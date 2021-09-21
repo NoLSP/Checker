@@ -50,34 +50,34 @@ namespace Checker_v._3._0.Controllers
 
         private ActionResult StudentProfile(User user)
         {
-            var tasks = dataContext.StudentsTaskResults
-                .Where(x => x.Student_id == user.Id)
-                .Select(x => new TaskDto()
-                {
-                    Id = x.Id,
-                    Title = x.Task.Title,
-                    StudentResult = x.TeacherResult ?? 0,
-                    MaxResult = x.Task.MaxResult
-                }).ToList();
+            //var tasks = dataContext.StudentsTaskResults
+            //    .Where(x => x.Student_id == user.Id)
+            //    .Select(x => new TaskDto()
+            //    {
+            //        Id = x.Id,
+            //        Title = x.Task.Title,
+            //        StudentResult = x.TeacherResult ?? 0,
+            //        MaxResult = x.Task.MaxResult
+            //    }).ToList();
 
-            var group = dataContext.StuentsInGroups
-                .Include(x => x.Group)
-                .First(x => x.Student_id == user.Id)
-                .Group;
+            //var group = dataContext.StuentsInGroups
+            //    .Include(x => x.Group)
+            //    .First(x => x.Student_id == user.Id)
+            //    .Group;
 
-            var profileDto = new UserDto()
-            {
-                Id = user.Id,
-                ShortName = user.ShortName,
-                FullName = user.FullName,
-                GroupId = group.Id,
-                GroupTitle = group.Title,
-                Points = tasks.Sum(x => x.StudentResult),
-                TotalPoints = tasks.Sum(x => x.MaxResult),
-                Tasks = tasks
-            };
+            //var profileDto = new UserDto()
+            //{
+            //    Id = user.Id,
+            //    ShortName = user.ShortName,
+            //    FullName = user.FullName,
+            //    GroupId = group.Id,
+            //    GroupTitle = group.Title,
+            //    Points = tasks.Sum(x => x.StudentResult),
+            //    TotalPoints = tasks.Sum(x => x.MaxResult),
+            //    Tasks = tasks
+            //};
 
-            return View(profileDto);
+            return View();
         }
 
         private ActionResult TeacherProfile(User user)

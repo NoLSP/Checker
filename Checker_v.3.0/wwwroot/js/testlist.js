@@ -8,7 +8,7 @@ function CreateTask() {
     document.body.appendChild(darkLayer); // включаем затемнение
 
     var modalWin = document.getElementById('popupWin'); // находим наше "окно"
-    $.get("/Tasks/_CreateForm", { layout: null }, function (data) {
+    $.get("/Tests/_CreateForm", { layout: null }, function (data) {
         $("#popupWin").html(data);
     });
     

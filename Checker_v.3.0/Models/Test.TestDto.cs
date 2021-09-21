@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    public class TaskForListDto
+    public class TestDto
     {
         public int Id;
         public string Title;
-        public string Description;
-        public string TaskGroupTitle;
-        public int MaxResult;
+        public string TaskTitle;
+        public string FileName;
     }
 }

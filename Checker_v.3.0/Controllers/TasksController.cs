@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Checker_v._3._0.Helpers;
 using Checker_v._3._0.Models;
+using Checker_v._3._0.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Checker_v._3._0.Controllers
@@ -13,6 +15,7 @@ namespace Checker_v._3._0.Controllers
     public class TasksController : Controller
     {
         private DataContext dataContext;
+
         public TasksController(DataContext context)
         {
             dataContext = context;
@@ -21,7 +24,7 @@ namespace Checker_v._3._0.Controllers
         public ActionResult List()
         {
             var tasks = dataContext.Tasks
-                .Select(x => new TaskForListDto() 
+                .Select(x => new TaskDto() 
                 { 
                     Id = x.Id,
                     Title = x.Title,
@@ -30,12 +33,41 @@ namespace Checker_v._3._0.Controllers
                     MaxResult = x.MaxResult
                 });
 
-            return View("TeacherList", tasks);
+            return View("List", tasks);
         }
 
-        public ActionResult Create(TaskViewModel model)
+        public ActionResult _CreateForm()
         {
+            var taskGroups = dataContext.TaskGroups
+                .Select(x => new SelectListItem()
+                {
+                    Text = x.Title,
+                    Value = $"{x.Id}"
+                }).ToList();
 
+            return View("_CreateForm", new CreateTaskViewModel() { TaskGroups = taskGroups });
+        }
+
+        [HttpPost]
+        public ActionResult Create(CreateTaskViewModel model)
+        {
+            var taskGroup = dataContext.TaskGroups.Find(model.GroupId);
+
+            if (taskGroup == null)
+                return ResultHelper.Failed($"Курса #{model.GroupId} не существует.");
+
+            var taskToCreate = new Task()
+            {
+                Title = model.Title,
+                Description = model.Description,
+                Group_id = taskGroup.Id,
+                MaxResult = model.MaxResult
+            };
+
+            dataContext.Entry(taskToCreate).State = EntityState.Added;
+            dataContext.SaveChanges();
+
+            return Redirect("/Tasks/List");
         }
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QqYvl2SGO5KyQkzO/90i/+AB/L6tKxcZrjtJ5j1hzjuOsYPFMdrI5kJye7ZE6dBWm9Vb5HpVRE7SRCe3tSY+OQ==",
+  "dgSpecHash": "/DGE2e5gfOCmlB3ezQlDCLgVz/Kt9vFtfKHQYG5WFif1SNONp4em1mvvHj5i8Xzk6wrDaOqHNNkkbuc/X6AohA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\artem\\Desktop\\Checker_v.3.0\\Checker_v.3.0\\Checker_v.3.0.csproj",
+  "projectFilePath": "C:\\Users\\artem\\Desktop\\Checker\\Checker_v.3.0\\Checker_v.3.0.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\artem\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\artem\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.9\\microsoft.entityframeworkcore.5.0.9.nupkg.sha512",

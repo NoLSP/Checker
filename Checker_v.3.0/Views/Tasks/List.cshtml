@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TaskForListDto>
+﻿@model IEnumerable<TaskDto>
 
 <style>
     label{
@@ -78,50 +78,7 @@
 </div>
 
 <div id="popupWin" class="formWindow">
-    <h2 style="text-align: center" id="title">Создать Task</h2>
-    <form>
-        <div class="row col-12 justify-content-center">
-            <div class="col-2">
-                <label>Title</label>
-            </div>
-            <div class="col-2">
-                <input id="title" type="text">
-            </div>
-        </div>
-
-        <div class="row col-12 justify-content-center">
-            <div class="col-2">
-                <label>Description</label>
-            </div>
-            <div class="col-2">
-                <input id="description" type="text">
-            </div>
-        </div>
-
-        <div class="row col-12 justify-content-center">
-            <div class="col-2">
-                <label>MAxResult</label>
-            </div>
-            <div class="col-2">
-                <input id="maxResult" type="number">
-            </div>
-        </div>
-
-        <div class="row col-12 justify-content-center">
-            <div class="col-2">
-                <label>Group</label>
-            </div>
-            <div class="col-2">
-                <select class="form-select" aria-label="select">
-                    <option selected>Choose task group</option>
-                    <option value="1">JavaScript</option>
-                    <option value="2">Operation Systems</option>
-                </select>
-            </div>
-        </div>
-
-        <input style="text-align: center" type="submit" value="Create">
-    </form>
+    
 </div>
 
 <script src="~/js/tasklist.js"></script>

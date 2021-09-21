@@ -1,0 +1,35 @@
+﻿@model CreateTaskViewModel
+
+@{
+    Layout = null;
+}
+
+<form asp-action="Create" asp-controller="Tasks">
+    <h2 style="text-align: center" id="title">Создать Task</h2>
+
+    <div class="row col-12 justify-content-center">
+        <label asp-for="Title">Название:</label>
+        <input type="text" asp-for="Title" />
+    </div>
+
+    <div class="row col-12 justify-content-center">
+        <label asp-for="Description">Описание:</label>
+        <textarea asp-for="Description"></textarea>
+    </div>
+
+    <div class="row col-12 justify-content-center">
+        <label asp-for="MaxResult">Максимальный результат:</label>
+        <input type="number" asp-for="MaxResult" />
+    </div>
+
+    <div class="row col-12 justify-content-center">
+        <div class="col-2">
+            <label asp-for="GroupId">Курс:</label>
+        </div>
+        <div class="col-2">
+            <select asp-for="GroupId" class="form-select" asp-items="Model.TaskGroups"></select>
+        </div>
+    </div>
+
+    <input style="text-align: center" type="submit" value="Create">
+</form>

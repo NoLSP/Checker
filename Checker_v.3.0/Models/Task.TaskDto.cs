@@ -9,8 +9,8 @@ namespace Checker_v._3._0.Models
     {
         public int Id;
         public string Title;
-        public int StudentResult;
-        public string StateTitle;
+        public string Description;
+        public string TaskGroupTitle;
         public int MaxResult;
     }
 }

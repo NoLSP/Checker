@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\artem\\Desktop\\Checker_v.3.0\\Checker_v.3.0\\Checker_v.3.0.csproj": {}
+    "C:\\Users\\artem\\Desktop\\Checker\\Checker_v.3.0\\Checker_v.3.0.csproj": {}
   },
   "projects": {
-    "C:\\Users\\artem\\Desktop\\Checker_v.3.0\\Checker_v.3.0\\Checker_v.3.0.csproj": {
+    "C:\\Users\\artem\\Desktop\\Checker\\Checker_v.3.0\\Checker_v.3.0.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\artem\\Desktop\\Checker_v.3.0\\Checker_v.3.0\\Checker_v.3.0.csproj",
+        "projectUniqueName": "C:\\Users\\artem\\Desktop\\Checker\\Checker_v.3.0\\Checker_v.3.0.csproj",
         "projectName": "Checker_v.3.0",
-        "projectPath": "C:\\Users\\artem\\Desktop\\Checker_v.3.0\\Checker_v.3.0\\Checker_v.3.0.csproj",
+        "projectPath": "C:\\Users\\artem\\Desktop\\Checker\\Checker_v.3.0\\Checker_v.3.0.csproj",
         "packagesPath": "C:\\Users\\artem\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\artem\\Desktop\\Checker_v.3.0\\Checker_v.3.0\\obj\\",
+        "outputPath": "C:\\Users\\artem\\Desktop\\Checker\\Checker_v.3.0\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
