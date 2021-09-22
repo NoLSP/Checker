@@ -82,7 +82,35 @@ namespace Checker_v._3._0.Models
         private UserRole _role;
         [Column("Role_id")]
         public int Role_id { get; set; }
-        public List<StudentsGroup> StudenstGroups { get; set; } = new List<StudentsGroup>();
-        public List<StudentsGroupUser> StudentsGroupUsers { get; set; } = new List<StudentsGroupUser>();
+
+        /// <summary>
+        /// Группы
+        /// </summary>
+        [Display(Name = "Группы")]
+        [NotMapped]
+        public List<StudentsGroup> StudentGroups
+        {
+            get
+            {
+                if (_StudentsGroups == null && StudentsGroupUsers != null)
+                    _StudentsGroups = StudentsGroupUsers.Select(x => x.Group).ToList();
+                else if (_StudentsGroups == null && dataContext != null)
+                    _StudentsGroups = dataContext.Set<StudentsGroupUser>().Where(x => x.Student.Id == this.Id).Select(x => x.Group).ToList();
+                return _StudentsGroups;
+            }
+            set => _StudentsGroups = value;
+        }
+        private List<StudentsGroup> _StudentsGroups;
+
+        /// <summary>
+        /// Группы
+        /// </summary>
+        [Display(Name = "Группы")]
+        public IList<StudentsGroupUser> StudentsGroupUsers
+        {
+            get => _StudentsGroupUsers ?? lazyLoader?.Load(this, ref _StudentsGroupUsers);
+            set => _StudentsGroupUsers = value;
+        }
+        private IList<StudentsGroupUser> _StudentsGroupUsers;
     }
 }

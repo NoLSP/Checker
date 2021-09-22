@@ -54,10 +54,15 @@ namespace Checker_v._3._0.Models
                 .WithMany(t => t.Tasks)
                 .HasForeignKey(p => p.Group_id);
 
-            modelBuilder.Entity<User>()
-                .HasMany(c => c.StudenstGroups)
-                .WithMany(s => s.Users)
-                .UsingEntity(j => j.ToTable("StudentsGroupUser"));
+            modelBuilder.Entity<StudentsGroupUser>()
+                 .HasOne(p => p.Student)
+                 .WithMany(t => t.StudentsGroupUsers)
+                 .HasForeignKey(p => p.Student_id);
+
+            modelBuilder.Entity<StudentsGroupUser>()
+                 .HasOne(p => p.Group)
+                 .WithMany(t => t.StudentsGroupUsers)
+                 .HasForeignKey(p => p.Group_id);
 
             OnModelCreatingPartial(modelBuilder);
         }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 #nullable disable
 
@@ -54,7 +55,26 @@ namespace Checker_v._3._0.Models
         private User _owner;
         [Column("Owner_id")]
         public int Owner_id { get; set; }
-        public List<StudentsGroupUser> StudentsGroupUsers { get; set; } = new List<StudentsGroupUser>();
-        public List<User> Users { get; set; } = new List<User>();
+
+        /// <summary>
+        /// Студенты
+        /// </summary>
+        [Display(Name = "Студенты")]
+        [NotMapped]
+        public IList<User> Users
+        {
+            get
+            {
+                if (_Users == null && StudentsGroupUsers != null)
+                    _Users = StudentsGroupUsers.Select(x => x.Student).ToList();
+                else if (_Users == null && dataContext != null)
+                    _Users = dataContext.Set<StudentsGroupUser>().Where(x => x.Group.Id == this.Id).Select(x => x.Student).ToList();
+                return _Users;
+            }
+            set => _Users = value;
+        }
+        private IList<User> _Users;
+
+        public List<StudentsGroupUser> StudentsGroupUsers { get; set; }
     }
 }

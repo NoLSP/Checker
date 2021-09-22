@@ -1,0 +1,36 @@
+﻿@model IEnumerable<StudentDto>
+
+<div class="container">
+    <div class="row">
+            <div class="col-1 justify-content-center">
+                <label class="taskId head">Id</label>
+            </div>
+            <div class="col-2 justify-content-center">
+                <label class="taskTitle head">FullName</label>
+            </div>
+            <div class="col-2 justify-content-center">
+                <label class="taskGroupTitle head">Email</label>
+            </div>
+            <div class="col-2 justify-content-center">
+                <label class="taskMaxResult head">Groups</label>
+            </div>
+        </div>
+
+    @foreach(var student in Model)
+    {
+        <div class="row">
+            <div class="col-1 justify-content-center">
+                <label class="taskId">@student.Id</label>
+            </div>
+            <div class="col-2 justify-content-center">
+                <label class="taskTitle">@student.FullName</label>
+            </div>
+            <div class="col-2 justify-content-center">
+                <label class="taskGroupTitle">@student.Email</label>
+            </div>
+            <div class="col-2 justify-content-center">
+                <label class="taskMaxResult">@String.Join(", ", student.GroupsTitles)</label>
+            </div>
+        </div>
+    }
+</div>

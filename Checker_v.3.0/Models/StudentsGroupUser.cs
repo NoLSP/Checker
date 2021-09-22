@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Checker_v._3._0.Models
 {
-    [Table("StudentsInGroup")]
+    [Table("StudentsGroupUser")]
     public partial class StudentsGroupUser : EntityObject
     {
         private DataContext dataContext;
