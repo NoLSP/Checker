@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -94,8 +95,8 @@ namespace Checker_v._3._0.Models
             {
                 if (_StudentsGroups == null && StudentsGroupUsers != null)
                     _StudentsGroups = StudentsGroupUsers.Select(x => x.Group).ToList();
-                else if (_StudentsGroups == null && dataContext != null)
-                    _StudentsGroups = dataContext.Set<StudentsGroupUser>().Where(x => x.Student.Id == this.Id).Select(x => x.Group).ToList();
+                else if (dataContext != null)
+                    _StudentsGroups = dataContext.Set<StudentsGroupUser>().Include(x => x.Group).Where(x => x.Student_id == this.Id).Select(x => x.Group).ToList();
                 return _StudentsGroups;
             }
             set => _StudentsGroups = value;

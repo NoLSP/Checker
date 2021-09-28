@@ -19,7 +19,7 @@ namespace Checker_v._3._0.Models
 
         public virtual DbSet<StudentsGroup> StudentsGroups { get; set; }
         public virtual DbSet<StudentsTaskResult> StudentsTaskResults { get; set; }
-        public virtual DbSet<StudentsGroupUser> StuentsInGroups { get; set; }
+        public virtual DbSet<StudentsGroupUser> StudentsGroupUser { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskState> TaskStates { get; set; }
         public virtual DbSet<TasksTests> TasksTests { get; set; }
@@ -63,6 +63,12 @@ namespace Checker_v._3._0.Models
                  .HasOne(p => p.Group)
                  .WithMany(t => t.StudentsGroupUsers)
                  .HasForeignKey(p => p.Group_id);
+
+            modelBuilder.Entity<StudentsGroupUser>()
+                .Navigation(x => x.Group).AutoInclude();
+
+            modelBuilder.Entity<StudentsGroupUser>()
+                .Navigation(x => x.Student).AutoInclude();
 
             OnModelCreatingPartial(modelBuilder);
         }

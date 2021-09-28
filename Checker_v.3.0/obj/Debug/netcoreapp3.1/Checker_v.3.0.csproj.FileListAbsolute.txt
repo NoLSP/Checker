@@ -181,3 +181,5 @@ C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3
 C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Tests\List.cshtml.g.cs
 C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Tests\_CreateForm.cshtml.g.cs
 C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Students\List.cshtml.g.cs
+C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\TasksGroups\List.cshtml.g.cs
+C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\TasksGroups\_CreateForm.cshtml.g.cs

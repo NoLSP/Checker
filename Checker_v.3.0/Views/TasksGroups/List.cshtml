@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StudentDto>
+﻿@model IEnumerable<TaskDto>
 
 <style>
     label{
@@ -48,30 +48,30 @@
                 <label class="taskId head">Id</label>
             </div>
             <div class="col-2 justify-content-center">
-                <label class="taskTitle head">FullName</label>
+                <label class="taskTitle head">Title</label>
             </div>
             <div class="col-2 justify-content-center">
-                <label class="taskGroupTitle head">Email</label>
+                <label class="taskGroupTitle head">GroupTitle</label>
             </div>
             <div class="col-2 justify-content-center">
-                <label class="taskMaxResult head">Groups</label>
+                <label class="taskMaxResult head">MaxResult</label>
             </div>
         </div>
 
-    @foreach(var student in Model)
+    @foreach(var task in Model)
     {
         <div class="row">
             <div class="col-1 justify-content-center">
-                <label class="taskId">@student.Id</label>
+                <label class="taskId">@task.Id</label>
             </div>
             <div class="col-2 justify-content-center">
-                <label class="taskTitle">@student.FullName</label>
+                <label class="taskTitle">@task.Title</label>
             </div>
             <div class="col-2 justify-content-center">
-                <label class="taskGroupTitle">@student.Email</label>
+                <label class="taskGroupTitle">@task.TaskGroupTitle</label>
             </div>
             <div class="col-2 justify-content-center">
-                <label class="taskMaxResult">@String.Join(", ", student.GroupsTitles)</label>
+                <label class="taskMaxResult">@task.MaxResult</label>
             </div>
         </div>
     }
@@ -81,4 +81,4 @@
     
 </div>
 
-<script src="~/js/studentlist.js"></script>
+<script src="~/js/tasklist.js"></script>
