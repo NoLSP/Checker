@@ -8,19 +8,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Checker_v._3._0.Models
 {
-    [Table("StudentsTaskResult")]
-    public partial class StudentsTaskResult : EntityObject
+    [Table("StudentTaskResult")]
+    public partial class StudentTaskResult : EntityObject
     {
         private DataContext dataContext;
         private ILazyLoader lazyLoader;
 
-        public StudentsTaskResult(DataContext context, ILazyLoader loader)
+        public StudentTaskResult(DataContext context, ILazyLoader loader)
         {
             dataContext = context;
             lazyLoader = loader;
         }
 
-        public StudentsTaskResult() : base()
+        public StudentTaskResult() : base()
         {
 
         }

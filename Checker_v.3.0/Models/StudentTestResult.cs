@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Checker_v._3._0.Models
 {
-    [Table("StudentsTestsResult")]
-    public partial class StudentsTestsResult
+    [Table("StudentTestResult")]
+    public partial class StudentTestResult
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Id")]

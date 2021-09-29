@@ -116,7 +116,6 @@ C:\Users\artem\Desktop\Checker_v.3.0\Checker_v.3.0\obj\Debug\netcoreapp3.1\Check
 C:\Users\artem\Desktop\Checker_v.3.0\Checker_v.3.0\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\artem\Desktop\Checker_v.3.0\Checker_v.3.0\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\artem\Desktop\Checker_v.3.0\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Tasks\TeacherList.cshtml.g.cs
-C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0.csprojAssemblyReference.cache
 C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0.AssemblyInfoInputs.cache
 C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0.AssemblyInfo.cs
 C:\Users\artem\Desktop\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0.csproj.CoreCompileInputs.cache

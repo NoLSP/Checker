@@ -18,16 +18,15 @@ namespace Checker_v._3._0.Models
         }
 
         public virtual DbSet<StudentsGroup> StudentsGroups { get; set; }
-        public virtual DbSet<StudentsTaskResult> StudentsTaskResults { get; set; }
+        public virtual DbSet<StudentTaskResult> StudentsTaskResults { get; set; }
         public virtual DbSet<StudentsGroupUser> StudentsGroupUser { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskState> TaskStates { get; set; }
-        public virtual DbSet<TasksTests> TasksTests { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<TestState> TestStates { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
-        public virtual DbSet<StudentsTestsResult> StudentsTestsResults { get; set; }
+        public virtual DbSet<StudentTestResult> StudentsTestsResults { get; set; }
         public virtual DbSet<TaskGroup> TaskGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
