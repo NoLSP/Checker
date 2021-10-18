@@ -29,7 +29,7 @@ namespace Checker_v._3._0.Controllers
                     Id = x.Id,
                     Email = x.Email,
                     FullName = x.FullName,
-                    GroupsTitles = x.StudentGroups.Select(y => y.Title)
+                    GroupsTitles = x.StudentGroups.Select(y => y.Title).ToArray()
                 }).ToList();
 
             //Потом можно добавить привязку к преподавателю
