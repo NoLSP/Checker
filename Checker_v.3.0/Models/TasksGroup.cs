@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    [Table("TaskGroup")]
-    public class TaskGroup : EntityObject
+    [Table("TasksGroup")]
+    public class TasksGroup : EntityObject
     {
         private DataContext dataContext;
         private ILazyLoader lazyLoader;
 
-        public TaskGroup(DataContext context, ILazyLoader loader)
+        public TasksGroup(DataContext context, ILazyLoader loader)
         {
             dataContext = context;
             lazyLoader = loader;
         }
 
-        public TaskGroup() : base()
+        public TasksGroup() : base()
         {
 
         }

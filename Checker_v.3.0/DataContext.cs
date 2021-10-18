@@ -28,7 +28,7 @@ namespace Checker_v._3._0.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<StudentsTestsResult> StudentsTestsResults { get; set; }
-        public virtual DbSet<TaskGroup> TaskGroups { get; set; }
+        public virtual DbSet<TasksGroup> TaskGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

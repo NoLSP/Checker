@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 #nullable disable
 
@@ -12,12 +13,10 @@ namespace Checker_v._3._0.Models
     public partial class UserRole : EntityObject
     {
         private DataContext dataContext;
-        private ILazyLoader lazyLoader;
 
-        public UserRole(DataContext context, ILazyLoader loader)
+        public UserRole(DataContext context)
         {
             dataContext = context;
-            lazyLoader = loader;
         }
 
         public UserRole() : base()
@@ -52,7 +51,12 @@ namespace Checker_v._3._0.Models
         private ICollection<User> _users;
         public virtual ICollection<User> Users
         {
-            get => _users ?? lazyLoader.Load(this, ref _users);
+            get
+            {
+                if (_users == null)
+                    _users = dataContext.Set<User>().Where(x => x.Role_id == this.Id).ToList();
+                return _users;
+            }
             set => _users = value;
         }
     }

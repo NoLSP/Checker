@@ -22,5 +22,10 @@ namespace Checker_v._3._0.Helpers
         {
             return Failed("Пользователь не найден");
         }
+
+        public static ActionResult EntityNotFound(string entityName)
+        {
+            return Failed($"Сущность с именем {entityName} не найдена");
+        }
     }
 }

@@ -13,17 +13,15 @@ namespace Checker_v._3._0.Models
     public partial class StudentsGroup : EntityObject
     {
         private DataContext dataContext;
-        private ILazyLoader lazyLoader;
 
         public StudentsGroup() : base()
         {
 
         }
 
-        public StudentsGroup(DataContext context, ILazyLoader loader)
+        public StudentsGroup(DataContext context)
         {
             dataContext = context;
-            lazyLoader = loader;
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -49,12 +47,41 @@ namespace Checker_v._3._0.Models
         [ForeignKey("Owner_id")]
         public User Owner 
         {
-            get => _owner ?? lazyLoader.Load(this, ref _owner);
+            get
+            {
+                if (_owner == null)
+                    _owner = dataContext.Set<User>()
+                        .Where(x => dataContext.Set<StudentsGroupUser>()
+                                        .Where(y => y.Group_id == this.Id)
+                                        .FirstOrDefault().Student_id == x.Id)
+                        .FirstOrDefault();
+                return _owner;
+            }
             set => _owner = value;
         }
         private User _owner;
         [Column("Owner_id")]
         public int Owner_id { get; set; }
+
+        /// <summary>
+        /// Курс
+        /// </summary>
+        [Display(Name = "Курс")]
+        [Required(ErrorMessage = "Поле 'курс' обязательно для заполнения")]
+        [ForeignKey("TasksGroup_id")]
+        public TasksGroup TaskGroup
+        {
+            get
+            {
+                if (_taskGroup == null)
+                    _taskGroup = dataContext.Set<TasksGroup>().Where(x => x.Id == this.TasksGroup_id).FirstOrDefault();
+                return _taskGroup;
+            }
+            set => _taskGroup = value;
+        }
+        private TasksGroup _taskGroup;
+        [Column("TasksGroup_id")]
+        public int TasksGroup_id { get; set; }
 
         /// <summary>
         /// Студенты

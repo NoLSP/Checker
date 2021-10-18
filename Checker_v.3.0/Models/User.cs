@@ -14,18 +14,11 @@ namespace Checker_v._3._0.Models
     public partial class User : EntityObject
     {
         private DataContext dataContext;
-        private ILazyLoader lazyLoader;
+        public User() : base() { }
 
-        public User() : base()
-        {
-
-        }
-        
-
-        public User(DataContext context, ILazyLoader loader)
+        public User(DataContext context)
         {
             dataContext = context;
-            lazyLoader = loader;
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -77,7 +70,12 @@ namespace Checker_v._3._0.Models
         [ForeignKey("Role_id")]
         public UserRole Role
         {
-            get => _role ?? lazyLoader.Load(this, ref _role);
+            get
+            {
+                if (_role == null)
+                    _role = dataContext.Set<UserRole>().First(x => x.Id == this.Role_id);
+                return _role;
+            }
             set => _role = value;
         }
         private UserRole _role;
@@ -103,13 +101,14 @@ namespace Checker_v._3._0.Models
         }
         private List<StudentsGroup> _StudentsGroups;
 
-        /// <summary>
-        /// Группы
-        /// </summary>
-        [Display(Name = "Группы")]
         public IList<StudentsGroupUser> StudentsGroupUsers
         {
-            get => _StudentsGroupUsers ?? lazyLoader?.Load(this, ref _StudentsGroupUsers);
+            get
+            {
+                if (_StudentsGroupUsers == null)
+                    _StudentsGroupUsers = dataContext.Set<StudentsGroupUser>().Include(x => x.Group).Where(x => x.Student_id == this.Id).ToList();
+                return _StudentsGroupUsers;
+            }
             set => _StudentsGroupUsers = value;
         }
         private IList<StudentsGroupUser> _StudentsGroupUsers;

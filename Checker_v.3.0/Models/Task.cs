@@ -54,7 +54,7 @@ namespace Checker_v._3._0.Models
         [Display(Name = "Группа задач")]
         [Required(ErrorMessage = "Поле 'Группа задач' обязательно для заполнения")]
         [ForeignKey("Group_id")]
-        public virtual TaskGroup Group { get; set; }
+        public virtual TasksGroup Group { get; set; }
         [Column("Group_id")]
         public int Group_id { get; set; }
 

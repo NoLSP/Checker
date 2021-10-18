@@ -22,8 +22,6 @@ namespace Checker_v._3._0.Controllers
         public IActionResult List()
         {
             var students = dataContext.Users
-                .Include(x => x.Role)
-                .Include(x => x.StudentsGroupUsers)
                 .Where(x => x.Role.Name == "Student")
                 .ToList()
                 .Select(x => new StudentDto()
