@@ -1,40 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Checker_v._3._0.Models.Attributes;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace Checker_v._3._0.Models
 {
-    [Table("TasksGroup")]
-    public class TasksGroup : EntityObject
+    [Table("UserRole")]
+    [ListDisplay("Роли")]
+    [EditDisplay("Роль")]
+    public partial class UserRole : EntityObject
     {
         private DataContext dataContext;
-        private ILazyLoader lazyLoader;
 
-        public TasksGroup(DataContext context, ILazyLoader loader)
+        public UserRole(DataContext context)
         {
             dataContext = context;
-            lazyLoader = loader;
         }
 
-        public TasksGroup() : base()
+        public UserRole() : base()
         {
 
         }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
 
         /// <summary>
         /// Системное название
         /// </summary>
-        [Display(Name = "Системное название")]
+        [ListDisplay("Системное название")]
+        [DetailDisplay("Системное название")]
+        [EditDisplay("Ситемное название")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -43,17 +42,25 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Название
         /// </summary>
-        [Display(Name = "Название")]
+        [ListDisplay("Название")]
+        [DetailDisplay("Название")]
+        [EditDisplay("Название")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Title { get; set; }
 
-        private ICollection<Task> _tasks;
-        public virtual ICollection<Task> Tasks
+        private ICollection<User> _users;
+        public virtual ICollection<User> Users
         {
-            get => _tasks ?? lazyLoader.Load(this, ref _tasks);
-            set => _tasks = value;
+            get
+            {
+                if (_users == null)
+                    _users = dataContext.Set<User>().Where(x => x.Role_id == this.Id).ToList();
+                return _users;
+            }
+            set => _users = value;
         }
     }
 }

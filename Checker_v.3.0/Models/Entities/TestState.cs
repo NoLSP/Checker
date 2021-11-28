@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Checker_v._3._0.Models.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,19 +6,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Checker_v._3._0.Models
 {
-    [Table("TaskState")]
-    public partial class TaskState
+    [ListDisplay("Состояния тестов")]
+    [EditDisplay("Состояние теста")]
+    public partial class TestState : EntityObject
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
+        private DataContext dataContext;
+
+        public TestState(DataContext context)
+        {
+            dataContext = context;
+        }
+
+        public TestState() : base()
+        {
+
+        }
 
         /// <summary>
         /// Название
         /// </summary>
-        [Display(Name = "Название")]
+        [ListDisplay("Название")]
+        [DetailDisplay("Название")]
+        [EditDisplay("Название")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -28,7 +37,10 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Системное название
         /// </summary>
-        [Display(Name = "Системное название")]
+        [ListDisplay("Системное название")]
+        [DetailDisplay("Системное название")]
+        [EditDisplay("Системное название")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]

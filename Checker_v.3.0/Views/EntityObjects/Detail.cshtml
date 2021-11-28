@@ -1,4 +1,4 @@
-﻿@model EntityObjectListDto
+﻿@model EntityObjectDetailDto
 
 <style>
     label{
@@ -36,41 +36,25 @@
     }
 </style>
 
-<label style="font-size:xx-large">@Model.Title</label>
+<label>@Model.Title</label>
 
 <div class="buttonsContainer">
-    <div class="col-2 justify-content-start">
-        <button id="createButton">Создать</button>
+    <div class="col-2 justify-content-center">
+        <button id="editButton">Изменить</button>
     </div>
 </div>
 
 <div class="container">
-    <div class="row">
-        @foreach (var headItem in Model.Head)
-        {
-            <div class="col-1 justify-content-center">
-                <label class="taskId head">@headItem</label>
-            </div>
-        }
-    </div>
 
-    @foreach(var entity in Model.Entities)
+    @foreach(var entityField in Model.Fields)
     {
         <div class="row">
-            @foreach (var entityField in entity)
-            {
-            <div class="col-1 justify-content-center">
-                @*if (entityField.Type == typeof(List<EntityObject>))
-                {
-                    <div>
-                        @foreach (var item in (dynamic)entityField.Value)
-                        {
-                            <a href="@item.Url">@item.Value</a>
-                        }
-                    </div>
-                }
-                else*@ 
-                @if (entityField.Url != null)
+            <div class="col-1 justify-content-end">
+                <label>@entityField.Title</label>
+            </div>
+
+            <div class="col-1 justify-content-start">
+                @if(entityField.Url != null)
                 {
                     <a href="@entityField.Url">@entityField.Value</a>
                 }
@@ -79,7 +63,6 @@
                     <label>@entityField.Value</label>
                 }
             </div>
-            }
         </div>
     }
 </div>
@@ -88,8 +71,4 @@
     
 </div>
 
-<script>
-    var EntityName = "@Model.EntityName";
-</script>
-
-<script src="~/js/entityobject.list.js"></script>
+<script src="~/js/studentlist.js"></script>

@@ -58,7 +58,7 @@ namespace Checker_v._3._0.Controllers
             {
                 Title = model.Title,
                 Description = model.Description,
-                Group_id = taskGroup.Id,
+                Course_id = taskGroup.Id,
                 MaxResult = model.MaxResult
             };
 

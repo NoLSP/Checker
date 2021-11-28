@@ -84,7 +84,7 @@ namespace Checker_v._3._0.Controllers
         {
             var model = new TeacherViewModel()
             {
-                FullName = user.FullName,
+                FullName = user.Title,
                 Id = user.Id,
                 ShortName = user.ShortName,
                 Email = user.Email,

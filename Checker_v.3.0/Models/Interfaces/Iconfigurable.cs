@@ -10,5 +10,6 @@ namespace Checker_v._3._0.Models
         public string RouteList();
         public string RouteCreate();
         public string RouteDelete();
+        public string RouteDetail();
     }
 }

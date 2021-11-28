@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    public class StudentDto
+    public class EntityObjectDetailDto
     {
-        public int Id;
-        public string Email;
-        public string FullName;
-        public string GroupTitle;
+        public string Title;
+        public List<EntityObjectFieldDto> Fields;
     }
 }

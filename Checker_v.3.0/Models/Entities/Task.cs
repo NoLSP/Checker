@@ -1,23 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Checker_v._3._0.Models.Attributes;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 #nullable disable
 
 namespace Checker_v._3._0.Models
 {
     [Table("Task")]
+    [ListDisplay("Задачи")]
+    [EditDisplay("Задача")]
     public partial class Task : EntityObject
     {
         private DataContext dataContext;
-        private ILazyLoader lazyLoader;
 
-        public Task(DataContext context, ILazyLoader loader)
+        public Task(DataContext context)
         {
             dataContext = context;
-            lazyLoader = loader;
         }
 
         public Task() : base()
@@ -25,16 +27,13 @@ namespace Checker_v._3._0.Models
 
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
-
         /// <summary>
         /// Название
         /// </summary>
-        [Display(Name = "Название")]
+        [ListDisplay("Название")]
+        [DetailDisplay("Название")]
+        [EditDisplay("Название")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -43,7 +42,10 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Описание
         /// </summary>
-        [Display(Name = "Описание")]
+        [ListDisplay("Описание")]
+        [DetailDisplay("Описание")]
+        [EditDisplay("Описание")]
+        [InputType("textarea")]
         [Required(ErrorMessage = "Поле 'Описание' обязательно для заполнения")]
         [Column("Description")]
         public string Description { get; set; }
@@ -51,17 +53,23 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Группа задач
         /// </summary>
-        [Display(Name = "Группа задач")]
+        [ListDisplay("Курс")]
+        [DetailDisplay("Курс")]
+        [EditDisplay("Курс")]
+        [InputType("select")]
         [Required(ErrorMessage = "Поле 'Группа задач' обязательно для заполнения")]
-        [ForeignKey("Group_id")]
-        public virtual TasksGroup Group { get; set; }
-        [Column("Group_id")]
-        public int Group_id { get; set; }
+        [ForeignKey("Course_id")]
+        public virtual Course Course { get; set; }
+        [Column("Course_id")]
+        public int Course_id { get; set; }
 
         /// <summary>
         /// Максимально возможный результат
         /// </summary>
-        [Display(Name = "Макс. результат")]
+        [ListDisplay("Макс. результат")]
+        [DetailDisplay("Макс. результат")]
+        [EditDisplay("Макс. результат")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Максю результат' обязательно для заполнения")]
         [Column("MaxResult")]
         public int MaxResult { get; set; }
@@ -69,7 +77,12 @@ namespace Checker_v._3._0.Models
         private ICollection<Test> _tests;
         public virtual ICollection<Test> Tests
         {
-            get => _tests ?? lazyLoader.Load(this, ref _tests);
+            get
+            {
+                if (_tests == null)
+                    _tests = dataContext.Set<Test>().Where(x => x.Task_id == this.Id).ToList();
+                return _tests;
+            }
             set => _tests = value;
         }
     }

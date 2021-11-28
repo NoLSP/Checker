@@ -29,7 +29,7 @@ namespace Checker_v._3._0.Controllers
                     Id = x.Id,
                     Title = x.Title,
                     Description = x.Description,
-                    TaskGroupTitle = x.Group.Title,
+                    TaskGroupTitle = x.Course.Title,
                     MaxResult = x.MaxResult
                 });
 
@@ -60,7 +60,7 @@ namespace Checker_v._3._0.Controllers
             {
                 Title = model.Title,
                 Description = model.Description,
-                Group_id = taskGroup.Id,
+                Course_id = taskGroup.Id,
                 MaxResult = model.MaxResult
             };
 

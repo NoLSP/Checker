@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Checker_v._3._0.Models.Attributes;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 
@@ -8,19 +11,6 @@ namespace Checker_v._3._0.Models
     public class EntityObject : IConfigurable
     {
         public EntityObject() { }
-
-        public static List<string> SystemEntiies = new List<string>()
-        {
-            "User",
-            "UserRole",
-            "StudentsGroup",
-            "Task",
-            "TasksGroup",
-            "Test",
-            "StudentTestResult",
-            "StudentTaskTeacherResult",
-            "TestState"
-        };
 
         public string RouteList() 
         {
@@ -40,6 +30,12 @@ namespace Checker_v._3._0.Models
             return $"/EntityObjects/{type}/Delete";
         }
 
+        public string RouteDetail()
+        {
+            var type = this.GetType().Name;
+            return $"/EntityObjects/{type}/Detail/{this.Id}";
+        }
+
         public IQueryable AsIQueryable(DataContext dataContext, Type type)
         {
             return dataContext.Set(type) as IQueryable;
@@ -51,5 +47,12 @@ namespace Checker_v._3._0.Models
             EntityObject instance = constructor.Invoke(new object[] { dataContext }) as EntityObject;
             return instance;
         }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ListDisplay("Id")]
+        [DetailDisplay("Id")]
+        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
+        [Key]
+        public int Id { get; set; }
     }
 }

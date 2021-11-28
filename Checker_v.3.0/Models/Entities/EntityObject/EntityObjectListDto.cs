@@ -4,7 +4,9 @@ namespace Checker_v._3._0.Models
 {
     public class EntityObjectListDto
     {
+        public string Title;
+        public string EntityName;
         public List<string> Head;
-        public List<List<EntityFieldDto>> Entities;
+        public List<List<EntityObjectFieldDto>> Entities;
     }
 }

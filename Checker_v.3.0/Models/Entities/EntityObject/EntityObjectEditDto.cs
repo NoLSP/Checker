@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    public class EntityFieldDto
+    public class EntityObjectEditDto
     {
-        public Type Type;
-        public object Value;
-        public string Url;
+        public string EntityName;
+        public List<EntityObjectFieldDto> Fields;
     }
 }

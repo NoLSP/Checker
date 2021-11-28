@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Checker_v._3._0.Models.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,18 +9,29 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Checker_v._3._0.Models
 {
     [Table("Test")]
-    public partial class Test
+    [ListDisplay("Тестов")]
+    [EditDisplay("Тест")]
+    public partial class Test : EntityObject
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
+        private DataContext dataContext;
+
+        public Test(DataContext context)
+        {
+            dataContext = context;
+        }
+
+        public Test() : base()
+        {
+
+        }
 
         /// <summary>
         /// Название
         /// </summary>
-        [Display(Name = "Название")]
+        [ListDisplay("Название")]
+        [DetailDisplay("Название")]
+        [EditDisplay("Название")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -28,7 +40,10 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Задача
         /// </summary>
-        [Display(Name = "Задача")]
+        [ListDisplay("Задача")]
+        [DetailDisplay("Задача")]
+        [EditDisplay("Задача")]
+        [InputType("select")]
         [Required(ErrorMessage = "Поле 'Задача' обязательно для заполнения")]
         [ForeignKey("Task_id")]
         public Task Task { get; set; }
@@ -38,7 +53,10 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Путь к тестовому файлу
         /// </summary>
-        [Display(Name = "Тестовый файл")]
+        [ListDisplay("Тестовый файл")]
+        [DetailDisplay("Тестовый файл")]
+        [EditDisplay("Тестовый файл")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Тестовый файл' обязательно для заполнения")]
         [Column("TestFilePath")]
         [StringLength(1024, ErrorMessage = "Строка слишком длинная")]

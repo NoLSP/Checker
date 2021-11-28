@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Checker_v._3._0.Models.Attributes;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ using System.Linq;
 namespace Checker_v._3._0.Models
 {
     [Table("User")]
+    [ListDisplay("Пользователи")]
+    [EditDisplay("Пользователь")]
     public partial class User : EntityObject
     {
         private DataContext dataContext;
@@ -21,25 +24,25 @@ namespace Checker_v._3._0.Models
             dataContext = context;
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
-
         /// <summary>
         /// Ф.И.О.
         /// </summary>
-        [Display(Name = "Ф.И.О.")]
+        [ListDisplay("Ф.И.О.")]
+        [DetailDisplay("Ф.И.О.")]
+        [EditDisplay("Ф.И.О.")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Ф.И.О.' обязательно для заполнения")]
-        [Column("FullName")]
+        [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
-        public string FullName { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Имя
         /// </summary>
-        [Display(Name = "Имя")]
+        [ListDisplay("Имя")]
+        [DetailDisplay("Имя")]
+        [EditDisplay("Имя")]
+        [InputType("text")]
         [Required(ErrorMessage = "Поле 'Короткое имя' обязательно для заполнения")]
         [Column("ShortName")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -48,7 +51,10 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Email
         /// </summary>
-        [Display(Name = "Email")]
+        [ListDisplay("Email")]
+        [DetailDisplay("Email")]
+        [EditDisplay("Email")]
+        [InputType("email")]
         [Required(ErrorMessage = "Поле 'Email' обязательно для заполнения")]
         [Column("Email")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -57,7 +63,8 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Пароль
         /// </summary>
-        [Display(Name = "Пароль")]
+        [EditDisplay("Пароль")]
+        [InputType("password")]
         [Required(ErrorMessage = "Поле 'пароль' обязательно для заполнения")]
         [Column("Password")]
         public string Password { get; set; }
@@ -65,7 +72,10 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Роль
         /// </summary>
-        [Display(Name = "Роль")]
+        [ListDisplay("Роль")]
+        [DetailDisplay("Роль")]
+        [EditDisplay("Роль")]
+        [InputType("select")]
         [Required(ErrorMessage = "Поле 'Роль' обязательно для заполнения")]
         [ForeignKey("Role_id")]
         public UserRole Role
@@ -83,34 +93,15 @@ namespace Checker_v._3._0.Models
         public int Role_id { get; set; }
 
         /// <summary>
-        /// Группы
+        /// Группа
         /// </summary>
-        [Display(Name = "Группы")]
-        [NotMapped]
-        public List<StudentsGroup> StudentGroups
-        {
-            get
-            {
-                if (_StudentsGroups == null && StudentsGroupUsers != null)
-                    _StudentsGroups = StudentsGroupUsers.Select(x => x.Group).ToList();
-                else if (dataContext != null)
-                    _StudentsGroups = dataContext.Set<StudentsGroupUser>().Include(x => x.Group).Where(x => x.Student_id == this.Id).Select(x => x.Group).ToList();
-                return _StudentsGroups;
-            }
-            set => _StudentsGroups = value;
-        }
-        private List<StudentsGroup> _StudentsGroups;
-
-        public IList<StudentsGroupUser> StudentsGroupUsers
-        {
-            get
-            {
-                if (_StudentsGroupUsers == null)
-                    _StudentsGroupUsers = dataContext.Set<StudentsGroupUser>().Include(x => x.Group).Where(x => x.Student_id == this.Id).ToList();
-                return _StudentsGroupUsers;
-            }
-            set => _StudentsGroupUsers = value;
-        }
-        private IList<StudentsGroupUser> _StudentsGroupUsers;
+        [ListDisplay("Группа")]
+        [DetailDisplay("Группа")]
+        [EditDisplay("Группа")]
+        [InputType("select")]
+        [ForeignKey("StudentsGroup_id")]
+        public StudentsGroup Group{ get; set; }
+        [Column("StudentsGroup_id")]
+        public int? StudentsGroup_id { get; set; }
     }
 }

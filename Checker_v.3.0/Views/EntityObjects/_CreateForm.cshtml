@@ -1,0 +1,40 @@
+﻿@model EntityObjectEditDto
+
+@{
+    Layout = null;
+}
+
+<form>
+    <h2 style="text-align: center" id="title">@Model.EntityName</h2>
+
+    @foreach (var field in Model.Fields)
+    {
+        if (field.InputType == "select")
+        {
+            <div class="row col-12 justify-content-center">
+                <div class="col-2">
+                    <label for=@field.Name>@field.Title:</label>
+                </div>
+                <div class="col-2">
+                    <select id=@field.Name name="@field.Name" class="form-select" asp-items="@field.Values"></select>
+                </div>
+            </div>
+        }
+        else if(field.InputType == "textarea")
+        { 
+            <div class="row col-12 justify-content-center">
+                <label for=@field.Name>@field.Title:</label>
+                <textarea id=@field.Name name="@field.Name"></textarea>
+            </div>
+        }
+        else
+        {
+            <div class="row col-12 justify-content-center">
+                <label for=@field.Name>@field.Title:</label>
+                <input type=@field.InputType id=@field.Name name="@field.Name" />
+            </div>
+        }
+    }
+</form>
+
+<button style="text-align: center" id="createEntity">Создать</button>

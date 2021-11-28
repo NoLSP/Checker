@@ -56,13 +56,13 @@ namespace Checker_v._3._0.Controllers
         public ActionResult Create(CreateTestViewModel model)
         {
             var task = dataContext.Tasks
-                .Include(x => x.Group)
+                .Include(x => x.Course)
                 .SingleOrDefault(x => x.Id == model.TaskId);
 
             if (task == null)
                 return ResultHelper.Failed($"Задачи #{model.TaskId} не существует.");
 
-            string path = appEnvironment.WebRootPath + $"/Files/Tests/{task.Group.Title}/{task.Title}/";
+            string path = appEnvironment.WebRootPath + $"/Files/Tests/{task.Course.Title}/{task.Title}/";
             var directory = Directory.CreateDirectory(path);
 
             using (var fileStream = new FileStream( path + model.TestFile.FileName, FileMode.Create))
