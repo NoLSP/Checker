@@ -24,13 +24,6 @@ namespace Checker_v._3._0.Models
 
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ListDisplay("Id")]
-        [DetailDisplay("Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
-
         /// <summary>
         /// Студенческая группа
         /// </summary>

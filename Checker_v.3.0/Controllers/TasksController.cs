@@ -29,7 +29,7 @@ namespace Checker_v._3._0.Controllers
                     Id = x.Id,
                     Title = x.Title,
                     Description = x.Description,
-                    TaskGroupTitle = x.Course.Title,
+                    CourseTitle = x.Course.Title,
                     MaxResult = x.MaxResult
                 });
 
@@ -38,23 +38,23 @@ namespace Checker_v._3._0.Controllers
 
         public ActionResult _CreateForm()
         {
-            var taskGroups = dataContext.TaskGroups
+            var courses = dataContext.Courses
                 .Select(x => new SelectListItem()
                 {
                     Text = x.Title,
                     Value = $"{x.Id}"
                 }).ToList();
 
-            return View("_CreateForm", new CreateTaskViewModel() { TaskGroups = taskGroups });
+            return View("_CreateForm", new TaskViewModel() { Courses = courses });
         }
 
         [HttpPost]
-        public ActionResult Create(CreateTaskViewModel model)
+        public ActionResult Create(TaskViewModel model)
         {
-            var taskGroup = dataContext.TaskGroups.Find(model.GroupId);
+            var taskGroup = dataContext.Courses.Find(model.CourseId);
 
             if (taskGroup == null)
-                return ResultHelper.Failed($"Курса #{model.GroupId} не существует.");
+                return ResultHelper.Failed($"Курса #{model.CourseId} не существует.");
 
             var taskToCreate = new Task()
             {

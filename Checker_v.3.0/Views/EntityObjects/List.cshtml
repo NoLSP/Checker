@@ -1,88 +1,64 @@
 ﻿@model EntityObjectListDto
 
-<style>
-    label{
-        margin-top: 6px;
-        margin-bottom: 6px;
-    }
-
-    .head{
-        font-size: 16px;
-    }
-
-    .formWindow {
-        height: 400px;
-        width: 400px;
-        background-color: white;
-        top: 20%; /* отступ сверху */
-        right: 0;
-        left: 0;
-        margin: 0 auto;
-        z-index: 2; /* поверх всех */
-        display: none; /* сначала невидим */
-        position: fixed; /* фиксированное позиционирование, окно стабильно при прокрутке */
-        padding: 15px;
-    }
-
-    #shadow {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        z-index: 1; /* поверх всех  кроме окна*/
-        background: #000;
-        opacity: 0.5; /*прозрачность*/
-        left: 0;
-        top: 0;
-    }
-</style>
-
 <label style="font-size:xx-large">@Model.Title</label>
 
 <div class="buttonsContainer">
-    <div class="col-2 justify-content-start">
+    <div>
         <button id="createButton">Создать</button>
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
+<table border="1" style="border-color:aliceblue" width="100%">
+    <tr>
         @foreach (var headItem in Model.Head)
         {
-            <div class="col-1 justify-content-center">
-                <label class="taskId head">@headItem</label>
-            </div>
+            <th style="background-color:lightgray">
+                <strong style="text-align:left;margin-left:10px">@headItem</strong>
+            </th>
         }
-    </div>
 
-    @foreach(var entity in Model.Entities)
+        <th style="background-color:lightgray">
+            <strong style="text-align:left;margin-left:10px">Действия</strong>
+        </th>
+    </tr>
+
+    @foreach (var entity in Model.Entities)
     {
-        <div class="row">
+        <tr>
             @foreach (var entityField in entity)
             {
-            <div class="col-1 justify-content-center">
-                @*if (entityField.Type == typeof(List<EntityObject>))
-                {
-                    <div>
-                        @foreach (var item in (dynamic)entityField.Value)
-                        {
-                            <a href="@item.Url">@item.Value</a>
-                        }
-                    </div>
-                }
-                else*@ 
-                @if (entityField.Url != null)
-                {
-                    <a href="@entityField.Url">@entityField.Value</a>
-                }
-                else
-                {
-                    <label>@entityField.Value</label>
-                }
-            </div>
+                <td style="background-color:antiquewhite">
+                    @*if (entityField.Type == typeof(List<EntityObject>))
+                    {
+                        <div>
+                            @foreach (var item in (dynamic)entityField.Value)
+                            {
+                                <a href="@item.Url">@item.Value</a>
+                            }
+                        </div>
+                    }
+                    else*@ 
+                    @if (entityField.Url != null)
+                    {
+                        <a style="text-align:center;margin-left:10px" href="@entityField.Url">@entityField.Value</a>
+                    }
+                    else
+                    {
+                        <label style="text-align:center;margin-left:10px">@entityField.Value</label>
+                    }
+                </td>
             }
-        </div>
+            @*Actions*@
+            @{ 
+                var entityId = entity.First(x => x.Name == "Id").Value;
+            }
+            <td>
+                <button class="editButton" style="background-color:lightgreen" data-id="@entityId">Редактировать</button>
+                <button class="deleteButton" style="background-color:orangered" data-id="@entityId">Удалить</button>
+            </td>
+        </tr>
     }
-</div>
+</table>
 
 <div id="popupWin" class="formWindow">
     

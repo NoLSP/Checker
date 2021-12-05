@@ -24,7 +24,7 @@ namespace Checker_v._3._0.Controllers
             var students = dataContext.Users
                 .Where(x => x.Role.Name == "Student")
                 .ToList()
-                .Select(x => new StudentDto()
+                .Select(x => new UserDto()
                 {
                     Id = x.Id,
                     Email = x.Email,

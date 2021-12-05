@@ -59,6 +59,8 @@ namespace Checker_v._3._0.Controllers
                     {
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                             Url = null
@@ -72,6 +74,8 @@ namespace Checker_v._3._0.Controllers
 
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                             Url = url
@@ -92,6 +96,8 @@ namespace Checker_v._3._0.Controllers
                         //}
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
                             Type = typeof(List<EntityObject>),
                             Value = items.Count,
                         });
@@ -102,6 +108,8 @@ namespace Checker_v._3._0.Controllers
                         var url = fieldValue == null ? "" : (fieldValue as EntityObject).RouteDetail();
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = fieldValue == null ? "" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
                             Url = "https://" + HttpContext.Request.Host + url
@@ -309,6 +317,159 @@ namespace Checker_v._3._0.Controllers
             }
 
             dataContext.Entry(entity).State = EntityState.Added;
+            dataContext.SaveChanges();
+
+            return ResultHelper.Successed();
+        }
+
+        [HttpGet]
+        [Route("/EntityObjects/{entityType}/Edit/{id}")]
+        public ActionResult Edit(string entityType, int id)
+        {
+            var type = Type.GetType($"Checker_v._3._0.Models.{entityType}");
+
+            if (type == null)
+                return ResultHelper.EntityNotFound(entityType);
+
+            var entity = (EntityObject)dataContext.Set(type).Find(id);
+
+            if (entity == null)
+                return ResultHelper.EntityNotFound($"{id}");
+
+            var entityDisplayName = (type.GetCustomAttributes(false).First(attr => attr is EditDisplay) as EditDisplay).Name;
+
+            var fields = type.GetProperties()
+                .Where(p => p.GetCustomAttributes(false).Any(attr => attr is EditDisplay))
+                .Select(p => new
+                {
+                    FieldName = p.PropertyType.BaseType.Name == "EntityObject" ?
+                                (p.GetCustomAttributes(false).First(attr => attr is ForeignKeyAttribute) as ForeignKeyAttribute).Name :
+                                p.Name,
+                    FieldType = p.PropertyType,
+                    FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is EditDisplay) as EditDisplay).Name,
+                    FieldInputType = (p.GetCustomAttributes(false).First(attr => attr is InputType) as InputType).Name
+                });
+
+            var dtoEntity = new List<EntityObjectFieldDto>();
+            foreach (var field in fields)
+            {
+                if (field.FieldType.Name == "Int32")
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                    });
+                }
+                else if (field.FieldType.Name == "String")
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                    });
+                }
+                else if (field.FieldType.BaseType.Name == "EntityObject")
+                {
+                    var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldType))
+                        .ToList()
+                        .Select(x => new SelectListItem()
+                        {
+                            Value = $"{x.Id}",
+                            Text = x.Title
+                        }).ToList();
+
+                    var value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
+
+                    var selectedItem = items.FirstOrDefault(x => x.Value == $"{value}");
+                    if(selectedItem != null)
+                        selectedItem.Selected = true;
+
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Type = field.FieldType,
+                        Title = field.FieldDisplayName,
+                        Name = field.FieldName,
+                        InputType = field.FieldInputType,
+                        Values = items
+                    });
+                }
+            }
+
+            return View("_CreateForm", new EntityObjectEditDto()
+            {
+                EntityName = entityDisplayName,
+                Fields = dtoEntity
+            });
+        }
+
+        [HttpPost]
+        [Route("/EntityObjects/{entityType}/Edit/{id}")]
+        public ActionResult Edit(string entityType, int id, int dummy)
+        {
+            var data = JArray.Parse(this.HttpContext.Request.Form.Keys.First());
+
+            var type = Type.GetType($"Checker_v._3._0.Models.{entityType}");
+
+            if (type == null)
+                return ResultHelper.EntityNotFound(entityType);
+
+            var entity = (EntityObject)dataContext.Set(type).Find(id);
+
+            if (entity == null)
+                return ResultHelper.EntityNotFound($"{id}");
+
+            var fieldTypes = type.GetProperties()
+                .Where(p => p.GetCustomAttributes(false).Any(attr => attr is EditDisplay))
+                .ToDictionary(p => p.PropertyType.BaseType.Name == "EntityObject" ?
+                                   (p.GetCustomAttributes(false).First(attr => attr is ForeignKeyAttribute) as ForeignKeyAttribute).Name :
+                                   p.Name, p => p.PropertyType);
+
+            foreach (JObject field in data)
+            {
+                var fieldName = (string)field.GetValue("FieldName");
+                var fieldType = fieldTypes[fieldName];
+                var jFieldValue = field.GetValue("FieldValue");
+
+                if (fieldName.EndsWith("_id"))
+                {
+                    entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
+                }
+                else
+                {
+                    entity.GetType().GetProperty(fieldName).SetValue(entity, Convert.ChangeType(jFieldValue, fieldType));
+                }
+
+
+            }
+
+            dataContext.Entry(entity).State = EntityState.Modified;
+            dataContext.SaveChanges();
+
+            return ResultHelper.Successed();
+        }
+
+        [HttpPost]
+        [Route("/EntityObjects/{entityType}/Delete/{id}")]
+        public ActionResult Delete(string entityType, int id)
+        {
+            var type = Type.GetType($"Checker_v._3._0.Models.{entityType}");
+
+            if (type == null)
+                return ResultHelper.EntityNotFound(entityType);
+
+            var entity = (EntityObject)dataContext.Set(type).Find(id);
+
+            if (entity == null)
+                return ResultHelper.EntityNotFound($"{id}");
+
+            dataContext.Entry(entity).State = EntityState.Deleted;
             dataContext.SaveChanges();
 
             return ResultHelper.Successed();

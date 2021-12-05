@@ -16,5 +16,6 @@ namespace Checker_v._3._0.Models
         public int Points;
         public int TotalPoints;
         public List<TaskDto> Tasks;
+        public string DetailUrl;
     }
 }

@@ -75,8 +75,16 @@ namespace Checker_v._3._0.Models
         {
             get
             {
-                if (_courses == null && StudentsGroupsCourses != null)
+                if (_courses == null)
+                {
+                    if (StudentsGroupsCourses == null)
+                    {
+                        StudentsGroupsCourses = dataContext.StudentsGroupCourses
+                            .Where(x => x.StudentsGroup_id == this.Id)
+                            .ToList();
+                    }
                     _courses = StudentsGroupsCourses.Select(x => x.Course).ToList();
+                }
                 else if (_courses == null && dataContext != null)
                     _courses = dataContext.Set<StudentsGroupCourse>().Where(x => x.StudentsGroup_id == this.Id).Select(x => x.Course).ToList();
                 return _courses;

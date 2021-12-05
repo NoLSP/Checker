@@ -8,28 +8,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Checker_v._3._0.Models
 {
-    [Table("StudentTaskResult")]
-    public partial class StudentTaskResult : EntityObject
+    [Table("StudentTaskTeacherResult")]
+    public partial class StudentTaskTeacherResult : EntityObject
     {
         private DataContext dataContext;
         private ILazyLoader lazyLoader;
 
-        public StudentTaskResult(DataContext context, ILazyLoader loader)
+        public StudentTaskTeacherResult(DataContext context, ILazyLoader loader)
         {
             dataContext = context;
             lazyLoader = loader;
         }
 
-        public StudentTaskResult() : base()
+        public StudentTaskTeacherResult() : base()
         {
 
         }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Id")]
-        [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
-        [Key]
-        public int Id { get; set; }
         
         /// <summary>
         /// Студент

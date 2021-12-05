@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    public class StudentDto
+    public class StudentTaskTeacherResultDto
     {
         public int Id;
-        public string Email;
-        public string FullName;
-        public string GroupTitle;
+        public int StudentId;
+        public int TaskId;
+        public int? TeacherResult;
     }
 }

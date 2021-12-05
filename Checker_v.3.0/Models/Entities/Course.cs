@@ -39,6 +39,32 @@ namespace Checker_v._3._0.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Владелец
+        /// </summary>
+        [ListDisplay("Владелец")]
+        [DetailDisplay("Владелец")]
+        [EditDisplay("Владелец")]
+        [InputType("select")]
+        [Required(ErrorMessage = "Поле 'Владелец' обязательно для заполнения")]
+        [ForeignKey("Owner_id")]
+        public User Owner
+        {
+            get
+            {
+                if (_owner == null)
+                    _owner = dataContext.Set<User>()
+                        .Where(x => x.Role.Name == "Teacher")
+                        .Where(x => x.Id == this.Owner_id)
+                        .FirstOrDefault();
+                return _owner;
+            }
+            set => _owner = value;
+        }
+        private User _owner;
+        [Column("Owner_id")]
+        public int Owner_id { get; set; }
+
+        /// <summary>
         /// Название
         /// </summary>
         [ListDisplay("Название")]
@@ -65,15 +91,23 @@ namespace Checker_v._3._0.Models
         /// <summary>
         /// Студенческие группы
         /// </summary>
-        [ListDisplay("Курсы")]
-        [DetailDisplay("Курсы")]
+        [ListDisplay("Студ. группы")]
+        [DetailDisplay("Студ. группы")]
         [NotMapped]
-        public IList<StudentsGroup> studentsGroups
+        public IList<StudentsGroup> StudentsGroups
         {
             get
             {
-                if (_studentsGroups == null && StudentsGroupsCourses != null)
+                if (_studentsGroups == null)
+                {
+                    if (StudentsGroupsCourses == null)
+                    {
+                        StudentsGroupsCourses = dataContext.StudentsGroupCourses
+                            .Where(x => x.Course_id == this.Id)
+                            .ToList();
+                    }
                     _studentsGroups = StudentsGroupsCourses.Select(x => x.StudentsGroup).ToList();
+                }
                 else if (_studentsGroups == null && dataContext != null)
                     _studentsGroups = dataContext.Set<StudentsGroupCourse>().Where(x => x.Course_id == this.Id).Select(x => x.StudentsGroup).ToList();
                 return _studentsGroups;

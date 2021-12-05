@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    public class TaskDto
+    public class StudentsGroupDto
     {
         public int Id;
+        public string Name;
         public string Title;
-        public string Description;
-        public string TaskGroupTitle;
-        public int MaxResult;
+        public string DetailUrl;
+        public IEnumerable<CourseDto> Courses;
+        public List<UserDto> Students;
     }
 }

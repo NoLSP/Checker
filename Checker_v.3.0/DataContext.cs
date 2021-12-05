@@ -18,8 +18,8 @@ namespace Checker_v._3._0.Models
         }
 
         public virtual DbSet<StudentsGroup> StudentsGroups { get; set; }
-        public virtual DbSet<StudentTaskResult> StudentsTaskResults { get; set; }
-        public virtual DbSet<StudentsGroupCourse> StudentsGroupCourse { get; set; }
+        public virtual DbSet<StudentTaskTeacherResult> StudentsTaskTeacherResults { get; set; }
+        public virtual DbSet<StudentsGroupCourse> StudentsGroupCourses { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskState> TaskStates { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
@@ -27,7 +27,7 @@ namespace Checker_v._3._0.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<StudentTestResult> StudentsTestsResults { get; set; }
-        public virtual DbSet<Course> TaskGroups { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +37,15 @@ namespace Checker_v._3._0.Models
 
             modelBuilder.Entity<StudentsGroup>()
                 .HasOne(p => p.Owner);
+
+            modelBuilder.Entity<Course>()
+                .HasOne(p => p.Owner);
+
+            modelBuilder.Entity<StudentTaskTeacherResult>()
+               .HasOne(p => p.Student);
+
+            modelBuilder.Entity<StudentTaskTeacherResult>()
+               .HasOne(p => p.Task);
 
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Role)

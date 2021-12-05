@@ -35,7 +35,7 @@ namespace Checker_v._3._0.Controllers
                 {
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Profile", "Users", new { userId = user.Id});
+                    return RedirectToAction("Lk", "Users", new { userId = user.Id});
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }

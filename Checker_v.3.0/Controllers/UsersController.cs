@@ -21,10 +21,10 @@ namespace Checker_v._3._0.Controllers
         }
 
         [Authorize]
-        public ActionResult Profile()
+        public ActionResult Lk(int userId)
         {
             var userRole = User.Role();
-            var user = dataContext.Users.FirstOrDefault(x => x.Email == User.Identity.Name);
+            var user = dataContext.Users.Find(userId);
 
             if (user == null)
             {
@@ -36,19 +36,23 @@ namespace Checker_v._3._0.Controllers
                 return ResultHelper.Failed("У пользователя не указана роль");
             }
 
-            if(userRole == "Student")
+            if (userRole == "Administrator")
             {
-                return StudentProfile(dataContext.Users.Find());
+                return AdminLk(user);
             }
-            else if(userRole == "Teacher")
+            else if (userRole == "Student")
             {
-                return TeacherProfile(user);
+                return StudentLk(user);
+            }
+            else if (userRole == "Teacher")
+            {
+                return TeacherLk(user);
             }
 
             return ResultHelper.Failed("Роль пользователя не найдена в системе" );
         }
 
-        private ActionResult StudentProfile(User user)
+        private ActionResult StudentLk(User user)
         {
             //var tasks = dataContext.StudentsTaskResults
             //    .Where(x => x.Student_id == user.Id)
@@ -80,18 +84,71 @@ namespace Checker_v._3._0.Controllers
             return View();
         }
 
-        private ActionResult TeacherProfile(User user)
+        private ActionResult AdminLk(User user)
         {
             var model = new TeacherViewModel()
             {
                 FullName = user.Title,
                 Id = user.Id,
                 ShortName = user.ShortName,
-                Email = user.Email,
-                RoleName = dataContext.UserRoles.FirstOrDefault(x => x.Id == user.Role_id).Title
+                Email = user.Email
             };
 
             return View("TeacherProfile", model);
+        }
+
+        private ActionResult TeacherLk(User user)
+        {
+            var groupDatailUrl = "https://" + this.HttpContext.Request.Host + "/Teachers/StudentsGroupDetail?groupId=";
+
+            var studentsGroups = dataContext.StudentsGroups
+                .Where(x => x.Owner_id == user.Id)
+                .Select(x => new StudentsGroupDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    DetailUrl = groupDatailUrl + x.Id
+                }).ToList();
+
+            var courseDatailUrl = "https://" + this.HttpContext.Request.Host + "/Teachers/CourseDetail?courseId=";
+
+            var courses = dataContext.Courses
+                .Where(x => x.Owner_id == user.Id)
+                .Select(x => new CourseDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    DetailUrl = courseDatailUrl + x.Id
+                }).ToList();
+
+            var model = new TeacherViewModel()
+            {
+                FullName = user.Title,
+                Id = user.Id,
+                ShortName = user.ShortName,
+                Email = user.Email,
+                StudentsGroups = studentsGroups,
+                Courses = courses
+            };
+
+            return View("TeacherLk", model);
+        }
+
+        public ActionResult _TeacherGroups(int userId)
+        {
+            var user = dataContext.Users.Find(userId);
+
+            if (user == null)
+                return ResultHelper.UserNotFound();
+
+            if(user.Role.Name != "Teacher")
+                return ResultHelper.Failed("Пользователь не является преподавателем" );
+
+            var groups = dataContext.StudentsGroups
+                .Where(x => x.Owner_id == user.Id)
+                .ToList();
+
+            return View(groups);
         }
     }
 }

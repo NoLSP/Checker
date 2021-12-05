@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.ViewModels
 {
-    public class CreateTaskViewModel
+    public class CreateStudentsGroupViewModel
     {
         public string Title { get; set; }
-        public string Description { get; set; }
-        public int MaxResult { get; set; }
-        public int GroupId { get; set; }
-
-        public List<SelectListItem> TaskGroups;
+        
+        public int OwnerId { get; set; }
     }
 }

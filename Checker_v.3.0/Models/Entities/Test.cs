@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Checker_v._3._0.Models
 {
     [Table("Test")]
-    [ListDisplay("Тестов")]
+    [ListDisplay("Тесты")]
     [EditDisplay("Тест")]
     public partial class Test : EntityObject
     {

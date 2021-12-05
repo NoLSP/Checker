@@ -23,8 +23,8 @@ namespace Checker_v._3._0.Controllers
 
         public ActionResult List()
         {
-            var tasks = dataContext.TaskGroups
-                .Select(x => new TaskGroupDto() 
+            var tasks = dataContext.Courses
+                .Select(x => new CourseDto() 
                 { 
                     Id = x.Id,
                     Title = x.Title,
@@ -36,23 +36,23 @@ namespace Checker_v._3._0.Controllers
 
         public ActionResult _CreateForm()
         {
-            var taskGroups = dataContext.TaskGroups
+            var taskGroups = dataContext.Courses
                 .Select(x => new SelectListItem()
                 {
                     Text = x.Title,
                     Value = $"{x.Id}"
                 }).ToList();
 
-            return View("_CreateForm", new CreateTaskViewModel() { TaskGroups = taskGroups });
+            return View("_CreateForm", new TaskViewModel() { Courses = taskGroups });
         }
 
         [HttpPost]
-        public ActionResult Create(CreateTaskViewModel model)
+        public ActionResult Create(TaskViewModel model)
         {
-            var taskGroup = dataContext.TaskGroups.Find(model.GroupId);
+            var taskGroup = dataContext.Courses.Find(model.CourseId);
 
             if (taskGroup == null)
-                return ResultHelper.Failed($"Курса #{model.GroupId} не существует.");
+                return ResultHelper.Failed($"Курса #{model.CourseId} не существует.");
 
             var taskToCreate = new Task()
             {
