@@ -11,5 +11,7 @@ namespace Checker_v._3._0.Models
         public string Title;
         public string TaskTitle;
         public string FileName;
+        public string FilePath;
+        public string DetailUrl;
     }
 }

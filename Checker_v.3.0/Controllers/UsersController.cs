@@ -52,36 +52,40 @@ namespace Checker_v._3._0.Controllers
             return ResultHelper.Failed("Роль пользователя не найдена в системе" );
         }
 
-        private ActionResult StudentLk(User user)
+        private ActionResult StudentLk(User student)
         {
-            //var tasks = dataContext.StudentsTaskResults
-            //    .Where(x => x.Student_id == user.Id)
-            //    .Select(x => new TaskDto()
-            //    {
-            //        Id = x.Id,
-            //        Title = x.Task.Title,
-            //        StudentResult = x.TeacherResult ?? 0,
-            //        MaxResult = x.Task.MaxResult
-            //    }).ToList();
+            var studentsGroupDatailUrl = "https://" + this.HttpContext.Request.Host + $"/Students/StudentsGroupDetail?groupId={student.StudentsGroup_id}";
 
-            //var group = dataContext.StuentsInGroups
-            //    .Include(x => x.Group)
-            //    .First(x => x.Student_id == user.Id)
-            //    .Group;
+            var courseDatailUrl = "https://" + this.HttpContext.Request.Host + "/Students/CourseDetail?courseId=";
 
-            //var profileDto = new UserDto()
-            //{
-            //    Id = user.Id,
-            //    ShortName = user.ShortName,
-            //    FullName = user.FullName,
-            //    GroupId = group.Id,
-            //    GroupTitle = group.Title,
-            //    Points = tasks.Sum(x => x.StudentResult),
-            //    TotalPoints = tasks.Sum(x => x.MaxResult),
-            //    Tasks = tasks
-            //};
+            var courses = student.Group.Courses
+                .Select(x => new CourseDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    DetailUrl = courseDatailUrl + x.Id,
+                    Owner = new UserDto()
+                    {
+                        Id = x.Owner.Id,
+                        FullName = x.Owner.Title
+                    }
+                }).ToList();
 
-            return View();
+            var model = new StudentViewModel()
+            {
+                FullName = student.Title,
+                Id = student.Id,
+                ShortName = student.ShortName,
+                Email = student.Email,
+                Courses = courses,
+                Group = new StudentsGroupDto() 
+                { 
+                    Id = student.Group.Id,
+                    Title = student.Group.Title
+                }
+            };
+
+            return View("StudentLk", model);
         }
 
         private ActionResult AdminLk(User user)

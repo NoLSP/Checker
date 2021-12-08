@@ -4,20 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Checker_v._3._0.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Checker_v._3._0.Controllers
 {
     public class TeachersController : Controller
     {
         private DataContext dataContext;
+        private IWebHostEnvironment appEnvironment;
 
-        public TeachersController(DataContext context)
+        public TeachersController(DataContext context, IWebHostEnvironment appEnvironment)
         {
             dataContext = context;
+            this.appEnvironment = appEnvironment;
         }
 
         public ActionResult StudentsGroupDetail(int groupId)
@@ -133,7 +136,7 @@ namespace Checker_v._3._0.Controllers
             var user = dataContext.Users.Find(userId);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             return View(new CreateStudentsGroupViewModel() { OwnerId = user.Id });
         }
@@ -161,7 +164,7 @@ namespace Checker_v._3._0.Controllers
             var user = dataContext.Users.Find(userId);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             return View(new CreateCourseViewModel() { OwnerId = user.Id });
         }
@@ -172,7 +175,7 @@ namespace Checker_v._3._0.Controllers
             var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             var courseToCreate = new Course()
             {
@@ -193,12 +196,12 @@ namespace Checker_v._3._0.Controllers
             var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             var task = dataContext.Tasks.Find(taskId);
 
             if (task == null)
-                ResultHelper.EntityNotFound("Task");
+                return ResultHelper.EntityNotFound("Task");
 
             var courses = dataContext.Courses
                 .Where(x => x.Owner_id == user.Id)
@@ -227,12 +230,12 @@ namespace Checker_v._3._0.Controllers
             var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             var task = dataContext.Tasks.Find(model.Id);
 
             if (task == null)
-                ResultHelper.EntityNotFound("Task");
+                return ResultHelper.EntityNotFound("Task");
 
             task.Title = model.Title;
             task.Description = model.Description;
@@ -251,12 +254,12 @@ namespace Checker_v._3._0.Controllers
             var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             var course = dataContext.Courses.Find(courseId);
 
             if (course == null)
-                ResultHelper.EntityNotFound("Course");
+                return ResultHelper.EntityNotFound("Course");
 
             var taskViewModel = new TaskViewModel()
             {
@@ -272,7 +275,7 @@ namespace Checker_v._3._0.Controllers
             var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
 
             if (user == null)
-                ResultHelper.UserNotFound();
+                return ResultHelper.UserNotFound();
 
             var task = new Models.Task() {
                 Title = model.Title,
@@ -285,6 +288,146 @@ namespace Checker_v._3._0.Controllers
             dataContext.SaveChanges();
 
             return Redirect($"/Teachers/CourseDetail?courseId={task.Course_id}");
+        }
+
+        public ActionResult TaskDetail(int taskId)
+        {
+            var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
+
+            if (user == null)
+                return ResultHelper.UserNotFound();
+
+            var task = dataContext.Tasks
+                .Include(x => x.Course)
+                .FirstOrDefault(x => x.Id == taskId);
+
+            if (task == null)
+                return ResultHelper.EntityNotFound("Task");
+
+            if (task.Course.Owner_id != user.Id)
+                return ResultHelper.Failed("Данный пользователь не является владельцем курса");
+
+            var tests = task.Tests
+                .Select(x => new TestDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    FileName = new FileInfo(x.TestFilePath).Name,
+                    DetailUrl = "https://" + HttpContext.Request.Host + "/Teachers/TestDetail?id=" + x.Id
+                }).ToList();
+
+            var taskDto = new TaskDto()
+            {
+                Id = task.Id,
+                Title = task.Title,
+                CourseId = task.Course_id,
+                CourseTitle = task.Course.Title,
+                Description = task.Description,
+                MaxResult = task.MaxResult,
+                Tests = tests
+            };
+
+            return View(taskDto);
+        }
+
+        [HttpGet]
+        public ActionResult CreateTest(int taskId)
+        {
+            var task = dataContext.Tasks.Find(taskId);
+
+            if (task == null)
+                return ResultHelper.EntityNotFound("Task");
+
+            return View("CreateTest", new TestViewModel() { Tasks = new List<SelectListItem>() { new SelectListItem() { Text = "", Value = $"{taskId}"} } });
+        }
+
+        [HttpPost]
+        public ActionResult CreateTest(TestViewModel model)
+        {
+            var task = dataContext.Tasks
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Owner)
+                .SingleOrDefault(x => x.Id == model.TaskId);
+
+            if (task == null)
+                return ResultHelper.Failed($"Задачи #{model.TaskId} не существует.");
+
+            string path = appEnvironment.WebRootPath + $"/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
+            var directory = Directory.CreateDirectory(path);
+
+            using (var fileStream = new FileStream(path + model.TestFile.FileName, FileMode.Create))
+            {
+                model.TestFile.CopyTo(fileStream);
+            }
+
+            var testToCreate = new Test()
+            {
+                Title = model.Title,
+                TestFilePath = path + model.TestFile.FileName,
+                Task_id = task.Id
+            };
+
+            dataContext.Entry(testToCreate).State = EntityState.Added;
+            dataContext.SaveChanges();
+
+            return Redirect($"/Teachers/TaskDetail?taskId={task.Id}");
+        }
+
+        [HttpGet]
+        public ActionResult EditTest(int testId)
+        {
+            var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
+
+            if (user == null)
+                return ResultHelper.UserNotFound();
+
+            var test = dataContext.Tests
+                .FirstOrDefault(x => x.Id == testId);
+
+            if (test == null)
+                return ResultHelper.EntityNotFound("Test");
+
+            var testViewModel = new TestViewModel()
+            {
+                Id = test.Id,
+                Title = test.Title,
+                FileName = new FileInfo(test.TestFilePath).Name,
+                TaskId = test.Task_id
+            };
+
+            return View(testViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditTest(TestViewModel model)
+        {
+            var task = dataContext.Tasks
+                .Include(x => x.Course)
+                .ThenInclude(x => x.Owner)
+                .SingleOrDefault(x => x.Id == model.TaskId);
+
+            if (task == null)
+                return ResultHelper.Failed($"Задачи #{model.TaskId} не существует.");
+
+            string path = appEnvironment.WebRootPath + $"/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
+            var directory = Directory.CreateDirectory(path);
+
+            using (var fileStream = new FileStream(path + model.TestFile.FileName, FileMode.Create))
+            {
+                model.TestFile.CopyTo(fileStream);
+            }
+
+            var testToCreate = new Test()
+            {
+                Title = model.Title,
+                TestFilePath = path + model.TestFile.FileName,
+                Task_id = task.Id
+            };
+
+            dataContext.Entry(testToCreate).State = EntityState.Added;
+            dataContext.SaveChanges();
+
+            return Redirect($"/Teachers/TaskDetail?taskId={task.Id}");
         }
     }
 }

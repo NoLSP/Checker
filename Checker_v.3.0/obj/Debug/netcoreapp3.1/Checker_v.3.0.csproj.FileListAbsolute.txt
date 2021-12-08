@@ -299,12 +299,9 @@ G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\H
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
-G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Students\List.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\TasksGroups\List.cshtml.g.cs
-G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\TasksGroups\_CreateForm.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Tasks\List.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Tests\List.cshtml.g.cs
-G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Tests\_CreateForm.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Users\TeacherProfile.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
@@ -317,7 +314,6 @@ G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0.genruntimeconfig.cache
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\EntityObjects\List.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\EntityObjects\Detail.cshtml.g.cs
-G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\EntityObjects\_CreateForm.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Users\TeacherLk.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\StudentsGroupDetail.cshtml.g.cs
@@ -326,3 +322,9 @@ G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\T
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\CourseDetail.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\EditTask.cshtml.g.cs
 G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\CreateTask.cshtml.g.cs
+G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\TaskDetail.cshtml.g.cs
+G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Teachers\CreateTest.cshtml.g.cs
+G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Checker_v.3.0.csproj.AssemblyReference.cache
+G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\EntityObjects\_CreateForm.cshtml.g.cs
+G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Users\StudentLk.cshtml.g.cs
+G:\Files\Projects\C#\Checker\Checker_v.3.0\obj\Debug\netcoreapp3.1\Razor\Views\Students\CourseDetail.cshtml.g.cs

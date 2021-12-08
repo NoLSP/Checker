@@ -49,11 +49,11 @@ namespace Checker_v._3._0.Controllers
                     Value = $"{x.Id}"
                 }).ToList();
 
-            return View("_CreateForm", new CreateTestViewModel() { Tasks = tasks });
+            return View("_CreateForm", new TestViewModel() { Tasks = tasks });
         }
 
         [HttpPost]
-        public ActionResult Create(CreateTestViewModel model)
+        public ActionResult Create(TestViewModel model)
         {
             var task = dataContext.Tasks
                 .Include(x => x.Course)

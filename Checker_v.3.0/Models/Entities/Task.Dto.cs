@@ -14,5 +14,7 @@ namespace Checker_v._3._0.Models
         public string CourseTitle;
         public int CourseId;
         public int MaxResult;
+
+        public IEnumerable<TestDto> Tests;
     }
 }
