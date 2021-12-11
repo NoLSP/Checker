@@ -1,24 +1,27 @@
 ﻿using Checker_v._3._0.Models.Attributes;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 #nullable disable
 
 namespace Checker_v._3._0.Models
 {
-    [ListDisplay("Состояния тестов")]
-    [EditDisplay("Состояние теста")]
-    [Table("TestState")]
-    public partial class TestState : EntityObject
+    [Table("ProgrammingLanguage")]
+    [ListDisplay("Языки программирования")]
+    [EditDisplay("Язык программирования")]
+    public partial class ProgrammingLanguage : EntityObject
     {
         private DataContext dataContext;
 
-        public TestState(DataContext context)
+        public ProgrammingLanguage(DataContext context)
         {
             dataContext = context;
         }
 
-        public TestState() : base()
+        public ProgrammingLanguage() : base()
         {
 
         }
@@ -46,5 +49,23 @@ namespace Checker_v._3._0.Models
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Задачи
+        /// </summary>
+        [ListDisplay("Задачи")]
+        [DetailDisplay("Задачи")]
+        [NotMapped]
+        public IList<Task> Tasks
+        {
+            get
+            {
+                if (_tasks == null)
+                    _tasks = dataContext.Set<Task>().Where(x => x.ProgrammingLanguage_id == this.Id).ToList();
+                return _tasks;
+            }
+            set => _tasks = value;
+        }
+        private IList<Task> _tasks;
     }
 }

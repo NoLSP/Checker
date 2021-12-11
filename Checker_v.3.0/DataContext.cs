@@ -22,6 +22,7 @@ namespace Checker_v._3._0.Models
         public virtual DbSet<StudentsGroupCourse> StudentsGroupCourses { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskState> TaskStates { get; set; }
+        public virtual DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
         public virtual DbSet<Test> Tests { get; set; }
         public virtual DbSet<TestState> TestStates { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -47,6 +48,11 @@ namespace Checker_v._3._0.Models
             modelBuilder.Entity<StudentTaskTeacherResult>()
                .HasOne(p => p.Task);
 
+            modelBuilder.Entity<StudentTaskTeacherResult>()
+               .HasOne(p => p.TaskState)
+               .WithMany(p => p.Results)
+               .HasForeignKey(p => p.TaskState_id);
+
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Role)
                 .WithMany(t => t.Users)
@@ -61,6 +67,11 @@ namespace Checker_v._3._0.Models
                 .HasOne(p => p.Task)
                 .WithMany(t => t.Tests)
                 .HasForeignKey(p => p.Task_id);
+
+            modelBuilder.Entity<ProgrammingLanguage>()
+                .HasMany(p => p.Tasks)
+                .WithOne(t => t.ProgrammingLanguage)
+                .HasForeignKey(p => p.ProgrammingLanguage_id);
 
             modelBuilder.Entity<Task>()
                 .HasOne(p => p.Course)
@@ -85,6 +96,21 @@ namespace Checker_v._3._0.Models
 
             modelBuilder.Entity<User>()
                 .Navigation(x => x.Group).AutoInclude();
+
+            modelBuilder.Entity<StudentTaskTeacherResult>()
+                .Navigation(x => x.Student).AutoInclude();
+
+            modelBuilder.Entity<StudentTaskTeacherResult>()
+                .Navigation(x => x.Task).AutoInclude();
+
+            modelBuilder.Entity<StudentTaskTeacherResult>()
+                .Navigation(x => x.TaskState).AutoInclude();
+
+            modelBuilder.Entity<Task>()
+                .Navigation(x => x.Course).AutoInclude();
+
+            modelBuilder.Entity<Task>()
+                .Navigation(x => x.ProgrammingLanguage).AutoInclude();
 
             OnModelCreatingPartial(modelBuilder);
         }

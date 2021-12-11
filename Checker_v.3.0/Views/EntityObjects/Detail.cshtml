@@ -36,11 +36,11 @@
     }
 </style>
 
-<label>@Model.Title</label>
+<label>@Model.EntityTitle</label>
 
 <div class="buttonsContainer">
     <div class="col-2 justify-content-center">
-        <button id="editButton">Изменить</button>
+        <button class="editButton" style="background-color:lightgreen" data-id="@Model.EntityId">Изменить</button>
     </div>
 </div>
 
@@ -71,4 +71,8 @@
     
 </div>
 
-<script src="~/js/studentlist.js"></script>
+<script>
+    var EntityName = "@Model.EntityName";
+</script>
+
+<script src="~/js/entityobject.list.js"></script>

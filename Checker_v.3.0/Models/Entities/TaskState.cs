@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 #nullable disable
 
@@ -13,6 +14,18 @@ namespace Checker_v._3._0.Models
     [EditDisplay("Состояние задачи")]
     public partial class TaskState : EntityObject
     {
+        private DataContext dataContext;
+
+        public TaskState(DataContext context)
+        {
+            dataContext = context;
+        }
+
+        public TaskState() : base()
+        {
+
+        }
+
         /// <summary>
         /// Название
         /// </summary>
@@ -36,5 +49,23 @@ namespace Checker_v._3._0.Models
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Результаты
+        /// </summary>
+        [ListDisplay("Результаты")]
+        [DetailDisplay("Результаты")]
+        [NotMapped]
+        public IList<StudentTaskTeacherResult> Results
+        {
+            get
+            {
+                if (_results == null)
+                    _results = dataContext.Set<StudentTaskTeacherResult>().Where(x => x.TaskState_id == this.Id).ToList();
+                return _results;
+            }
+            set => _results = value;
+        }
+        private IList<StudentTaskTeacherResult> _results;
     }
 }

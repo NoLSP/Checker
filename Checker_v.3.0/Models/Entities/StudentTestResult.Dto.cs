@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace Checker_v._3._0.Models
 {
-    public class StudentTaskTeacherResultDto
+    public class StudentTestResultDto
     {
         public int Id;
+        public UserDto Student;
         public int StudentId;
-        public int TaskId;
-        public int? TeacherResult;
-        public DateTime? SolutionLoadDateTime;
-        public int SuccessTestsCount;
+        public TestDto Test;
+        public TestState State;
     }
 }

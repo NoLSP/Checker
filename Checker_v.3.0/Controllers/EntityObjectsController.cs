@@ -66,6 +66,19 @@ namespace Checker_v._3._0.Controllers
                             Url = null
                         });
                     }
+                    else if (field.FieldType.Name == "Nullable`1")//nullable int
+                    {
+                        var fieldValue = (int?)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
+
+                        dtoEntity.Add(new EntityObjectFieldDto()
+                        {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
+                            Type = field.FieldType,
+                            Value = fieldValue == null ? null : fieldValue,
+                            Url = null
+                        });
+                    }
                     else if (field.FieldType.Name == "String")
                     {
                         var url = (string)null;
@@ -199,7 +212,9 @@ namespace Checker_v._3._0.Controllers
 
             return View(new EntityObjectDetailDto()
             {
-                Title = (string)entity.GetType().GetProperty("Title").GetValue(entity, null),
+                EntityId = id,
+                EntityName = entityType,
+                EntityTitle = (string)entity.GetType().GetProperty("Title").GetValue(entity, null),
                 Fields = entityFields
             });
         }
@@ -240,6 +255,16 @@ namespace Checker_v._3._0.Controllers
                         InputType = field.FieldInputType
                     });
                 }
+                else if (field.FieldType.Name == "Nullable`1")//nullable int
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType
+                    });
+                }
                 else if (field.FieldType.Name == "String")
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
@@ -271,6 +296,8 @@ namespace Checker_v._3._0.Controllers
                     });
                 }
             }
+
+            ViewData["Title"] = "Создать";
 
             return View("_CreateForm",new EntityObjectEditDto()
             {
@@ -364,6 +391,19 @@ namespace Checker_v._3._0.Controllers
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                     });
                 }
+                else if (field.FieldType.Name == "Nullable`1")//nullable int
+                {
+                    var fieldValue = (int?)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
+
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        Value = fieldValue == null ? null : fieldValue,
+                    });
+                }
                 else if (field.FieldType.Name == "String")
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
@@ -401,6 +441,8 @@ namespace Checker_v._3._0.Controllers
                     });
                 }
             }
+
+            ViewData["Title"] = "Редактировать";
 
             return View("_CreateForm", new EntityObjectEditDto()
             {

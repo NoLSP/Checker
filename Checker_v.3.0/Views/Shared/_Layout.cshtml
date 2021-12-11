@@ -22,12 +22,16 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                         <ul class="navbar-nav flex-grow-1">
-                            @{ 
+                            @{
                                 var usersUrl = "https://" + Context.Request.Host + "/EntityObjects/User/List";
                                 var coursesUrl = "https://" + Context.Request.Host + "/EntityObjects/Course/List";
                                 var studentsGroupsUrl = "https://" + Context.Request.Host + "/EntityObjects/StudentsGroup/List";
                                 var tasksUrl = "https://" + Context.Request.Host + "/EntityObjects/Task/List";
                                 var testsUrl = "https://" + Context.Request.Host + "/EntityObjects/Test/List";
+                                var resultsUrl = "https://" + Context.Request.Host + "/EntityObjects/StudentTaskTeacherResult/List";
+                                var taskStatesUrl = "https://" + Context.Request.Host + "/EntityObjects/TaskState/List";
+                                var testStatesUrl = "https://" + Context.Request.Host + "/EntityObjects/TestState/List";
+                                var programmingLanguagesUrl = "https://" + Context.Request.Host + "/EntityObjects/ProgrammingLanguage/List";
                             }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href=@usersUrl>Пользователи</a>
@@ -43,6 +47,18 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="@testsUrl">Тесты</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="@resultsUrl">Результаты</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="@taskStatesUrl">Состояния задач</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="@testStatesUrl">Состояния тестов</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="@programmingLanguagesUrl">Языки программирования</a>
                             </li>
                         </ul>
                     </div>

@@ -1,0 +1,28 @@
+﻿@model StudentTaskDto
+
+<label>Постановка задачи: @Model.Task.Description</label>
+<br />
+<strong>Решение:</strong>
+<br />
+<label>Дата последней загрузки     @Model.TeacherResult.SolutionLoadDateTime</label>
+<br />
+<label>Прошло тестов     @Model.TeacherResult.SuccessTestsCount/@Model.Task.Tests.Count()</label>
+<br />
+<label>Итоговая оценка     @Model.TeacherResult.TeacherResult/@Model.Task.MaxResult</label>
+<br />
+<strong>Тесты:</strong>
+<br />
+@foreach (var testResult in Model.TestsResults)
+{
+    <label>@testResult.Test.Title ................ @testResult.State.Title</label>
+    <br />
+}
+
+<input id="loadSolutionButton" name="loadSolutionButton" data-id="@Model.TeacherResult.Id" onchange="LoadSolution('loadSolutionButton')" type="file" value="Загрузить решение" />
+
+
+<div id="popupWin" class="formWindow">
+
+</div>
+
+<script src="~/js/student.taskdetail.js"></script>

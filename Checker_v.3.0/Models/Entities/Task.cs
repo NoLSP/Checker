@@ -51,7 +51,7 @@ namespace Checker_v._3._0.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Группа задач
+        /// Курс
         /// </summary>
         [ListDisplay("Курс")]
         [DetailDisplay("Курс")]
@@ -62,6 +62,19 @@ namespace Checker_v._3._0.Models
         public virtual Course Course { get; set; }
         [Column("Course_id")]
         public int Course_id { get; set; }
+
+        /// <summary>
+        /// Язык программирования
+        /// </summary>
+        [ListDisplay("Язык программирования")]
+        [DetailDisplay("Язык программирования")]
+        [EditDisplay("Язык программирования")]
+        [InputType("select")]
+        [Required(ErrorMessage = "Поле 'Язык программирования' обязательно для заполнения")]
+        [ForeignKey("ProgrammingLanguage_id")]
+        public virtual ProgrammingLanguage ProgrammingLanguage { get; set; }
+        [Column("ProgrammingLanguage_id")]
+        public int ProgrammingLanguage_id { get; set; }
 
         /// <summary>
         /// Максимально возможный результат

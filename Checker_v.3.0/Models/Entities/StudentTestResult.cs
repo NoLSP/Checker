@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Checker_v._3._0.Models.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,6 +9,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Checker_v._3._0.Models
 {
     [Table("StudentTestResult")]
+    [ListDisplay("Результаты тестов")]
+    [EditDisplay("Результат теста")]
     public partial class StudentTestResult
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,19 +19,43 @@ namespace Checker_v._3._0.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Поле 'StudentId' обязательно для заполнения")]
+        /// <summary>
+        /// Студент
+        /// </summary>
+        [ListDisplay("Студент")]
+        [EditDisplay("Студент")]
+        [DetailDisplay("Студент")]
+        [InputType("select")]
+        [Required(ErrorMessage = "Поле 'Студент' обязательно для заполнения")]
+        [ForeignKey("Student_id")]
+        public User Student { get; set; }
         [Column("Student_id")]
         public int Student_id { get; set; }
-        public virtual User Student { get; set; }
 
-        [Required(ErrorMessage = "Поле 'TestId' обязательно для заполнения")]
+        /// <summary>
+        /// Тест
+        /// </summary>
+        [ListDisplay("Тест")]
+        [EditDisplay("Тест")]
+        [DetailDisplay("Тест")]
+        [InputType("select")]
+        [Required(ErrorMessage = "Поле 'Тест' обязательно для заполнения")]
+        [ForeignKey("Test_id")]
+        public Test Test { get; set; }
         [Column("Test_id")]
         public int Test_id { get; set; }
-        public virtual Test Test { get; set; }
 
-        [Required(ErrorMessage = "Поле 'StateId' обязательно для заполнения")]
-        [Column("State_id")]
-        public int StateId { get; set; }
-        public virtual TestState State { get; set; }
+        /// <summary>
+        /// Статус
+        /// </summary>
+        [ListDisplay("Статус")]
+        [EditDisplay("Статус")]
+        [DetailDisplay("Статус")]
+        [InputType("select")]
+        [Required(ErrorMessage = "Поле 'Статус' обязательно для заполнения")]
+        [ForeignKey("TestState_id")]
+        public TestState State { get; set; }
+        [Column("TestState_id")]
+        public int TestState_id { get; set; }
     }
 }
