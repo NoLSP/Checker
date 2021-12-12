@@ -31,6 +31,7 @@
     ".NETCoreApp,Version=v3.1": {
       "Checker_v.3.0/1.0.0": {
         "dependencies": {
+          "Jint": "2.11.58",
           "Microsoft.EntityFrameworkCore.Proxies": "5.0.9",
           "Newtonsoft.Json": "13.0.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "5.0.7",
@@ -333,6 +334,17 @@
         },
         "compile": {
           "lib/netstandard1.5/Castle.Core.dll": {}
+        }
+      },
+      "Jint/2.11.58": {
+        "runtime": {
+          "lib/netstandard2.0/Jint.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "2.11.58.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Jint.dll": {}
         }
       },
       "Microsoft.EntityFrameworkCore/5.0.9": {
@@ -2988,6 +3000,13 @@
       "sha512": "sha512-zanbjWC0Y05gbx4eGXkzVycOQqVOFVeCjVsDSyuao9P4mtN1w3WxxTo193NGC7j3o2u3AJRswaoC6hEbnGACnQ==",
       "path": "castle.core/4.4.1",
       "hashPath": "castle.core.4.4.1.nupkg.sha512"
+    },
+    "Jint/2.11.58": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-obRlPnuSmbjO7I2bfuKc1d+K1LB3xyg1Cnm2MT7PGUOHOntcdR96pDhsQnWBI5Dhxqr1Bj5/odpNi/B+AwVlPA==",
+      "path": "jint/2.11.58",
+      "hashPath": "jint.2.11.58.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/5.0.9": {
       "type": "package",

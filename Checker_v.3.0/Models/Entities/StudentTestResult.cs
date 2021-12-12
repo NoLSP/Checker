@@ -54,7 +54,7 @@ namespace Checker_v._3._0.Models
         [InputType("select")]
         [Required(ErrorMessage = "Поле 'Статус' обязательно для заполнения")]
         [ForeignKey("TestState_id")]
-        public TestState State { get; set; }
+        public TestState TestState { get; set; }
         [Column("TestState_id")]
         public int TestState_id { get; set; }
     }

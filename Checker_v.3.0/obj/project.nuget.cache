@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "n2qGLUrKcr+YuUYpwifqtJTAisebVjaNUzPHXmsw20UV8l8B0tXm5bynb7Pg5oJ/quB2sluzd3csGl6MCzgMAA==",
+  "dgSpecHash": "0WMAsd4XrUXPyh/ePwME4/EC2xMMG+XoDdzMUJ+HgmmgN+149uSBTYHRZy7vphaf3cKbCsD8GUoEvBKcpN8r6w==",
   "success": true,
   "projectFilePath": "G:\\Files\\Projects\\C#\\Checker\\Checker_v.3.0\\Checker_v.3.0.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Buloyaka\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
+    "C:\\Users\\Buloyaka\\.nuget\\packages\\jint\\2.11.58\\jint.2.11.58.nupkg.sha512",
     "C:\\Users\\Buloyaka\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.9\\microsoft.entityframeworkcore.5.0.9.nupkg.sha512",
     "C:\\Users\\Buloyaka\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.9\\microsoft.entityframeworkcore.abstractions.5.0.9.nupkg.sha512",
     "C:\\Users\\Buloyaka\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\5.0.9\\microsoft.entityframeworkcore.analyzers.5.0.9.nupkg.sha512",

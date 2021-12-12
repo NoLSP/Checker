@@ -11,6 +11,7 @@ namespace Checker_v._3._0.Models
         public UserDto Student;
         public int StudentId;
         public TestDto Test;
+        public int TestId;
         public TestState State;
     }
 }

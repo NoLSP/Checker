@@ -33,21 +33,30 @@ namespace Checker_v._3._0.Models
             return state;
         }
 
-        public static TestState Complete(DataContext dataContext)
+        public static TestState Success(DataContext dataContext)
         {
-            var state = Find(dataContext, "Complete");
+            var state = Find(dataContext, "Success");
 
             if (state == null)
-                state = Obtain(dataContext, "Complete", "Завершено");
+                state = Obtain(dataContext, "Success", "Пройден");
 
             return state;
         }
 
+        public static TestState Failed(DataContext dataContext)
+        {
+            var state = Find(dataContext, "Failed");
 
+            if (state == null)
+                state = Obtain(dataContext, "Failed", "Провален");
+
+            return state;
+        }
 
         public static void Install(DataContext dataContext)
         {
-            Complete(dataContext);
+            Success(dataContext);
+            Failed(dataContext);
         }
     }
 }

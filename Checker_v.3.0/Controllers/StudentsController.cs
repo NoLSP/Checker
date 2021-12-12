@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Jint;
 
 namespace Checker_v._3._0.Controllers
 {
@@ -135,7 +137,7 @@ namespace Checker_v._3._0.Controllers
                         Title = x.Test.Title
                     },
                     StudentId = user.Id,
-                    State = x.State
+                    State = x.TestState
                 }).ToList();
 
             foreach(var test in tests.Where(x => !testResults.Any(y => y.Test.Id == x.Id)))
@@ -144,7 +146,7 @@ namespace Checker_v._3._0.Controllers
                 {
                     Student_id = user.Id,
                     Test_id = test.Id,
-                    State = dataContext.TestStates.First(x => x.Name == "Failed")
+                    TestState = dataContext.TestStates.First(x => x.Name == "Failed")
                 };
 
                 dataContext.Entry(studentTestResult).State = EntityState.Added;
@@ -155,7 +157,7 @@ namespace Checker_v._3._0.Controllers
                     StudentId = user.Id,
                     Id = studentTestResult.Id,
                     Test = test,
-                    State = studentTestResult.State
+                    State = studentTestResult.TestState
                 });
             }
 
@@ -205,28 +207,114 @@ namespace Checker_v._3._0.Controllers
         }
 
         [HttpPost]
-        public JsonResult LoadSolution(IFormCollection formData,[FromForm] IFormFile studentFile)
+        public JsonResult LoadSolution([FromForm] int studentResultId, [FromForm] IFormFile studentFile)
         {
-            var context = this.HttpContext;
+            var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
 
-            //var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
+            if (studentResult == null)
+                return Json(new { Success = false, Message = $"Результат #{studentResultId} не существует." });
 
-            //if (studentResult == null)
-            //    return Json(new { Success = true, Message = $"Результат #{studentResultId} не существует." });
+            var programmingLanguage = studentResult.Task.ProgrammingLanguage;
 
-            //string path = appEnvironment.WebRootPath + $"/Files/Students/{studentResult.Student.Title}/Solutions/{studentResult.Task.Title}/";
-            //var directory = Directory.CreateDirectory(path);
+            if(!studentFile.FileName.EndsWith(programmingLanguage.FileExtension))
+                return Json(new { Success = false, Message = $"неверный формат файла" });
 
-            //using (var fileStream = new FileStream(path + studentFile.FileName, FileMode.Create))
-            //{
-            //    studentFile.CopyTo(fileStream);
-            //}
+            string path = appEnvironment.WebRootPath + $"/Files/Students/{studentResult.Student.Title}/Solutions/{studentResult.Task.Title}/";
+            var directory = Directory.CreateDirectory(path);
 
-            //studentResult.StudentFilePath = path + studentFile.FileName;
-            //dataContext.Entry(studentResult).State = EntityState.Modified;
-            //dataContext.SaveChanges();
+            using (var fileStream = new FileStream(path + studentFile.FileName, FileMode.Create))
+            {
+                studentFile.CopyTo(fileStream);
+            }
 
-            return Json(new { Success = true, Message = "Файл успешно загружен"});
+            studentResult.StudentFilePath = path + studentFile.FileName;
+            var now = DateTime.UtcNow;
+            studentResult.SolutionLoadDateTime = now;
+            studentResult.TaskState = TaskState.SolutionLoaded(dataContext);
+            studentResult.StateDateTime = now;
+            dataContext.Entry(studentResult).State = EntityState.Modified;
+            dataContext.SaveChanges();
+
+            return Json(new { Success = true, Message = "решение загружено", LoadDate = now.ToString("dd.MM.yy"), LoadTime = now.ToString("HH.mm")});
+        }
+
+        public JsonResult CheckSolution(int studentResultId)
+        {
+            var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
+
+            if (studentResult == null)
+                return Json(new { Success = false, Message = $"Результат #{studentResultId} не существует." });
+
+            var studentScript = "";
+
+            using (var studentScriptStream = new StreamReader(studentResult.StudentFilePath))
+            {
+                studentScript = studentScriptStream.ReadToEnd();
+            }
+
+            var tests = studentResult.Task.Tests;
+            var studentTestsResults = dataContext.StudentsTestsResults
+                .Where(x => x.Student_id == studentResult.Student_id && tests.Select(y => y.Id).ToList().Contains(x.Test_id))
+                .ToList();
+
+            var JSEngine = new Engine();
+            var data = new List<dynamic>();
+
+            foreach (var test in tests)
+            {
+                var testResult = false;
+                var teacherScript = "";
+
+                using (var teacherTestScriptStream = new StreamReader(test.TestFilePath))
+                {
+                    teacherScript = teacherTestScriptStream.ReadToEnd();
+                }
+
+                string script = studentScript + "\n" + teacherScript;
+
+                try
+                {
+                    JSEngine.Execute(script);
+                    testResult = JSEngine.GetValue("result").AsBoolean();
+                }
+                catch (Jint.Runtime.JavaScriptException Ex)
+                {
+                    //Тут можно будет выводить ошибку
+                }
+                catch(Exception e)
+                {
+
+                }
+
+                var studentTestResult = studentTestsResults.FirstOrDefault(x => x.Test_id == test.Id);
+                if(studentTestResult == null)
+                {
+                    studentTestResult = new StudentTestResult()
+                    {
+                        Test_id = test.Id,
+                        Student_id = studentResult.Student_id,
+                        TestState = testResult ? TestState.Success(dataContext) : TestState.Failed(dataContext)
+                    };
+
+                    dataContext.Entry(studentTestResult).State = EntityState.Added;
+                }
+                else
+                {
+                    studentTestResult.TestState = testResult ? TestState.Success(dataContext) : TestState.Failed(dataContext);
+                    dataContext.Entry(studentTestResult).State = EntityState.Modified;
+                }
+
+                dataContext.SaveChanges();
+
+                data.Add(new
+                {
+                    TestId = studentTestResult.Test_id,
+                    TestTitle = test.Title,
+                    State = studentTestResult.TestState
+                });
+            }
+
+            return Json(new { data = data.ToArray()});
         }
     }
 }

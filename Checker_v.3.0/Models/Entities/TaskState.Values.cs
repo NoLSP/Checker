@@ -33,21 +33,52 @@ namespace Checker_v._3._0.Models
             return state;
         }
 
-        public static TaskState Complete(DataContext dataContext)
+        public static TaskState Success(DataContext dataContext)
         {
-            var state = Find(dataContext, "Complete");
+            var state = Find(dataContext, "Success");
 
             if (state == null)
-                state = Obtain(dataContext, "Complete", "Завершено");
+                state = Obtain(dataContext, "Success", "Сдана");
 
             return state;
         }
 
+        public static TaskState Failed(DataContext dataContext)
+        {
+            var state = Find(dataContext, "Failed");
 
+            if (state == null)
+                state = Obtain(dataContext, "Failed", "Не сдана");
+
+            return state;
+        }
+
+        public static TaskState InProgress(DataContext dataContext)
+        {
+            var state = Find(dataContext, "In progress");
+
+            if (state == null)
+                state = Obtain(dataContext, "In progress", "Ждет оценки");
+
+            return state;
+        }
+
+        public static TaskState SolutionLoaded(DataContext dataContext)
+        {
+            var state = Find(dataContext, "Solution loaded");
+
+            if (state == null)
+                state = Obtain(dataContext, "Solution loaded", "Решение загружено");
+
+            return state;
+        }
 
         public static void Install(DataContext dataContext)
         {
-            Complete(dataContext);
+            Success(dataContext);
+            Failed(dataContext);
+            InProgress(dataContext);
+            SolutionLoaded(dataContext);
         }
     }
 }

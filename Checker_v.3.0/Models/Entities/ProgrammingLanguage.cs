@@ -51,6 +51,17 @@ namespace Checker_v._3._0.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Расширение
+        /// </summary>
+        [ListDisplay("Расширение")]
+        [DetailDisplay("Расширение")]
+        [EditDisplay("Расширение")]
+        [InputType("text")]
+        [Column("FileExtension")]
+        [StringLength(128, ErrorMessage = "Строка слишком длинная")]
+        public string FileExtension { get; set; }
+
+        /// <summary>
         /// Задачи
         /// </summary>
         [ListDisplay("Задачи")]
