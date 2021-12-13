@@ -1,10 +1,10 @@
 html {
     height: 100%;
-  }
+}
 
 body {
     margin: auto;
-	min-width: 100%;
+    min-width: 100%;
     min-height: 100%;
     margin: auto;
     background: #CECECE;
@@ -12,21 +12,20 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0.2fr 4fr 0.25fr;
-    gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
-      "header"
-      "main"
-      "footer";
+        "header"
+        "main"
+        "footer";
 }
 
-@font-face{
-	font-family: PT SansNarrow;
+@font-face {
+    font-family: PT SansNarrow;
     src: url(/fonts/PTSansNarrow-Regular.ttf);
 }
-  
-header { 
-    grid-area: header; 
+
+header {
+    grid-area: header;
     background-color: #EAEAEA;
     color: #6892FF;
     font-size: xx-large;
@@ -39,35 +38,35 @@ header {
     margin: 0;
     padding-top: 1%;
 }
-  
+
 main {
     display: grid;
     margin-top: 1%;
     grid-template-columns: 0.3fr 0.4fr 0.5fr 0.5fr 0.5fr 0.3fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 0.5fr 1.5fr;
     grid-auto-flow: row;
     grid-area: main;
     grid-template-areas:
         "info info . . . ."
         ". tasks tasks tasks tasks ."
-  }
-  
+}
+
 .info {
     grid-area: info;
-    min-height: 80%;
-    max-height: 100%;
+    min-height: 70%;
+    max-height: 80%;
     min-width: 60%;
     background-color: #FFFFFF;
     padding-left: 12%;
     margin-right: 10%;
-    margin-bottom: 6%;
+    margin-bottom: 1%;
     border-top-right-radius: 20pt;
     border-bottom-right-radius: 20pt;
 }
 
 .name {
     font-size: x-large;
-    font-weight:600;
+    font-weight: 600;
 }
 
 
@@ -89,14 +88,14 @@ main {
     color: #6892FF;
 }
 
-.student_mail:hover, .group_number:hover {
-    text-decoration: underline;
-}
+    .student_mail:hover {
+        text-decoration: underline;
+    }
 
-.student_mail:visited, .group_number:visited {
-    text-decoration: none; 
-    color: #6892FF;
-}
+    .student_mail:visited {
+        text-decoration: none;
+        color: #6892FF;
+    }
 
 .tasks {
     grid-area: tasks;
@@ -114,7 +113,7 @@ main {
     margin-left: 2%;
     margin-top: 1%;
     margin-bottom: 0;
-    font-size:xx-large;
+    font-size: xx-large;
     font-weight: bold;
 }
 
@@ -123,7 +122,7 @@ main {
 }
 
 .course_points {
-    margin-right: 4.5%;
+    margin-right: 7%;
     margin-bottom: 0;
     margin-top: 2%;
     font-size: xx-large;
@@ -160,32 +159,35 @@ main {
     margin-top: 2%;
     font-weight: 600;
     margin-bottom: 0;
+    text-decoration: none;
 }
 
 
-.task_name:hover {
-    text-decoration: underline;
-}
+    .task_name:hover {
+        text-decoration: underline;
+    }
 
-.task_name:visited {
-    text-decoration: none; 
-    color: #6892FF;
-}
+    .task_name:visited {
+        text-decoration: none;
+        color: #6892FF;
+    }
 
 .task_points {
     grid-area: task_points;
     margin-bottom: 0;
-    margin-left: 15%;
+    margin-left: 10%;
+    margin-right: 5%;
     font-size: xx-large;
     margin-top: 2%;
 }
 
 .status {
     grid-area: status;
-    margin-left: 5%;
+    margin-left: 2%;
     font-size: large;
-    margin-top: 2%;
+    margin-top: 0;
     margin-bottom: 2%;
+    padding-bottom: 1%;
 }
 
 .task_status {
@@ -194,8 +196,8 @@ main {
 
 
 
-footer { 
-    grid-area: footer; 
+footer {
+    grid-area: footer;
     background-color: #FFFFFF;
     color: #6892FF;
     font-size: x-large;
@@ -209,11 +211,11 @@ footer {
     text-decoration: none;
 }
 
-.contacts_button:hover {
-    text-decoration: underline;
-}
-  
-.contacts_button:visited {
-    text-decoration: none; 
-    color: #6892FF;
-}
+    .contacts_button:hover {
+        text-decoration: underline;
+    }
+
+    .contacts_button:visited {
+        text-decoration: none;
+        color: #6892FF;
+    }
