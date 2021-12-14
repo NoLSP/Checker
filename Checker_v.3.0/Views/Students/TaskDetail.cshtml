@@ -1,12 +1,5 @@
 ﻿@model StudentTaskDto
 
-<style>
-    .custom-file-input {
-        width: 132px;
-        overflow: hidden;
-    }
-</style>
-
 <label>Постановка задачи: @Model.Task.Description</label>
 <br />
 <strong>Решение:</strong>
@@ -18,7 +11,7 @@
 }
 <label>Дата последней загрузки........</label><label id="solutionLoadedDateTime">@solutionDateTime</label>
 <br />
-<label>Прошло тестов     @Model.TeacherResult.SuccessTestsCount/@Model.Task.Tests.Count()</label>
+<label>Прошло тестов     </label><label id="passedTestsCountLabel">@Model.TeacherResult.SuccessTestsCount</label><label>/@Model.Task.Tests.Count()</label>
 <br />
 <label>Итоговая оценка     @Model.TeacherResult.TeacherResult/@Model.Task.MaxResult</label>
 <br />

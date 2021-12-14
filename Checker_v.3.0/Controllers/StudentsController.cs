@@ -219,7 +219,7 @@ namespace Checker_v._3._0.Controllers
             if(!studentFile.FileName.EndsWith(programmingLanguage.FileExtension))
                 return Json(new { Success = false, Message = $"неверный формат файла" });
 
-            string path = appEnvironment.WebRootPath + $"/Files/Students/{studentResult.Student.Title}/Solutions/{studentResult.Task.Title}/";
+            string path = appEnvironment.ContentRootPath + $"/AppData/Files/Students/{studentResult.Student.Title}/Solutions/{studentResult.Task.Title}/";
             var directory = Directory.CreateDirectory(path);
 
             using (var fileStream = new FileStream(path + studentFile.FileName, FileMode.Create))
@@ -245,62 +245,38 @@ namespace Checker_v._3._0.Controllers
             if (studentResult == null)
                 return Json(new { Success = false, Message = $"Результат #{studentResultId} не существует." });
 
-            var studentScript = "";
-
-            using (var studentScriptStream = new StreamReader(studentResult.StudentFilePath))
-            {
-                studentScript = studentScriptStream.ReadToEnd();
-            }
-
             var tests = studentResult.Task.Tests;
             var studentTestsResults = dataContext.StudentsTestsResults
                 .Where(x => x.Student_id == studentResult.Student_id && tests.Select(y => y.Id).ToList().Contains(x.Test_id))
                 .ToList();
 
-            var JSEngine = new Engine();
+            var testsEngine = TestsEngine.ObtainEngine(studentResult.Task.ProgrammingLanguage);
+            if(testsEngine == null)
+                return Json(new { Success = false, Message = $"Не найден движок для языка программирования '{studentResult.Task.ProgrammingLanguage}'" });
+
             var data = new List<dynamic>();
 
             foreach (var test in tests)
             {
-                var testResult = false;
-                var teacherScript = "";
-
-                using (var teacherTestScriptStream = new StreamReader(test.TestFilePath))
-                {
-                    teacherScript = teacherTestScriptStream.ReadToEnd();
-                }
-
-                string script = studentScript + "\n" + teacherScript;
-
-                try
-                {
-                    JSEngine.Execute(script);
-                    testResult = JSEngine.GetValue("result").AsBoolean();
-                }
-                catch (Jint.Runtime.JavaScriptException Ex)
-                {
-                    //Тут можно будет выводить ошибку
-                }
-                catch(Exception e)
-                {
-
-                }
+                var testResult = testsEngine.RunTest(studentResult.StudentFilePath, test.TestFilePath);
 
                 var studentTestResult = studentTestsResults.FirstOrDefault(x => x.Test_id == test.Id);
-                if(studentTestResult == null)
+                var testState = testResult ? TestState.Success(dataContext) : TestState.Failed(dataContext);
+
+                if (studentTestResult == null)
                 {
                     studentTestResult = new StudentTestResult()
                     {
                         Test_id = test.Id,
                         Student_id = studentResult.Student_id,
-                        TestState = testResult ? TestState.Success(dataContext) : TestState.Failed(dataContext)
+                        TestState = testState
                     };
 
                     dataContext.Entry(studentTestResult).State = EntityState.Added;
                 }
                 else
                 {
-                    studentTestResult.TestState = testResult ? TestState.Success(dataContext) : TestState.Failed(dataContext);
+                    studentTestResult.TestState = testState;
                     dataContext.Entry(studentTestResult).State = EntityState.Modified;
                 }
 

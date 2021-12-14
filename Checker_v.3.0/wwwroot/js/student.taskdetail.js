@@ -27,10 +27,13 @@ function CheckSolution() {
     $.post({
         url: "/Students/CheckSolution?studentResultId=" + StudentTaskResultId,
         success: function (data) {
-
+            var passedTestsCount = 0;
             for (var i = 0; i < data.data.length; i++) {
                 $(".testLabel[data-id='" + data.data[i].testId + "']").html(data.data[i].testTitle + "............" + data.data[i].state.title);
+                if (data.data[i].state.title == "Пройден")
+                    passedTestsCount++;
             }
+            $("#passedTestsCountLabel").html(passedTestsCount);
         }
     });
 }

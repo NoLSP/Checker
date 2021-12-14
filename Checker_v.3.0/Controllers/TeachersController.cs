@@ -50,6 +50,8 @@ namespace Checker_v._3._0.Controllers
 
             var studentIds = students.Select(x => x.Id);
 
+            var url = "https://" + HttpContext.Request.Host + "/Teachers/StudentTaskResult?";
+
             var courses = dataContext.StudentsGroupCourses
                 .Where(x => x.Course.Owner_id == user.Id)
                 .Where(x => x.StudentsGroup_id == groupId)
@@ -71,8 +73,9 @@ namespace Checker_v._3._0.Controllers
                         .Where(y => y.Task.Course_id == x.Course_id)
                         .Where(y => studentIds.Contains(y.Student_id))
                         .Select(y => new StudentTaskTeacherResultDto()
-                        { 
+                        {
                             Id = y.Id,
+                            DetailUrl = url + $"taskId={y.Task_id}&studentId={y.Student_id}",
                             StudentId = y.Student_id,
                             TaskId = y.Task_id,
                             TeacherResult = y.TeacherResult
@@ -128,6 +131,143 @@ namespace Checker_v._3._0.Controllers
             };
 
             return View(courseDto);
+        }
+
+        public ActionResult StudentTaskResult(int taskId, int studentId)
+        {
+            var student = dataContext.Users.Find(studentId);
+
+            if (student == null)
+                return ResultHelper.UserNotFound();
+
+            var task = dataContext.Tasks
+                .Include(x => x.Course)
+                .FirstOrDefault(x => x.Id == taskId);
+
+            if (task == null)
+                return ResultHelper.EntityNotFound("Task");
+
+            var userDto = new UserDto()
+            {
+                Id = student.Id,
+                FullName = student.Title
+            };
+
+            var tests = task.Tests
+                .Select(x => new TestDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title
+                })
+                .ToList();
+
+            var testsIds = tests.Select(x => x.Id).ToList();
+
+            var testResults = dataContext.StudentsTestsResults
+                .Where(x => x.Student_id == student.Id)
+                .Where(x => testsIds.Contains(x.Test_id))
+                .Select(x => new StudentTestResultDto()
+                {
+                    Id = x.Id,
+                    Test = new TestDto()
+                    {
+                        Id = x.Test.Id,
+                        Title = x.Test.Title
+                    },
+                    StudentId = student.Id,
+                    State = x.TestState
+                }).ToList();
+
+            foreach (var test in tests.Where(x => !testResults.Any(y => y.Test.Id == x.Id)))
+            {
+                var studentTestResult = new StudentTestResult()
+                {
+                    Student_id = student.Id,
+                    Test_id = test.Id,
+                    TestState = dataContext.TestStates.First(x => x.Name == "Failed")
+                };
+
+                dataContext.Entry(studentTestResult).State = EntityState.Added;
+                dataContext.SaveChanges();
+
+                testResults.Add(new StudentTestResultDto()
+                {
+                    StudentId = student.Id,
+                    Id = studentTestResult.Id,
+                    Test = test,
+                    State = studentTestResult.TestState
+                });
+            }
+
+            var taskResult = dataContext.StudentsTaskTeacherResults
+                .FirstOrDefault(x => x.Task_id == task.Id && x.Student_id == student.Id);
+
+            if (taskResult == null)
+            {
+                var now = DateTime.UtcNow;
+
+                taskResult = new StudentTaskTeacherResult()
+                {
+                    CreationDateTime = now,
+                    StateDateTime = now,
+                    TaskState = dataContext.TaskStates.First(x => x.Name == "Failed"),
+                    Student_id = student.Id,
+                    Task_id = task.Id
+                };
+
+                dataContext.Entry(taskResult).State = EntityState.Added;
+                dataContext.SaveChanges();
+            }
+
+            var studentTaskDto = new StudentTaskDto()
+            {
+                Task = new TaskDto()
+                {
+                    Id = task.Id,
+                    Title = task.Title,
+                    Tests = tests,
+                    Description = task.Description,
+                    MaxResult = task.MaxResult
+                },
+                TestsResults = testResults,
+                TeacherResult = new StudentTaskTeacherResultDto()
+                {
+                    Id = taskResult.Id,
+                    StudentId = student.Id,
+                    Student = new UserDto()
+                    {
+                        Id = student.Id,
+                        FullName = student.Title,
+                        GroupTitle = student.Group.Title
+                    },
+                    DownloadStudentSolutionUrl = "https://" + this.HttpContext.Request.Host + 
+                        $"/Teachers/DownloadStudentSolution?studentResultId={taskResult.Id}",
+                    TaskId = task.Id,
+                    SolutionLoadDateTime = taskResult.SolutionLoadDateTime,
+                    SuccessTestsCount = testResults.Count(x => x.State.Name == "Success"),
+                    TeacherResult = taskResult.TeacherResult
+                }
+            };
+
+            return View(studentTaskDto);
+        }
+
+        public ActionResult DownloadStudentSolution(int studentResultId)
+        {
+            var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
+
+            if (studentResult == null)
+                return ResultHelper.EntityNotFound("StudentTaskTeacherResult");
+
+            var file = new FileInfo(studentResult.StudentFilePath);
+
+            var stream = file.OpenRead();
+
+            return new FileStreamResult(stream, $"application/{file.Extension}")
+            {
+                FileDownloadName = file.Name
+            };
+
         }
 
         [HttpGet]
@@ -352,7 +492,7 @@ namespace Checker_v._3._0.Controllers
             if (task == null)
                 return ResultHelper.Failed($"Задачи #{model.TaskId} не существует.");
 
-            string path = appEnvironment.WebRootPath + $"/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
+            string path = appEnvironment.ContentRootPath + $"/AppData/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
             var directory = Directory.CreateDirectory(path);
 
             using (var fileStream = new FileStream(path + model.TestFile.FileName, FileMode.Create))
@@ -409,7 +549,7 @@ namespace Checker_v._3._0.Controllers
             if (task == null)
                 return ResultHelper.Failed($"Задачи #{model.TaskId} не существует.");
 
-            string path = appEnvironment.WebRootPath + $"/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
+            string path = appEnvironment.ContentRootPath + $"/AppData/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
             var directory = Directory.CreateDirectory(path);
 
             using (var fileStream = new FileStream(path + model.TestFile.FileName, FileMode.Create))
