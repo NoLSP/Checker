@@ -22,6 +22,16 @@
                         <input asp-for="Email" class="email_input" type="email" size="25" required>
                     </label>
 
+                    <label asp-for="FullName" class="fullName">
+                        Ф.И.О.:
+                        <input asp-for="FullName" class="fullName_input" type="text" size="25" required>
+                    </label>
+
+                    <label asp-for="ShortName" class="shortName">
+                        Сокращенное имя(Иванов И.И.):
+                        <input asp-for="ShortName" class="shortName_input" type="text" size="25" required>
+                    </label>
+
                     <label asp-for="Password" class="password">
                         Пароль:
                         <input asp-for="Password" class="password_input" type="password" size="25" minlength="6" pattern="^[ 0-9]+$" title="Введите пароль, состоящий минимум из 6 цифр." autocomplete="current-password" required>

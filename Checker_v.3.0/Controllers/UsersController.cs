@@ -58,18 +58,22 @@ namespace Checker_v._3._0.Controllers
 
             var courseDatailUrl = "https://" + this.HttpContext.Request.Host + "/Students/CourseDetail?courseId=";
 
-            var courses = student.Group.Courses
-                .Select(x => new CourseDto()
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    DetailUrl = courseDatailUrl + x.Id,
-                    Owner = new UserDto()
+            var courses = (List<CourseDto>)null;
+            if (student.Group != null)
+            {
+                courses = student.Group.Courses
+                    .Select(x => new CourseDto()
                     {
-                        Id = x.Owner.Id,
-                        FullName = x.Owner.Title
-                    }
-                }).ToList();
+                        Id = x.Id,
+                        Title = x.Title,
+                        DetailUrl = courseDatailUrl + x.Id,
+                        Owner = new UserDto()
+                        {
+                            Id = x.Owner.Id,
+                            FullName = x.Owner.Title
+                        }
+                    }).ToList();
+            }
 
             var model = new StudentViewModel()
             {
@@ -78,7 +82,7 @@ namespace Checker_v._3._0.Controllers
                 ShortName = student.ShortName,
                 Email = student.Email,
                 Courses = courses,
-                Group = new StudentsGroupDto() 
+                Group = student.Group == null ? null : new StudentsGroupDto() 
                 { 
                     Id = student.Group.Id,
                     Title = student.Group.Title

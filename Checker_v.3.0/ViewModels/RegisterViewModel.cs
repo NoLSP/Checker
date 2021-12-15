@@ -18,5 +18,11 @@ namespace Checker_v._3._0.ViewModels
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароль введен неверно")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Не указано Ф.И.О.")]
+        public string FullName { get; set; }
+
+        [Required(ErrorMessage = "Не указано сокращенное имя")]
+        public string ShortName { get; set; }
     }
 }

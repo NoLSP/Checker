@@ -21,17 +21,19 @@
               <p class="name">@Model.FullName</p>
               <p class="role">студент</p>
               <p class="mail">Аккаунт: <a class="student_mail">@Model.Email</a></p>
-              <p class="group">Группа: <a class="group_number">@Model.Group.Title</a></p>
+              <p class="group">Группа: <a class="group_number">@(Model.Group == null ? "" : Model.Group.Title)</a></p>
           </article>
           <article class="courses">
               <p class="courses_header">Курсы</p>
-
-              @foreach (var course in Model.Courses)
+              @if (Model.Courses != null)
               {
-                  <article class="course_container">
-                      <a class="course_name" href=@course.DetailUrl>@course.Title</a>
-                      <p class="course_teacher">Преподаватель: @course.Owner.FullName</p>
-                  </article>
+                  foreach (var course in Model.Courses)
+                  {
+                      <article class="course_container">
+                          <a class="course_name" href=@course.DetailUrl>@course.Title</a>
+                          <p class="course_teacher">Преподаватель: @course.Owner.FullName</p>
+                      </article>
+                  }
               }
           </article>
       </main>

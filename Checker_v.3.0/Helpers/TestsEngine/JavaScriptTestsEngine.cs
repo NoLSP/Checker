@@ -18,8 +18,8 @@ namespace Checker_v._3._0.Helpers
                 var teacherScript = GetScript(teacherTestFilePath);
                 string script = studentScript + "\n" + teacherScript;
             
-                JSEngine.Execute(script);
-                var testResult = JSEngine.GetValue("result").AsBoolean();
+                var testFunction = JSEngine.Execute(script).GetValue("Test");
+                var testResult = testFunction.Invoke().AsBoolean();
                 return testResult;
             }
             catch (Jint.Runtime.JavaScriptException Ex)

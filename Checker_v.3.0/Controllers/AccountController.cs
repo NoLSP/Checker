@@ -58,16 +58,24 @@ namespace Checker_v._3._0.Controllers
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    user = new User { Email = model.Email, Password = model.Password };
+                    user = new User 
+                    { 
+                        Email = model.Email, 
+                        Password = model.Password,
+                        Title = model.FullName,
+                        ShortName = model.ShortName,
+                        Role = UserRole.Student(dataContext)
+                    };
+
                     dataContext.Users.Add(user);
                     await dataContext.SaveChangesAsync();
 
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Lk", "Users", new { userId = user.Id });
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                    ModelState.AddModelError("", "Такой пользователь уже зарегистрирован");
             }
             return View(model);
         }

@@ -290,6 +290,22 @@ namespace Checker_v._3._0.Controllers
                 });
             }
 
+            var succesState = TaskState.Success(dataContext);
+            var inProgressState = TaskState.InProgress(dataContext);
+
+            if (data.Where(x => x.State.Title == "Success").Count() > (double)data.Count() / 2)
+            {
+                studentResult.TaskState = inProgressState;
+                dataContext.Entry(studentResult).State = EntityState.Modified;
+                dataContext.SaveChanges();
+            }
+            else if(studentResult.TaskState == succesState || studentResult.TaskState == inProgressState)
+            {
+                studentResult.TaskState = TaskState.Failed(dataContext);
+                dataContext.Entry(studentResult).State = EntityState.Modified;
+                dataContext.SaveChanges();
+            }
+
             return Json(new { data = data.ToArray()});
         }
     }
