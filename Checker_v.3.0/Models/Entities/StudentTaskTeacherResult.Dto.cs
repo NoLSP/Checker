@@ -17,5 +17,7 @@ namespace Checker_v._3._0.Models
         public int SuccessTestsCount;
         public string StudentSolutionFilePath;
         public string DownloadStudentSolutionUrl;
+        public int MaxResult;
+        public string TaskStateTitle;
     }
 }

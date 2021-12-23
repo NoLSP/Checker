@@ -44,7 +44,7 @@ namespace Checker_v._3._0.Controllers
                 .Select(x => new UserDto()
                 {
                     Id = x.Id,
-                    FullName = x.Title,
+                    Title = x.Title,
 
                 }).ToList();
 
@@ -150,7 +150,7 @@ namespace Checker_v._3._0.Controllers
             var userDto = new UserDto()
             {
                 Id = student.Id,
-                FullName = student.Title
+                Title = student.Title
             };
 
             var tests = task.Tests
@@ -237,7 +237,7 @@ namespace Checker_v._3._0.Controllers
                     Student = new UserDto()
                     {
                         Id = student.Id,
-                        FullName = student.Title,
+                        Title = student.Title,
                         GroupTitle = student.Group.Title
                     },
                     DownloadStudentSolutionUrl = "https://" + this.HttpContext.Request.Host + 
@@ -568,6 +568,47 @@ namespace Checker_v._3._0.Controllers
             dataContext.SaveChanges();
 
             return Redirect($"/Teachers/TaskDetail?taskId={task.Id}");
+        }
+
+        [HttpGet]
+        public ActionResult EditTeacherResult(int teacherResultId)
+        {
+            var user = Checker_v._3._0.Models.User.Get(dataContext, HttpContext);
+
+            if (user == null)
+                return ResultHelper.UserNotFound();
+
+            var teacherResult = dataContext.StudentsTaskTeacherResults
+                .Find(teacherResultId);
+
+            if (teacherResult == null)
+                return ResultHelper.EntityNotFound("StudentTaskTeacherResult");
+
+            var teacherResultViewModel = new TeacherResultViewModel()
+            {
+                Id = teacherResult.Id,
+                MaxResult = teacherResult.Task.MaxResult,
+                TeacherResult = teacherResult.TeacherResult ?? 0
+            };
+
+            return View(teacherResultViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditTeacherResult(TeacherResultViewModel model)
+        {
+            var teacherResult = dataContext.StudentsTaskTeacherResults
+                .Find(model.Id);
+
+            if (teacherResult == null)
+                return ResultHelper.EntityNotFound($"StudentTaskTeacherResult");
+
+            teacherResult.TeacherResult = model.TeacherResult;
+
+            dataContext.Entry(teacherResult).State = EntityState.Modified;
+            dataContext.SaveChanges();
+
+            return Redirect($"/Teachers/StudentTaskResult?taskId={teacherResult.Task_id}&studentId={teacherResult.Student_id}");
         }
     }
 }

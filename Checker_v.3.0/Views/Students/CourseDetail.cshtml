@@ -18,7 +18,7 @@
       </header>
       <main>
           <article class="info">
-              <p class="name">@Model.Student.FullName</p>
+              <p class="name">@Model.Student.LastName @Model.Student.FirstName @(Model.Student.MiddleName == null ? "" : " " + Model.Student.MiddleName)</p>
               <p class="role">студент</p>
               <p class="mail">Аккаунт: <a class="student_mail">@Model.Student.Email</a></p>
               <p class="group">Группа: <a class="group_number">@Model.Student.Group.Title</a></p>
@@ -34,7 +34,7 @@
                   <article class="task_container">
 
                       @{
-                          var studentResult = Model.Course.TasksResults.FirstOrDefault();
+                          var studentResult = Model.Course.TasksResults.FirstOrDefault(x => x.TaskId == task.Id);
                           var result = studentResult != null ? $"{studentResult.TeacherResult}/{task.MaxResult}" : $"0/{task.MaxResult}";
                       }
 
@@ -42,7 +42,7 @@
                           <a class="task_name" href="@task.DetailUrl">@task.Title</a>
                           <p class="task_points">@result</p>
                       </article>
-                      <p class="status">Статус: <span class="task_status">сдана(временно)</span></p>
+                      <p class="status">Статус: <span class="task_status">@studentResult.TaskStateTitle</span></p>
                   </article>
               }
 

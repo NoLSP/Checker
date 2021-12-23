@@ -25,6 +25,41 @@ namespace Checker_v._3._0.Models
         }
 
         /// <summary>
+        /// Фамилия
+        /// </summary>
+        [ListDisplay("Фамилия")]
+        [DetailDisplay("Фамилия")]
+        [EditDisplay("Фамилия")]
+        [InputType("text")]
+        [Required(ErrorMessage = "Поле 'Фамилия' обязательно для заполнения")]
+        [Column("LastName")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// Имя
+        /// </summary>
+        [ListDisplay("Имя")]
+        [DetailDisplay("Имя")]
+        [EditDisplay("Имя")]
+        [InputType("text")]
+        [Required(ErrorMessage = "Поле 'Имя' обязательно для заполнения")]
+        [Column("FirstName")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Отчество
+        /// </summary>
+        [ListDisplay("Отчество")]
+        [DetailDisplay("Отчество")]
+        [EditDisplay("Отчество")]
+        [InputType("text")]
+        [Column("MiddleName")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        public string MiddleName { get; set; }
+
+        /// <summary>
         /// Ф.И.О.
         /// </summary>
         [ListDisplay("Ф.И.О.")]
@@ -35,18 +70,6 @@ namespace Checker_v._3._0.Models
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Title { get; set; }
-
-        /// <summary>
-        /// Имя
-        /// </summary>
-        [ListDisplay("Имя")]
-        [DetailDisplay("Имя")]
-        [EditDisplay("Имя")]
-        [InputType("text")]
-        [Required(ErrorMessage = "Поле 'Короткое имя' обязательно для заполнения")]
-        [Column("ShortName")]
-        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
-        public string ShortName { get; set; }
 
         /// <summary>
         /// Email

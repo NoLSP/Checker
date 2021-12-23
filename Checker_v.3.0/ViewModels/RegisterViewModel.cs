@@ -19,10 +19,12 @@ namespace Checker_v._3._0.ViewModels
         [Compare("Password", ErrorMessage = "Пароль введен неверно")]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "Не указано Ф.И.О.")]
-        public string FullName { get; set; }
+        [Required(ErrorMessage = "Не указано Имя")]
+        public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Не указано сокращенное имя")]
-        public string ShortName { get; set; }
+        [Required(ErrorMessage = "Не указана фамилия")]
+        public string LastName { get; set; }
+
+        public string MiddleName { get; set; }
     }
 }

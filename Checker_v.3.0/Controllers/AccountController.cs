@@ -62,8 +62,10 @@ namespace Checker_v._3._0.Controllers
                     { 
                         Email = model.Email, 
                         Password = model.Password,
-                        Title = model.FullName,
-                        ShortName = model.ShortName,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        MiddleName = model.MiddleName,
+                        Title = model.LastName + " " + model.FirstName,
                         Role = UserRole.Student(dataContext)
                     };
 

@@ -1,6 +1,72 @@
 ﻿@model StudentTaskDto
 
-<label>Постановка задачи: @Model.Task.Description</label>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Задача</title>
+    <link rel="stylesheet" href="/css/student.taskdetail.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="icon" href="/Files/images/icon.svg" type="image/svg">
+</head>
+  <body>
+    <header class="header">@Model.Task.CourseTitle &mdash; @Model.Task.Title</header>
+    <main>
+      <div class="info">
+        <p class="task"><span class="task_header">Постановка задачи: </span>@Model.Task.Description</p>
+        <div class="mark">
+            @{ 
+                var solutionDateTime = Model.TeacherResult.SolutionLoadDateTime.HasValue ?
+                    Model.TeacherResult.SolutionLoadDateTime.Value.ToString("HH.mm") + " " + Model.TeacherResult.SolutionLoadDateTime.Value.ToString("dd.MM.yy") :
+                    "";
+            }
+          <p class="mark_header">Решение:</p>
+          <div class="student_task_date">Дата последней</br> загрузки<span class="date">@solutionDateTime</span></div>
+          <div class="student_tests_passed">Прошло</br> тестов<span class="tests_passed">@Model.TeacherResult.SuccessTestsCount/@Model.Task.Tests.Count()</span></div>
+          <div class="final_mark">Итоговая</br> оценка<span class="mark">@Model.TeacherResult.TeacherResult/@Model.Task.MaxResult</span></div>
+        </div>
+      </div>
+      <div class="check">
+          <div class="tests">
+              <p class="tests_header">Тесты(@(Model.TeacherResult.SolutionLoadDateTime.HasValue ? "Решение загружено" : "Решение не загружено"))</p>
+
+              @foreach (var testResult in Model.TestsResults)
+              {
+                  var testState = testResult.State.Name == "Success" ? "✓" : "✗";
+                  var filler = ("...........................................................................").Substring(0, 75 - testResult.Test.Title.Length + 1);
+
+                  <div class="test">@testResult.Test.Title @filler <span class="@(testState == "✓" ? "test_checked" : "test_not_checked")">@testState</span></div>
+              }
+
+              <div class="buttons">
+                  <label class="upload">
+                      <input class="upload_button" id="upload-task-btn" style="width:50%; overflow:hidden;" onchange="LoadSolution('upload-task-btn')" type="file" value="Загрузить решение">
+                  </label>
+                  <label class="run_tests">
+                      <input class="run_tests_button" type="button" id="run-tests-btn" value="Проверить решение">
+                  </label>
+              </div>
+          </div>
+        <div class="chat">
+          <p class="chat_text">Здесь будет чат...</p>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <article class="contacts">
+        <a href="https://vk.com/dorapomodora" class="contacts_button" target="_blank">Написать администратору</a> 
+      </article>
+    </footer>
+  </body>
+</html>
+
+
+
+@*<label>Постановка задачи: @Model.Task.Description</label>
 <br />
 <strong>Решение:</strong>
 <br />
@@ -24,7 +90,7 @@
 }
 
 <input id="loadSolutionButton" name="loadSolutionButton" data-id="@Model.TeacherResult.Id" style="width:130px; overflow:hidden;" onchange="LoadSolution('loadSolutionButton')" type="file" value="Загрузить решение" />
-<input id="checkSolutionButton" name="checkSolutionButton" data-id="@Model.TeacherResult.Id" type="button" value="Проверить решение" />
+<input id="checkSolutionButton" name="checkSolutionButton" data-id="@Model.TeacherResult.Id" type="button" value="Проверить решение" />*@
 
 <script>
     var StudentTaskResultId = "@Model.TeacherResult.Id";

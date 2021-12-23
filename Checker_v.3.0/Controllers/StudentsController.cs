@@ -69,7 +69,8 @@ namespace Checker_v._3._0.Controllers
                         Id = y.Id,
                         StudentId = y.Student_id,
                         TaskId = y.Task_id,
-                        TeacherResult = y.TeacherResult
+                        TeacherResult = y.TeacherResult,
+                        TaskStateTitle = y.TaskState.Title
                     }).ToList()
             };
 
@@ -77,9 +78,10 @@ namespace Checker_v._3._0.Controllers
             {
                 Student = new StudentViewModel()
                 {
-                    FullName = student.Title,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    MiddleName = student.MiddleName,
                     Id = student.Id,
-                    ShortName = student.ShortName,
                     Email = student.Email,
                     Group = new StudentsGroupDto()
                     {
@@ -112,7 +114,7 @@ namespace Checker_v._3._0.Controllers
             var userDto = new UserDto()
             {
                 Id = user.Id,
-                FullName = user.Title
+                Title = user.Title
             };
 
             var tests = task.Tests
@@ -187,6 +189,7 @@ namespace Checker_v._3._0.Controllers
                 {
                     Id = task.Id,
                     Title = task.Title,
+                    CourseTitle = task.Course.Title,
                     Tests = tests,
                     Description = task.Description,
                     MaxResult = task.MaxResult
@@ -207,7 +210,7 @@ namespace Checker_v._3._0.Controllers
         }
 
         [HttpPost]
-        public JsonResult LoadSolution([FromForm] int studentResultId, [FromForm] IFormFile studentFile)
+        public ActionResult LoadSolution([FromForm] int studentResultId, [FromForm] IFormFile studentFile)
         {
             var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
 
@@ -235,10 +238,11 @@ namespace Checker_v._3._0.Controllers
             dataContext.Entry(studentResult).State = EntityState.Modified;
             dataContext.SaveChanges();
 
-            return Json(new { Success = true, Message = "решение загружено", LoadDate = now.ToString("dd.MM.yy"), LoadTime = now.ToString("HH.mm")});
+            return Redirect($"TaskDetail?{studentResult.Task_id}");
+            //return Json(new { Success = true, Message = "решение загружено", LoadDate = now.ToString("dd.MM.yy"), LoadTime = now.ToString("HH.mm")});
         }
 
-        public JsonResult CheckSolution(int studentResultId)
+        public ActionResult CheckSolution(int studentResultId)
         {
             var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
 
@@ -306,7 +310,8 @@ namespace Checker_v._3._0.Controllers
                 dataContext.SaveChanges();
             }
 
-            return Json(new { data = data.ToArray()});
+            return Redirect($"TaskDetail?{studentResult.Task_id}");
+            //return Json(new { data = data.ToArray()});
         }
     }
 }

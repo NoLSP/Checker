@@ -70,16 +70,17 @@ namespace Checker_v._3._0.Controllers
                         Owner = new UserDto()
                         {
                             Id = x.Owner.Id,
-                            FullName = x.Owner.Title
+                            Title = x.Owner.Title
                         }
                     }).ToList();
             }
 
             var model = new StudentViewModel()
             {
-                FullName = student.Title,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                MiddleName = student.MiddleName,
                 Id = student.Id,
-                ShortName = student.ShortName,
                 Email = student.Email,
                 Courses = courses,
                 Group = student.Group == null ? null : new StudentsGroupDto() 
@@ -94,15 +95,16 @@ namespace Checker_v._3._0.Controllers
 
         private ActionResult AdminLk(User user)
         {
-            var model = new TeacherViewModel()
+            var model = new UserDto()
             {
-                FullName = user.Title,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                MiddleName = user.MiddleName,
                 Id = user.Id,
-                ShortName = user.ShortName,
                 Email = user.Email
             };
 
-            return View("TeacherProfile", model);
+            return View("AdminLk", model);
         }
 
         private ActionResult TeacherLk(User user)
@@ -131,9 +133,10 @@ namespace Checker_v._3._0.Controllers
 
             var model = new TeacherViewModel()
             {
-                FullName = user.Title,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                MiddleName = user.MiddleName,
                 Id = user.Id,
-                ShortName = user.ShortName,
                 Email = user.Email,
                 StudentsGroups = studentsGroups,
                 Courses = courses

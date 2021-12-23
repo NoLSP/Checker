@@ -64,7 +64,7 @@ label {
     margin-left: 10%;
 }
 
-.email_input, .password_input, .fullName_input, .shortName_input {
+.email_input, .password_input, .firstName_input, .lastName_input, .middleName_input {
     background-color: #EAEAEA;
     border: none;
     border-radius: 5px;

@@ -1,0 +1,9 @@
+﻿@model TeacherViewModel
+
+<h2>Администратор - @Model.LastName + " " + @Model.FirstName + @(Model.MiddleName == null ? "" : " " + Model.MiddleName)</h2>
+
+<div class="TeacherInfo">
+    <div>
+        <label id="Email">Email: @Model.Email</label>
+    </div>
+</div>

@@ -9,8 +9,10 @@ namespace Checker_v._3._0.Models
     {
         public int Id;
         public int GroupId;
-        public string ShortName;
-        public string FullName;
+        public string FirstName;
+        public string LastName;
+        public string MiddleName;
+        public string Title;
         public string Email;
         public string GroupTitle;
         public int Points;

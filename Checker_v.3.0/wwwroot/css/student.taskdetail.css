@@ -1,0 +1,209 @@
+body {
+    margin: auto;
+	min-width: 100%;
+    min-height: 100%;
+    margin: auto;
+    background: #CECECE;
+    font-family: PT SansNarrow;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 70% 0.25fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+}
+
+@font-face{
+	font-family: PT SansNarrow;
+    src: url(/fonts/PTSansNarrow-Regular.ttf);
+}
+
+main {
+    grid-area: main;
+    height:max-content;
+    min-height: 600px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". info info info info info ."
+      ". check check check check check .";
+    margin-top: 2%;
+    font-size: large;
+}
+
+.info, .check, .task, .mark, .tests, .chat {
+    border-radius: 10pt;
+}
+  
+.task, .mark, .tests, .chat {
+    background-color: #FFFFFF;
+    height: 100%;
+    margin: 2%;
+}
+
+.header { 
+    grid-area: header;
+    background-color: #EAEAEA;
+    color: #6892FF;
+    font-size: xx-large;
+    font-weight: bolder;
+    padding-left: 2%;
+    margin: 0; 
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+  
+.info {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "task mark";
+    grid-area: info;
+    margin-top: 3%;    
+}
+
+.info, .check {
+    background-color: #EAEAEA;
+    height: 80%;
+    padding: 1%;
+    padding-bottom: 3%;
+}
+  
+.task { 
+    grid-area: task;
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    align-content: stretch;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 3%;
+    padding-top: 3%;
+    padding-right: 3%;
+    max-height: 94%;
+    margin-top: 1.5%;
+}
+
+.task_header, .mark_header, .final_mark, .tests_header, .test_checked {
+    color: #6892FF;
+}
+
+.task_header, .mark_header, .tests_header {
+    font-weight: 600;
+    font-size: x-large;
+}
+
+.mark { 
+    grid-area: mark; 
+    padding-left: 3%;
+    display: flex;
+    flex-direction: column;
+    padding-right: 3%;
+    padding-top: 3%;
+    font-size: x-large;
+    max-height: 95%;
+}
+
+.mark_header, .student_task_date, .student_tests_passed, .final_mark {
+    margin-bottom: 1%;
+    margin-top: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.final_mark .mark {
+    padding: 0;
+    margin: 0;
+}
+
+.check {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    grid-template-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "tests chat";
+    grid-area: check;
+    margin-top: 1%;
+}
+  
+.tests { 
+    grid-area: tests; 
+    display: flex;
+    flex-direction: column;
+    font-size: x-large;
+    max-height: 95%;
+}
+
+.tests_header {
+    padding-left: 3%;
+}
+
+.test {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 3%;
+}
+
+.upload_button, .run_tests_button {
+    background-color: #6892FF;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10pt;
+    font-size: large;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+  
+.chat { 
+    grid-area: chat; 
+    margin-top: 1.5%;
+    padding: 3%;
+    display: flex;
+    max-height: 84.5%;
+    align-items: flex-end;
+}
+  
+.footer { 
+    grid-area: footer;
+    background-color: #FFFFFF;
+    color: #6892FF;
+    font-size: x-large;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.contacts {
+    margin-left: 2%;
+}
+
+.contacts_button {
+    text-decoration: none;
+}
+
+.contacts_button.teacher_mail {
+    text-decoration: underline;
+}
+  
+.contacts_button:visited {
+    text-decoration: none; 
+    color: #6892FF;
+}
+  

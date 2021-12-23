@@ -1,0 +1,25 @@
+﻿@model TeacherResultViewModel
+
+@{
+    Layout = null;
+}
+
+<form asp-action="EditTeacherResult" asp-controller="Teachers">
+    <h2 style="text-align: center" id="title">Редактировать</h2>
+
+    <div class="row col-12 justify-content-center">
+        <label asp-for="Id" hidden>Id:</label>
+        <input type="hidden" asp-for="Id" />
+    </div>
+
+    <div class="row col-12">
+        <div class="col-5 justify-content-end">
+            <label style="font-weight:bold" asp-for="TeacherResult">Оценка:</label>
+        </div>
+        <div class="col-7 justify-content-start">
+            <input type="number" max="@Model.MaxResult" asp-for="TeacherResult" />
+        </div>
+    </div>
+
+    <input class="edit_button" style="text-align: center" type="submit" value="Редактировать">
+</form>

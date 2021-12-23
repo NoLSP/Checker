@@ -10,8 +10,9 @@ namespace Checker_v._3._0.ViewModels
     {
         public int Id;
         public string Email;
-        public string FullName;
-        public string ShortName;
+        public string FirstName;
+        public string LastName;
+        public string MiddleName;
         public StudentsGroupDto Group;
         public IEnumerable<CourseDto> Courses;
     }
