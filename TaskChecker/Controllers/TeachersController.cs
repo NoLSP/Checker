@@ -278,11 +278,11 @@ namespace TaskChecker.Controllers
             if (user == null)
                 return ResultHelper.UserNotFound();
 
-            return View(new CreateStudentsGroupViewModel() { OwnerId = user.Id });
+            return View(new StudentsGroupViewModel() { OwnerId = user.Id });
         }
 
         [HttpPost]
-        public ActionResult CreateStudentsGroup(CreateStudentsGroupViewModel model)
+        public ActionResult CreateStudentsGroup(StudentsGroupViewModel model)
         {
             var user = TaskChecker.Models.User.Get(dataContext, HttpContext);
 
@@ -306,11 +306,11 @@ namespace TaskChecker.Controllers
             if (user == null)
                 return ResultHelper.UserNotFound();
 
-            return View(new CreateCourseViewModel() { OwnerId = user.Id });
+            return View(new CourseViewModel() { OwnerId = user.Id });
         }
 
         [HttpPost]
-        public ActionResult CreateCourse(CreateCourseViewModel model)
+        public ActionResult CreateCourse(CourseViewModel model)
         {
             var user = TaskChecker.Models.User.Get(dataContext, HttpContext);
 

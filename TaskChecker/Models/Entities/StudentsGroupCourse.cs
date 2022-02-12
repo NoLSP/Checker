@@ -29,6 +29,8 @@ namespace TaskChecker.Models
         /// </summary>
         [ListDisplay("Студенческая группа")]
         [DetailDisplay("Студенческая группа")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Студенческая группа' обязательно для заполнения")]
         [ForeignKey("StudentsGroup_id")]
         public virtual StudentsGroup StudentsGroup { get; set; }
@@ -40,6 +42,8 @@ namespace TaskChecker.Models
         /// </summary>
         [ListDisplay("Курс")]
         [DetailDisplay("Курс")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Курс' обязательно для заполнения")]
         [ForeignKey("Course_id")]
         public virtual Course Course { get; set; }

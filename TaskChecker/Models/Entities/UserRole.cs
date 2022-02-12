@@ -34,6 +34,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Системное название")]
         [EditDisplay("Ситемное название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -46,21 +48,11 @@ namespace TaskChecker.Models
         [DetailDisplay("Название")]
         [EditDisplay("Название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Title { get; set; }
-
-        private ICollection<User> _users;
-        public virtual ICollection<User> Users
-        {
-            get
-            {
-                if (_users == null)
-                    _users = dataContext.Set<User>().Where(x => x.Role_id == this.Id).ToList();
-                return _users;
-            }
-            set => _users = value;
-        }
     }
 }

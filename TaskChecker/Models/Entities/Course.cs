@@ -33,6 +33,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Системное название")]
         [EditDisplay("Системное название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -45,6 +47,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Владелец")]
         [EditDisplay("Владелец")]
         [InputType("select")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Владелец' обязательно для заполнения")]
         [ForeignKey("Owner_id")]
         public User Owner
@@ -71,13 +75,21 @@ namespace TaskChecker.Models
         [DetailDisplay("Название")]
         [EditDisplay("Название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Title { get; set; }
 
-        private ICollection<Task> _tasks;
-        public virtual ICollection<Task> Tasks
+        /// <summary>
+        /// Задачи
+        /// </summary>
+        [ListDisplay("Задачи")]
+        [DetailDisplay("Задачи")]
+        [FieldType(FieldTypes.List)]
+        [NotMapped]
+        public IList<Task> Tasks
         {
             get
             {
@@ -87,12 +99,14 @@ namespace TaskChecker.Models
             }
             set => _tasks = value;
         }
+        private IList<Task> _tasks;
 
         /// <summary>
         /// Студенческие группы
         /// </summary>
         [ListDisplay("Студ. группы")]
         [DetailDisplay("Студ. группы")]
+        [FieldType(FieldTypes.List)]
         [NotMapped]
         public IList<StudentsGroup> StudentsGroups
         {

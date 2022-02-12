@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-<form>
+<form id="form">
     <h2 style="text-align:center" id="title">@ViewData["Title"] - @Model.EntityName</h2>
 
     @foreach (var field in Model.Fields)
@@ -25,6 +25,14 @@
             { 
                 <div class="col-7 justify-content-start">
                     <textarea id=@field.Name name="@field.Name">@(field.Value)</textarea>
+                </div>
+            }
+            else if(field.InputType == "file")
+            {
+                <div class="col-7 justify-content-start">
+                    <label>@field.Value</label>
+                    <span class="fileButton" style="border:solid; background:grey">Выберите файл</span>
+                    <input class="fileInput" type=@field.InputType id=@field.Name name="@field.Name" hidden/>
                 </div>
             }
             else

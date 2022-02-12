@@ -51,6 +51,8 @@ namespace TaskChecker.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [ListDisplay("Id")]
         [DetailDisplay("Id")]
+        [NotNull]
+        [FieldType(FieldTypes.Int)]
         [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
         [Key]
         public int Id { get; set; }

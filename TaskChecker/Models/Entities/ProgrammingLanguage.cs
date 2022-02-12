@@ -33,6 +33,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Название")]
         [EditDisplay("Название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -45,6 +47,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Системное название")]
         [EditDisplay("Системное название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -57,6 +61,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Расширение")]
         [EditDisplay("Расширение")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Column("FileExtension")]
         [StringLength(128, ErrorMessage = "Строка слишком длинная")]
         public string FileExtension { get; set; }
@@ -66,6 +72,8 @@ namespace TaskChecker.Models
         /// </summary>
         [ListDisplay("Задачи")]
         [DetailDisplay("Задачи")]
+        [NotNull]
+        [FieldType(FieldTypes.List)]
         [NotMapped]
         public IList<Task> Tasks
         {

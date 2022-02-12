@@ -12,15 +12,22 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace TaskChecker.Controllers
 {
     public class EntityObjectsController : Controller
     {
         private DataContext dataContext;
-        public EntityObjectsController(DataContext context)
+        private IWebHostEnvironment appEnvironment;
+
+        public EntityObjectsController(DataContext context, IWebHostEnvironment appEnvironment)
         {
             dataContext = context;
+            this.appEnvironment = appEnvironment;
         }
 
         [Route("/EntityObjects/{entityType}/List")]
@@ -38,8 +45,9 @@ namespace TaskChecker.Controllers
                 .Select(p => new 
                 { 
                     FieldName = p.Name,
-                    FieldType = p.PropertyType,
-                    FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is ListDisplay) as ListDisplay).Name
+                    FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is ListDisplay) as ListDisplay).Name,
+                    FieldNotNull = p.GetCustomAttributes(false).Any(attr => attr is NotNull),
+                    FieldType = (p.GetCustomAttributes(false).First(attr => attr is FieldType) as FieldType).Name,
                 });
 
             var head = fields.Select(x => x.FieldDisplayName)
@@ -55,7 +63,7 @@ namespace TaskChecker.Controllers
                 var dtoEntity = new List<EntityObjectFieldDto>();
                 foreach(var field in fields)
                 {
-                    if (field.FieldType.Name == "Int32")
+                    if (field.FieldType == FieldTypes.Int)
                     {
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
@@ -66,20 +74,7 @@ namespace TaskChecker.Controllers
                             Url = null
                         });
                     }
-                    else if (field.FieldType.Name == "Nullable`1")//nullable int
-                    {
-                        var fieldValue = (int?)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
-
-                        dtoEntity.Add(new EntityObjectFieldDto()
-                        {
-                            Name = field.FieldName,
-                            Title = field.FieldDisplayName,
-                            Type = field.FieldType,
-                            Value = fieldValue == null ? null : fieldValue,
-                            Url = null
-                        });
-                    }
-                    else if (field.FieldType.Name == "String")
+                    else if (field.FieldType == FieldTypes.String)
                     {
                         var url = (string)null;
                         if (field.FieldName == "Title")
@@ -93,29 +88,20 @@ namespace TaskChecker.Controllers
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                             Url = url
                         });
-                    }else if (field.FieldType.IsGenericType && field.FieldType.Name == "IList`1")
+                    }
+                    else if (field.FieldType == FieldTypes.List)
                     {
                         dynamic items = (dynamic)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
-                        //var values = new List<EntityObjectFieldDto>();
-                        //foreach(var item in items)
-                        //{
-                        //    var url = EntityObject.GetInstance(dataContext, item.GetType()).RouteList();
-                        //    values.Add(new EntityObjectFieldDto() 
-                        //    { 
-                        //        Type = item.GetType(),
-                        //        Value = item.GetType().GetProperty("Title").GetValue(item, null),
-                        //        Url = url
-                        //    });
-                        //}
+
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
                             Name = field.FieldName,
                             Title = field.FieldDisplayName,
-                            Type = typeof(List<EntityObject>),
+                            Type = FieldTypes.List,
                             Value = items.Count,
                         });
                     }
-                    else if (field.FieldType.BaseType.Name == "EntityObject")
+                    else if (field.FieldType == FieldTypes.Link)
                     {
                         var fieldValue = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
                         var url = fieldValue == null ? "" : (fieldValue as EntityObject).RouteDetail();
@@ -126,6 +112,29 @@ namespace TaskChecker.Controllers
                             Type = field.FieldType,
                             Value = fieldValue == null ? "" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
                             Url = "https://" + HttpContext.Request.Host + url
+                        });
+                    }
+                    else if (field.FieldType == FieldTypes.File)
+                    {
+                        string fileName = "-";
+                        string url = null;
+
+                        var filePath = (string)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
+
+                        if(filePath != null)
+                        {
+                            var file = new FileInfo(filePath);
+                            fileName = file.Name;
+                            url = $"https://{HttpContext.Request.Host}/EntityObjects/{entityType}/Download?id={entity.Id}&attributeName={field.FieldName}";
+                        }
+
+                        dtoEntity.Add(new EntityObjectFieldDto()
+                        {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
+                            Type = field.FieldType,
+                            Value = fileName,
+                            Url = url
                         });
                     }
                 }
@@ -153,8 +162,9 @@ namespace TaskChecker.Controllers
                 .Select(p => new
                 {
                     FieldName = p.Name,
-                    FieldType = p.PropertyType,
-                    FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is DetailDisplay) as DetailDisplay).Name
+                    FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is DetailDisplay) as DetailDisplay).Name,
+                    FieldNotNull = p.GetCustomAttributes(false).Any(attr => attr is NotNull),
+                    FieldType = (p.GetCustomAttributes(false).First(attr => attr is FieldType) as FieldType).Name,
                 });
 
             var entity = (EntityObject)dataContext.Set(type).Find(id);
@@ -165,7 +175,7 @@ namespace TaskChecker.Controllers
             var entityFields = new List<EntityObjectFieldDto>();
             foreach (var field in fields)
             {
-                if (field.FieldType.Name == "Int32")
+                if (field.FieldType == FieldTypes.Int)
                 {
                     entityFields.Add(new EntityObjectFieldDto()
                     {
@@ -175,7 +185,7 @@ namespace TaskChecker.Controllers
                         Url = null
                     });
                 }
-                else if (field.FieldType.Name == "String")
+                else if (field.FieldType == FieldTypes.String)
                 {
                     entityFields.Add(new EntityObjectFieldDto()
                     {
@@ -185,18 +195,18 @@ namespace TaskChecker.Controllers
                         Url = null
                     });
                 }
-                else if (field.FieldType.IsGenericType && field.FieldType.Name == "IList`1")
+                else if (field.FieldType == FieldTypes.List)
                 {
                     dynamic items = (dynamic)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
 
                     entityFields.Add(new EntityObjectFieldDto()
                     {
-                        Type = typeof(List<EntityObject>),
+                        Type = FieldTypes.List,
                         Title = field.FieldDisplayName,
                         Value = items.Count,
                     });
                 }
-                else if (field.FieldType.BaseType.Name == "EntityObject")
+                else if (field.FieldType == FieldTypes.Link)
                 {
                     var fieldValue = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
                     var url = fieldValue == null ? "" : (fieldValue as EntityObject).RouteDetail();
@@ -208,13 +218,32 @@ namespace TaskChecker.Controllers
                         Url = "https://" + HttpContext.Request.Host + url
                     });
                 }
+                else if (field.FieldType == FieldTypes.File)
+                {
+                    var fieldValue = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
+                    var url = $"https://{HttpContext.Request.Host}/EntityObjects/{entityType}/Download?id={entity.Id}&attributeName={field.FieldName}";
+
+                    entityFields.Add(new EntityObjectFieldDto()
+                    {
+                        Type = field.FieldType,
+                        Title = field.FieldDisplayName,
+                        Value = fieldValue == null ? "" : new FileInfo((string)fieldValue).Name,
+                        Url = fieldValue == null ? null : url
+                    });
+                }
             }
+
+            var entityTitle = (string)null;
+            if (entity.GetType().GetProperty("Title") != null)
+                entityTitle = (string)entity.GetType().GetProperty("Title").GetValue(entity, null);
+            else
+                entityTitle = entityType + " #" + entity.GetType().GetProperty("Id").GetValue(entity, null).ToString();
 
             return View(new EntityObjectDetailDto()
             {
                 EntityId = id,
                 EntityName = entityType,
-                EntityTitle = (string)entity.GetType().GetProperty("Title").GetValue(entity, null),
+                EntityTitle = entityTitle,
                 Fields = entityFields
             });
         }
@@ -237,15 +266,17 @@ namespace TaskChecker.Controllers
                     FieldName = p.PropertyType.BaseType.Name == "EntityObject" ?
                                 (p.GetCustomAttributes(false).First(attr => attr is ForeignKeyAttribute) as ForeignKeyAttribute).Name :
                                 p.Name,
-                    FieldType = p.PropertyType,
+                    FieldEntityType = p.PropertyType,
                     FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is EditDisplay) as EditDisplay).Name,
-                    FieldInputType = (p.GetCustomAttributes(false).First(attr => attr is InputType) as InputType).Name
+                    FieldInputType = (p.GetCustomAttributes(false).First(attr => attr is InputType) as InputType).Name,
+                    FieldNotNull = p.GetCustomAttributes(false).Any(attr => attr is NotNull),
+                    FieldType = (p.GetCustomAttributes(false).First(attr => attr is FieldType) as FieldType).Name,
                 });
 
             var dtoEntity = new List<EntityObjectFieldDto>();
             foreach (var field in fields)
             {
-                if (field.FieldType.Name == "Int32")
+                if (field.FieldType == FieldTypes.Int)
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -255,7 +286,7 @@ namespace TaskChecker.Controllers
                         InputType = field.FieldInputType
                     });
                 }
-                else if (field.FieldType.Name == "Nullable`1")//nullable int
+                else if (field.FieldType == FieldTypes.String)
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -265,19 +296,9 @@ namespace TaskChecker.Controllers
                         InputType = field.FieldInputType
                     });
                 }
-                else if (field.FieldType.Name == "String")
+                else if (field.FieldType == FieldTypes.Link)
                 {
-                    dtoEntity.Add(new EntityObjectFieldDto()
-                    {
-                        Name = field.FieldName,
-                        Title = field.FieldDisplayName,
-                        Type = field.FieldType,
-                        InputType = field.FieldInputType
-                    });
-                }
-                else if (field.FieldType.BaseType.Name == "EntityObject")
-                {
-                    var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldType))
+                    var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldEntityType))
                         .ToList()
                         .Select(x => new SelectListItem()
                         {
@@ -295,6 +316,16 @@ namespace TaskChecker.Controllers
                         Values = items
                     });
                 }
+                else if (field.FieldType == FieldTypes.File)
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Type = field.FieldType,
+                        Title = field.FieldDisplayName,
+                        Name = field.FieldName,
+                        InputType = field.FieldInputType
+                    });
+                }
             }
 
             ViewData["Title"] = "Создать";
@@ -308,9 +339,10 @@ namespace TaskChecker.Controllers
 
         [HttpPost]
         [Route("/EntityObjects/{entityType}/Create")]
-        public ActionResult Create(string entityType, string dummy)
+        public ActionResult Create(string entityType, [FromForm] string fields)
         {
-            var data = JArray.Parse(this.HttpContext.Request.Form.Keys.First());
+            var fieldsData = JArray.Parse(fields);
+            var filesData = HttpContext.Request.Form.Files;
 
             var type = Type.GetType($"TaskChecker.Models.{entityType}");
 
@@ -325,7 +357,7 @@ namespace TaskChecker.Controllers
                                    (p.GetCustomAttributes(false).First(attr => attr is ForeignKeyAttribute) as ForeignKeyAttribute).Name :
                                    p.Name, p => p.PropertyType);
 
-            foreach (JObject field in data)
+            foreach (JObject field in fieldsData)
             {
                 var fieldName = (string)field.GetValue("FieldName");
                 var fieldType = fieldTypes[fieldName];
@@ -338,12 +370,26 @@ namespace TaskChecker.Controllers
                 else
                 {
                     entity.GetType().GetProperty(fieldName).SetValue(entity, Convert.ChangeType(jFieldValue, fieldType));
-                }
-
-                
+                } 
             }
 
             dataContext.Entry(entity).State = EntityState.Added;
+            dataContext.SaveChanges();
+
+            foreach (var fileData in filesData)
+            {
+                string path = appEnvironment.ContentRootPath + $"/AppData/Files/{entityType}/{entity.Id}/{fileData.Name}/";
+                var directory = Directory.CreateDirectory(path);
+
+                using (var fileStream = new FileStream(path + fileData.FileName, FileMode.Create))
+                {
+                    fileData.CopyTo(fileStream);
+                }
+
+                entity.GetType().GetProperty(fileData.Name).SetValue(entity, path + fileData.FileName);
+            }
+
+            dataContext.Entry(entity).State = EntityState.Modified;
             dataContext.SaveChanges();
 
             return ResultHelper.Successed();
@@ -372,15 +418,17 @@ namespace TaskChecker.Controllers
                     FieldName = p.PropertyType.BaseType.Name == "EntityObject" ?
                                 (p.GetCustomAttributes(false).First(attr => attr is ForeignKeyAttribute) as ForeignKeyAttribute).Name :
                                 p.Name,
-                    FieldType = p.PropertyType,
+                    FieldEntityType = p.PropertyType,
                     FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is EditDisplay) as EditDisplay).Name,
-                    FieldInputType = (p.GetCustomAttributes(false).First(attr => attr is InputType) as InputType).Name
+                    FieldInputType = (p.GetCustomAttributes(false).First(attr => attr is InputType) as InputType).Name,
+                    FieldNotNull = p.GetCustomAttributes(false).Any(attr => attr is NotNull),
+                    FieldType = (p.GetCustomAttributes(false).First(attr => attr is FieldType) as FieldType).Name,
                 });
 
             var dtoEntity = new List<EntityObjectFieldDto>();
             foreach (var field in fields)
             {
-                if (field.FieldType.Name == "Int32")
+                if (field.FieldType == FieldTypes.Int)
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -391,20 +439,7 @@ namespace TaskChecker.Controllers
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                     });
                 }
-                else if (field.FieldType.Name == "Nullable`1")//nullable int
-                {
-                    var fieldValue = (int?)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
-
-                    dtoEntity.Add(new EntityObjectFieldDto()
-                    {
-                        Name = field.FieldName,
-                        Title = field.FieldDisplayName,
-                        Type = field.FieldType,
-                        InputType = field.FieldInputType,
-                        Value = fieldValue == null ? null : fieldValue,
-                    });
-                }
-                else if (field.FieldType.Name == "String")
+                else if (field.FieldType == FieldTypes.String)
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -415,9 +450,9 @@ namespace TaskChecker.Controllers
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                     });
                 }
-                else if (field.FieldType.BaseType.Name == "EntityObject")
+                else if (field.FieldType == FieldTypes.Link)
                 {
-                    var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldType))
+                    var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldEntityType))
                         .ToList()
                         .Select(x => new SelectListItem()
                         {
@@ -440,6 +475,21 @@ namespace TaskChecker.Controllers
                         Values = items
                     });
                 }
+                else if (field.FieldType == FieldTypes.File)
+                {
+                    var fieldValue = (string)null;
+                    if (entity.GetType().GetProperty(field.FieldName).GetValue(entity, null) != null)
+                        fieldValue = new FileInfo((string)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null)).Name;
+
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Type = field.FieldType,
+                        Title = field.FieldDisplayName,
+                        Name = field.FieldName,
+                        InputType = field.FieldInputType,
+                        Value = fieldValue,
+                    });
+                }
             }
 
             ViewData["Title"] = "Редактировать";
@@ -453,9 +503,10 @@ namespace TaskChecker.Controllers
 
         [HttpPost]
         [Route("/EntityObjects/{entityType}/Edit/{id}")]
-        public ActionResult Edit(string entityType, int id, int dummy)
+        public ActionResult Edit(string entityType, int id, [FromForm] string fields)
         {
-            var data = JArray.Parse(this.HttpContext.Request.Form.Keys.First());
+            var fieldsData = JArray.Parse(fields);
+            var filesData = HttpContext.Request.Form.Files;
 
             var type = Type.GetType($"TaskChecker.Models.{entityType}");
 
@@ -473,7 +524,7 @@ namespace TaskChecker.Controllers
                                    (p.GetCustomAttributes(false).First(attr => attr is ForeignKeyAttribute) as ForeignKeyAttribute).Name :
                                    p.Name, p => p.PropertyType);
 
-            foreach (JObject field in data)
+            foreach (JObject field in fieldsData)
             {
                 var fieldName = (string)field.GetValue("FieldName");
                 var fieldType = fieldTypes[fieldName];
@@ -487,8 +538,19 @@ namespace TaskChecker.Controllers
                 {
                     entity.GetType().GetProperty(fieldName).SetValue(entity, Convert.ChangeType(jFieldValue, fieldType));
                 }
+            }
 
+            foreach (var fileData in filesData)
+            {
+                string path = appEnvironment.ContentRootPath + $"/AppData/Files/{entityType}/{entity.Id}/{fileData.Name}/";
+                var directory = Directory.CreateDirectory(path);
 
+                using (var fileStream = new FileStream(path + fileData.FileName, FileMode.Create))
+                {
+                    fileData.CopyTo(fileStream);
+                }
+
+                entity.GetType().GetProperty(fileData.Name).SetValue(entity, path + fileData.FileName);
             }
 
             dataContext.Entry(entity).State = EntityState.Modified;
@@ -515,6 +577,38 @@ namespace TaskChecker.Controllers
             dataContext.SaveChanges();
 
             return ResultHelper.Successed();
+        }
+
+        [HttpGet]
+        [Route("/EntityObjects/{entityType}/Download")]
+        public ActionResult Download(string entityType, int id, string attributeName)
+        {
+            var type = Type.GetType($"TaskChecker.Models.{entityType}");
+
+            if (type == null)
+                return ResultHelper.EntityNotFound(entityType);
+
+            var entity = (EntityObject)dataContext.Set(type).Find(id);
+
+            if (entity == null)
+                return ResultHelper.EntityNotFound($"{id}");
+
+            if (attributeName == null || entity.GetType().GetProperty(attributeName) == null)
+                return ResultHelper.Failed("Атрибут не найден");
+
+            //Путь к файлу
+            var attributeValue = (string)entity.GetType().GetProperty(attributeName).GetValue(entity, null);
+
+            var fileInfo = new FileInfo(attributeValue);
+
+            if (!fileInfo.Exists)
+                return ResultHelper.Failed("Файл не найден");
+
+            FileStream fileStream = new FileStream(attributeValue, FileMode.Open);
+            new FileExtensionContentTypeProvider()
+                .TryGetContentType(attributeValue, out string contentType);
+
+            return File(fileStream, contentType, fileInfo.Name);
         }
     }
 }

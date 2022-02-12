@@ -33,6 +33,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Название")]
         [EditDisplay("Название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -45,27 +47,11 @@ namespace TaskChecker.Models
         [DetailDisplay("Системное название")]
         [EditDisplay("Системное название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Результаты
-        /// </summary>
-        [ListDisplay("Результаты")]
-        [DetailDisplay("Результаты")]
-        [NotMapped]
-        public IList<StudentTaskTeacherResult> Results
-        {
-            get
-            {
-                if (_results == null)
-                    _results = dataContext.Set<StudentTaskTeacherResult>().Where(x => x.TaskState_id == this.Id).ToList();
-                return _results;
-            }
-            set => _results = value;
-        }
-        private IList<StudentTaskTeacherResult> _results;
     }
 }

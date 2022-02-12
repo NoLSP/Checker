@@ -34,6 +34,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Название")]
         [EditDisplay("Название")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
@@ -46,6 +48,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Описание")]
         [EditDisplay("Описание")]
         [InputType("textarea")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Описание' обязательно для заполнения")]
         [Column("Description")]
         public string Description { get; set; }
@@ -57,6 +61,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Курс")]
         [EditDisplay("Курс")]
         [InputType("select")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Группа задач' обязательно для заполнения")]
         [ForeignKey("Course_id")]
         public virtual Course Course { get; set; }
@@ -70,6 +76,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Язык программирования")]
         [EditDisplay("Язык программирования")]
         [InputType("select")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Язык программирования' обязательно для заполнения")]
         [ForeignKey("ProgrammingLanguage_id")]
         public virtual ProgrammingLanguage ProgrammingLanguage { get; set; }
@@ -83,12 +91,21 @@ namespace TaskChecker.Models
         [DetailDisplay("Макс. результат")]
         [EditDisplay("Макс. результат")]
         [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.Int)]
         [Required(ErrorMessage = "Поле 'Максю результат' обязательно для заполнения")]
         [Column("MaxResult")]
         public int MaxResult { get; set; }
 
-        private ICollection<Test> _tests;
-        public virtual ICollection<Test> Tests
+
+        /// <summary>
+        /// Тесты
+        /// </summary>
+        [ListDisplay("Тесты")]
+        [DetailDisplay("Тесты")]
+        [NotNull]
+        [FieldType(FieldTypes.List)]
+        public virtual IList<Test> Tests
         {
             get
             {
@@ -98,5 +115,6 @@ namespace TaskChecker.Models
             }
             set => _tests = value;
         }
+        private IList<Test> _tests;
     }
 }

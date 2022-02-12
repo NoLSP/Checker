@@ -1,6 +1,6 @@
-﻿@model TeacherViewModel
+﻿@model UserDto
 
-<h2>Администратор - @Model.LastName + " " + @Model.FirstName + @(Model.MiddleName == null ? "" : " " + Model.MiddleName)</h2>
+<h2>Администратор - @Model.LastName @Model.FirstName @(Model.MiddleName == null ? "" : " " + Model.MiddleName)</h2>
 
 <div class="TeacherInfo">
     <div>

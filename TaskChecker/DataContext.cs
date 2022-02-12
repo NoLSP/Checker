@@ -49,14 +49,10 @@ namespace TaskChecker.Models
                .HasOne(p => p.Task);
 
             modelBuilder.Entity<StudentTaskTeacherResult>()
-               .HasOne(p => p.TaskState)
-               .WithMany(p => p.Results)
-               .HasForeignKey(p => p.TaskState_id);
+               .HasOne(p => p.TaskState);
 
             modelBuilder.Entity<User>()
-                .HasOne(p => p.Role)
-                .WithMany(t => t.Users)
-                .HasForeignKey(p => p.Role_id);
+                .HasOne(p => p.Role);
 
             modelBuilder.Entity<User>()
                 .HasOne(p => p.Group)

@@ -21,6 +21,12 @@ function CreateEntity() {
             $(formWindow).children("div").children("#createEntity").click(function () {
                 SubmitButtonClick(formWindow, "/EntityObjects/" + EntityName + "/Create");
             });
+            $(".fileButton").click(function () {
+                $(this).parent().children("input").trigger("click");
+            });
+            $(".fileInput").on("change", function () {
+                $(this).parent().children("label").html($(this).val());
+            });
         }
     });
 
@@ -48,6 +54,12 @@ function EditEntity(e) {
             $(formWindow).html(data);
             $(formWindow).children("div").children("#createEntity").click(function () {
                 SubmitButtonClick(formWindow, "/EntityObjects/" + EntityName + "/Edit/" + entityId);
+            });
+            $(".fileButton").click(function () {
+                $(this).parent().children("input").trigger("click");
+            });
+            $(".fileInput").on("change", function () {
+                $(this).parent().children("label").html($(this).val());
             });
         }
     });
@@ -97,19 +109,26 @@ function DeleteEntity(e) {
 function SubmitButtonClick(formWindow, url) {
     var entityFields = [];
 
+    var formData = new FormData();
     var form = $(formWindow).children("form");
+    var files = [];
     form.find("input").each(function (index, element) {
-        entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
+        if ($(element).attr("type") == "file")
+            formData.append($(element).attr("name"), element.files[0]);
+            //files[$(element).attr("name")] = element.files[0];
+        else
+            entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
     });
     form.find("select").each(function (index, element) {
         entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
     });
+    
+    formData.append("fields", JSON.stringify(entityFields));
+    formData.append("files", files);
 
-    $.post({
-        url: url,
-        data: JSON.stringify(entityFields),
-        success: function () {
-            window.location.reload();
-        }
-    });
+    var request = new XMLHttpRequest();
+    request.open("POST", url);
+    request.send(formData);
+
+    window.location.reload();
 }

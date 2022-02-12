@@ -33,6 +33,8 @@ namespace TaskChecker.Models
         [EditDisplay("Студент")]
         [DetailDisplay("Студент")]
         [InputType("select")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Студент' обязательно для заполнения")]
         [ForeignKey("Student_id")]
         public User Student { get; set; }
@@ -46,6 +48,8 @@ namespace TaskChecker.Models
         [DetailDisplay("Задача")]
         [ListDisplay("Задача")]
         [InputType("select")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Задача' обязательно для заполнения")]
         [ForeignKey("Task_id")]
         public Task Task { get; set; }
@@ -59,6 +63,7 @@ namespace TaskChecker.Models
         [DetailDisplay("Оценка учителя")]
         [ListDisplay("Оценка учителя")]
         [InputType("number")]
+        [FieldType(FieldTypes.Int)]
         [Column("TeacherResult")]
         public int? TeacherResult { get; set; }
 
@@ -66,6 +71,8 @@ namespace TaskChecker.Models
         /// Дата и время создания
         /// </summary>
         [DetailDisplay("Дата и время создания")]
+        [NotNull]
+        [FieldType(FieldTypes.DateTime)]
         [Column("CreationDateTime")]
         public DateTime CreationDateTime { get; set; }
 
@@ -73,6 +80,8 @@ namespace TaskChecker.Models
         /// Дата и время состояния
         /// </summary>
         [DetailDisplay("Дата и время состояния")]
+        [NotNull]
+        [FieldType(FieldTypes.DateTime)]
         [Column("StateDateTime")]
         public DateTime StateDateTime { get; set; }
 
@@ -80,6 +89,7 @@ namespace TaskChecker.Models
         /// Дата и время загрузки решения
         /// </summary>
         [DetailDisplay("Дата и время загрузки решения")]
+        [FieldType(FieldTypes.DateTime)]
         [Column("SolutionLoadDateTime")]
         public DateTime? SolutionLoadDateTime { get; set; }
 
@@ -88,6 +98,9 @@ namespace TaskChecker.Models
         /// </summary>
         [DetailDisplay("Файл студента")]
         [ListDisplay("Файл студента")]
+        [EditDisplay("Файл студента")]
+        [FieldType(FieldTypes.File)]
+        [InputType("file")]
         [Column("StudentFilePath")]
         public string StudentFilePath { get; set; }
 
@@ -98,6 +111,8 @@ namespace TaskChecker.Models
         [EditDisplay("Статус")]
         [ListDisplay("Статус")]
         [InputType("select")]
+        [NotNull] 
+        [FieldType(FieldTypes.Link)]
         [ForeignKey("TaskState_id")]
         public TaskState TaskState { get; set; }
         [Column("TaskState_id")]

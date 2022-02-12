@@ -10,17 +10,17 @@ function LoadSolution(inputId) {
 
     var request = new XMLHttpRequest();
     request.open("POST", "/Students/LoadSolution");
-    //request.onload = function (e) {
-    //    var response = JSON.parse(e.target.response);
-
-    //    if (response.success) {
-    //        $("#solutionLoadedDateTime").html("........" + response.loadTime + " " + response.loadDate);
-    //        $("#fileNoteText").html("решение загружено");
-    //    } else {
-    //        $("#fileNoteText").html(response.message);
-    //    }
-    //};
     request.send(formData);
+
+    //$.ajax({
+    //    url: "/Students/LoadSolution",
+    //    data: formData,
+    //    processData: false,
+    //    type: 'POST',
+    //    success: function (data) {
+    //        alert(data);
+    //    }
+    //});
 }
 
 function CheckSolution() {
