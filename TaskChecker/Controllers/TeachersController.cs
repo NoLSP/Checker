@@ -494,10 +494,20 @@ namespace TaskChecker.Controllers
             if (task == null)
                 return ResultHelper.Failed($"Задачи #{model.TaskId} не существует.");
 
+            var existTest = dataContext.Set<Test>()
+                .Where(x => x.Task_id == task.Id)
+                .FirstOrDefault(x => x.Title == model.Title);
+            
+            if(existTest != null)
+                return ResultHelper.Failed($"Тест с таким названием уже существует");
+
             string path = appEnvironment.ContentRootPath + $"/AppData/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
             var directory = Directory.CreateDirectory(path);
 
-            using (var fileStream = new FileStream(path + model.TestFile.FileName, FileMode.Create))
+            //Файл называем так же, как задачу
+            var fileName = model.Title + Path.GetExtension(model.TestFile.FileName);
+
+            using (var fileStream = new FileStream(path + fileName, FileMode.Create))
             {
                 model.TestFile.CopyTo(fileStream);
             }
@@ -505,7 +515,7 @@ namespace TaskChecker.Controllers
             var testToCreate = new Test()
             {
                 Title = model.Title,
-                TestFilePath = path + model.TestFile.FileName,
+                TestFilePath = path + fileName,
                 Task_id = task.Id
             };
 
