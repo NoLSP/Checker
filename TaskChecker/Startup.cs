@@ -27,10 +27,11 @@ namespace TaskChecker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DataBase"))
+                //options.UseNpgsql(Configuration.GetConnectionString("DataBase"))
+                options.UseNpgsql("Server=postgresql.j74806048.myjino.ru;Port=5432;UserId=j74806048_checkerbd;Password=artem2000;Database=j74806048_checkerbd;")
                     //.UseLazyLoadingProxies()
                 );
-            // установка конфигурации подключения
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
@@ -58,7 +59,7 @@ namespace TaskChecker
 
             app.UseRouting();
 
-            app.UseAuthentication();    // аутентификация
+            app.UseAuthentication();    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

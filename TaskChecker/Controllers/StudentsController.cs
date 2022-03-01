@@ -16,7 +16,7 @@ using Jint;
 
 namespace TaskChecker.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class StudentsController : Controller
     {
         private DataContext dataContext;

@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskChecker.Controllers
 {
+    [Authorize(Roles = "Teacher")]
     public class TeachersController : Controller
     {
         private DataContext dataContext;
