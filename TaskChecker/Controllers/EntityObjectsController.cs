@@ -109,7 +109,7 @@ namespace TaskChecker.Controllers
                             Name = field.FieldName,
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
-                            Value = fieldValue == null ? "" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
+                            Value = fieldValue == null ? "-" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
                             Url = "https://" + HttpContext.Request.Host + url
                         });
                     }
@@ -304,7 +304,9 @@ namespace TaskChecker.Controllers
                             Value = $"{x.Id}",
                             Text = x.Title
                         }).ToList();
-                        
+                    
+                    if(!field.FieldNotNull)
+                        items.Insert(0, new SelectListItem(){Text = "-", Value = null});
 
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -459,6 +461,9 @@ namespace TaskChecker.Controllers
                             Text = x.Title
                         }).ToList();
 
+                    if(!field.FieldNotNull)
+                        items.Insert(0, new SelectListItem(){Text = "-", Value = null});
+
                     var value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
 
                     var selectedItem = items.FirstOrDefault(x => x.Value == $"{value}");
@@ -531,7 +536,10 @@ namespace TaskChecker.Controllers
 
                 if (fieldName.EndsWith("_id"))
                 {
-                    entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
+                    if((string)jFieldValue == "-")
+                        entity.GetType().GetProperty(fieldName).SetValue(entity, null);
+                    else
+                        entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
                 }
                 else
                 {

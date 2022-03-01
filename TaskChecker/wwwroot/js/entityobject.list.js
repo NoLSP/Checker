@@ -115,7 +115,6 @@ function SubmitButtonClick(formWindow, url) {
     form.find("input").each(function (index, element) {
         if ($(element).attr("type") == "file")
             formData.append($(element).attr("name"), element.files[0]);
-            //files[$(element).attr("name")] = element.files[0];
         else
             entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
     });
@@ -129,6 +128,13 @@ function SubmitButtonClick(formWindow, url) {
     var request = new XMLHttpRequest();
     request.open("POST", url);
     request.send(formData);
-
-    window.location.reload();
+    request.onreadystatechange = function() {//Вызывает функцию при смене состояния.
+        if(request.readyState == XMLHttpRequest.DONE) {
+            if(request.status == 200){
+                window.location.reload();
+            }else{
+                //тут можно обрабатывать ошибки
+            }
+        }
+    };
 }
