@@ -50,7 +50,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Задача' обязательно для заполнения")]
         [ForeignKey("Task_id")]
-        public Task Task { get; set; }
+        public virtual Task Task { get; set; }
         [Column("Task_id")]
         public int Task_id { get; set; }
 
