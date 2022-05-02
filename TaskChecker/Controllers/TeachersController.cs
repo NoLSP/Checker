@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using System.Text;
 
 namespace TaskChecker.Controllers
 {
@@ -28,7 +29,7 @@ namespace TaskChecker.Controllers
             var group = dataContext.StudentsGroups
                 .Find(groupId);
 
-            if(group == null)
+            if (group == null)
                 return ResultHelper.EntityNotFound("StudentsGroup");
 
             var user = TaskChecker.Models.User.Get(dataContext, HttpContext);
@@ -240,7 +241,7 @@ namespace TaskChecker.Controllers
                         Title = student.Title,
                         GroupTitle = student.Group.Title
                     },
-                    DownloadStudentSolutionUrl = "https://" + this.HttpContext.Request.Host + 
+                    DownloadStudentSolutionUrl = "https://" + this.HttpContext.Request.Host +
                         $"/Teachers/DownloadStudentSolution?studentResultId={taskResult.Id}",
                     TaskId = task.Id,
                     SolutionLoadDateTime = taskResult.SolutionLoadDateTime,
@@ -478,7 +479,7 @@ namespace TaskChecker.Controllers
             if (task == null)
                 return ResultHelper.EntityNotFound("Task");
 
-            return View("CreateTest", new TestViewModel() { Tasks = new List<SelectListItem>() { new SelectListItem() { Text = "", Value = $"{taskId}"} } });
+            return View("CreateTest", new TestViewModel() { Tasks = new List<SelectListItem>() { new SelectListItem() { Text = "", Value = $"{taskId}" } } });
         }
 
         [HttpPost]
@@ -609,6 +610,26 @@ namespace TaskChecker.Controllers
             dataContext.SaveChanges();
 
             return Redirect($"/Teachers/StudentTaskResult?taskId={teacherResult.Task_id}&studentId={teacherResult.Student_id}");
+        }
+
+        [HttpGet]
+        public JsonResult AddStudentToGroupGenerateLink(int studentGroupId)
+        {
+            var studentGroup = dataContext.StudentsGroups.Find(studentGroupId);
+            if(studentGroup == null)
+            {
+                return Json(new { Success = true, Reason = "Не найдена студенческая группа" });
+            }
+
+            var linkCommandString = $"AddStudentToGroup_{studentGroup.Id}_actualDateTime={Convert.ToBase64String(Encoding.UTF8.GetBytes(DateTime.UtcNow.AddDays(1).ToString()))}";
+            if (!CryptoHelper.TryEncrypt(linkCommandString, out var encryptedCommandString))
+            {
+                return Json(new { Success = true, Reason = "Не удалось зашифровать ссылку" });
+            }
+
+            var link = "https://" + HttpContext.Request.Host + $"/Students/AddStudentToGroup?hash={encryptedCommandString}";
+
+            return Json(new { Success = true, Link = link });
         }
     }
 }

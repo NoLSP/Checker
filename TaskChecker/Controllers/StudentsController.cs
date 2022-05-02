@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Jint;
+using System.Text;
 
 namespace TaskChecker.Controllers
 {
@@ -312,6 +313,34 @@ namespace TaskChecker.Controllers
 
             return Redirect($"TaskDetail?{studentResult.Task_id}");
             //return Json(new { data = data.ToArray()});
+        }
+
+        public ActionResult AddStudentToGroup(string hash)
+        {
+            var user = TaskChecker.Models.User.Get(dataContext, HttpContext);
+            if (user.Role.Name != UserRole.Student(dataContext).Name)
+            {
+                return View("Error.cshtml", new ErrorViewModel() { ErrorMessage = "Пользователь не является студентом." });
+            }
+
+            if (!CryptoHelper.TryDecrypt(hash, out var decryptedString))
+            {
+                return View("Error.cshtml", new ErrorViewModel() { ErrorMessage = "Не удалось расшифровать ссылку. Возможно истек срок действия." });
+            }
+
+            if (!int.TryParse(decryptedString.Split("AddStudentToGroup_")[1], out var studentsGroupId))
+                return View("Error.cshtml", new ErrorViewModel() { ErrorMessage = "Не удалось определить идентификатор группы." });
+
+            var studentsGroup = dataContext.StudentsGroups.Find(studentsGroupId);
+
+            if(studentsGroup == null)
+                return View("Error.cshtml", new ErrorViewModel() { ErrorMessage = "Не удалось найти группу" });
+
+            user.StudentsGroup_id = studentsGroup.Id;
+            dataContext.Entry(user).State = EntityState.Modified;
+            dataContext.SaveChanges();
+
+            return Redirect("https://" + HttpContext.Request.Host + $"/Users/Lk?userId={user.Id}");
         }
     }
 }

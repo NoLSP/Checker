@@ -1,6 +1,7 @@
 ﻿@model StudentsGroupDto
 
 <h3>@Model.Title</h3>
+<button id="addStudentToGroup">Получить ссылку на добавление</button>
 
 <div class="tabs">
     <div class="tabs__nav">
@@ -62,4 +63,7 @@
     </div>
 </div>
 
+<script>
+    var StudentGroupId = @Model.Id;
+</script>
 <script src="~/js/teacher.studentgroupdetail.js"></script>

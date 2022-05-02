@@ -1,4 +1,20 @@
-﻿var $tabs = function (target) {
+﻿$(document).ready(function () {
+    $("#addStudentToGroup").on("click", function () {
+        $.get({
+            url: "/Teachers/AddStudentToGroupGenerateLink?studentGroupId=" + StudentGroupId,
+            success: function (data) {
+                if (!data.success)
+                    alert(data.reason);
+                else {
+                    navigator.clipboard.writeText(data.link);
+                    alert("Ссылка скопирована в буффер обмена");
+                }
+            }
+        });
+    });
+});
+
+var $tabs = function (target) {
     var
         _elemTabs = (typeof target === 'string' ? document.querySelector(target) : target),
         _eventTabsShow,
