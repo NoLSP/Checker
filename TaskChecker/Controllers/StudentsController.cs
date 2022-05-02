@@ -17,7 +17,7 @@ using System.Text;
 
 namespace TaskChecker.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class StudentsController : Controller
     {
         private DataContext dataContext;

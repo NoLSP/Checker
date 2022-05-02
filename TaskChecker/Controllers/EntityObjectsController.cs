@@ -4,21 +4,20 @@ using TaskChecker.Models.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskChecker.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class EntityObjectsController : Controller
     {
         private DataContext dataContext;
@@ -110,7 +109,7 @@ namespace TaskChecker.Controllers
                             Name = field.FieldName,
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
-                            Value = fieldValue == null ? "" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
+                            Value = fieldValue == null ? "-" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
                             Url = "https://" + HttpContext.Request.Host + url
                         });
                     }
@@ -305,7 +304,9 @@ namespace TaskChecker.Controllers
                             Value = $"{x.Id}",
                             Text = x.Title
                         }).ToList();
-                        
+                    
+                    if(!field.FieldNotNull)
+                        items.Insert(0, new SelectListItem(){Text = "-", Value = null});
 
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -460,6 +461,9 @@ namespace TaskChecker.Controllers
                             Text = x.Title
                         }).ToList();
 
+                    if(!field.FieldNotNull)
+                        items.Insert(0, new SelectListItem(){Text = "-", Value = null});
+
                     var value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
 
                     var selectedItem = items.FirstOrDefault(x => x.Value == $"{value}");
@@ -532,7 +536,10 @@ namespace TaskChecker.Controllers
 
                 if (fieldName.EndsWith("_id"))
                 {
-                    entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
+                    if((string)jFieldValue == "-")
+                        entity.GetType().GetProperty(fieldName).SetValue(entity, null);
+                    else
+                        entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
                 }
                 else
                 {

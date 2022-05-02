@@ -144,22 +144,5 @@ namespace TaskChecker.Controllers
 
             return View("TeacherLk", model);
         }
-
-        public ActionResult _TeacherGroups(int userId)
-        {
-            var user = dataContext.Users.Find(userId);
-
-            if (user == null)
-                return ResultHelper.UserNotFound();
-
-            if(user.Role.Name != "Teacher")
-                return ResultHelper.Failed("Пользователь не является преподавателем" );
-
-            var groups = dataContext.StudentsGroups
-                .Where(x => x.Owner_id == user.Id)
-                .ToList();
-
-            return View(groups);
-        }
     }
 }

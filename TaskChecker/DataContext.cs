@@ -108,6 +108,9 @@ namespace TaskChecker.Models
             modelBuilder.Entity<Task>()
                 .Navigation(x => x.ProgrammingLanguage).AutoInclude();
 
+            modelBuilder.Entity<Test>()
+                .Navigation(x => x.Task).AutoInclude();
+
             OnModelCreatingPartial(modelBuilder);
         }
 
