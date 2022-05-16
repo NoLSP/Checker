@@ -113,10 +113,12 @@ function SubmitButtonClick(formWindow, url) {
     var form = $(formWindow).children("form");
     var files = [];
     form.find("input").each(function (index, element) {
-        if ($(element).attr("type") == "file")
+        if ($(element).attr("type") == "file") {
             formData.append($(element).attr("name"), element.files[0]);
-        else
+        }
+        else {
             entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
+        }
     });
     form.find("select").each(function (index, element) {
         entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });

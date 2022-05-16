@@ -9,11 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-<<<<<<< HEAD
 using System.Text;
-=======
 using Microsoft.AspNetCore.Authorization;
->>>>>>> 7ca13dff38da2ee2f75a8b924939e4121d626f66
 
 namespace TaskChecker.Controllers
 {

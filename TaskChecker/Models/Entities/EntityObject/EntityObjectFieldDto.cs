@@ -16,5 +16,6 @@ namespace TaskChecker.Models
         public List<SelectListItem> Values;
         public string Url;
         public string InputType;
+        public bool IsNotNull;
     }
 }

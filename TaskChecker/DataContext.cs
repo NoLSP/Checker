@@ -29,6 +29,7 @@ namespace TaskChecker.Models
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<StudentTestResult> StudentsTestsResults { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,12 @@ namespace TaskChecker.Models
 
             modelBuilder.Entity<StudentsGroup>()
                 .HasOne(p => p.Owner);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(p => p.Reaciever);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(p => p.Type);
 
             modelBuilder.Entity<Course>()
                 .HasOne(p => p.Owner);

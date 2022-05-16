@@ -282,7 +282,8 @@ namespace TaskChecker.Controllers
                         Name = field.FieldName,
                         Title = field.FieldDisplayName,
                         Type = field.FieldType,
-                        InputType = field.FieldInputType
+                        InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull
                     });
                 }
                 else if (field.FieldType == FieldTypes.String)
@@ -292,7 +293,8 @@ namespace TaskChecker.Controllers
                         Name = field.FieldName,
                         Title = field.FieldDisplayName,
                         Type = field.FieldType,
-                        InputType = field.FieldInputType
+                        InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull
                     });
                 }
                 else if (field.FieldType == FieldTypes.Link)
@@ -314,6 +316,7 @@ namespace TaskChecker.Controllers
                         Title = field.FieldDisplayName,
                         Name = field.FieldName,
                         InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull,
                         Values = items
                     });
                 }
@@ -324,6 +327,7 @@ namespace TaskChecker.Controllers
                         Type = field.FieldType,
                         Title = field.FieldDisplayName,
                         Name = field.FieldName,
+                        IsNotNull = field.FieldNotNull,
                         InputType = field.FieldInputType
                     });
                 }
@@ -437,6 +441,7 @@ namespace TaskChecker.Controllers
                         Title = field.FieldDisplayName,
                         Type = field.FieldType,
                         InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull,
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                     });
                 }
@@ -448,6 +453,7 @@ namespace TaskChecker.Controllers
                         Title = field.FieldDisplayName,
                         Type = field.FieldType,
                         InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull,
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                     });
                 }
@@ -475,6 +481,7 @@ namespace TaskChecker.Controllers
                         Type = field.FieldType,
                         Title = field.FieldDisplayName,
                         Name = field.FieldName,
+                        IsNotNull = field.FieldNotNull,
                         InputType = field.FieldInputType,
                         Values = items
                     });
@@ -490,6 +497,7 @@ namespace TaskChecker.Controllers
                         Type = field.FieldType,
                         Title = field.FieldDisplayName,
                         Name = field.FieldName,
+                        IsNotNull = field.FieldNotNull,
                         InputType = field.FieldInputType,
                         Value = fieldValue,
                     });

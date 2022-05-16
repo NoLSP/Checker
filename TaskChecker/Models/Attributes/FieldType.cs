@@ -13,7 +13,8 @@ namespace TaskChecker.Models.Attributes
         File,
         Link,
         List,
-        DateTime
+        DateTime,
+        Boolean
     }
 
     public class FieldType : System.Attribute

@@ -24,7 +24,7 @@
             else if(field.InputType == "textarea")
             { 
                 <div class="col-7 justify-content-start">
-                    <textarea id=@field.Name name="@field.Name">@(field.Value)</textarea>
+                    <textarea id=@field.Name name="@field.Name" @(field.IsNotNull ? "required" : "")>@(field.Value)</textarea>
                 </div>
             }
             else if(field.InputType == "file")
@@ -32,13 +32,13 @@
                 <div class="col-7 justify-content-start">
                     <label>@field.Value</label>
                     <span class="fileButton" style="border:solid; background:grey">Выберите файл</span>
-                    <input class="fileInput" type=@field.InputType id=@field.Name name="@field.Name" hidden/>
+                    <input class="fileInput" type=@field.InputType id=@field.Name name="@field.Name" hidden @(field.IsNotNull ? "required" : "")/>
                 </div>
             }
             else
             {
                 <div class="col-7 justify-content-start">
-                    <input type=@field.InputType id=@field.Name name="@field.Name" value="@(field.Value)"/>
+                    <input type=@field.InputType id=@field.Name name="@field.Name" value="@(field.Value)" @(field.IsNotNull ? "required" : "")/>
                 </div>
             }
         </div>
