@@ -65,7 +65,7 @@ namespace TaskChecker.Models
         [InputType("file")]
         [Required(ErrorMessage = "Поле 'Тестовый файл' обязательно для заполнения")]
         [Column("TestFilePath")]
-        [StringLength(1024, ErrorMessage = "Строка слишком длинная")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string TestFilePath { get; set; }
     }
 }

@@ -140,5 +140,15 @@ namespace TaskChecker.Models
         public StudentsGroup Group{ get; set; }
         [Column("StudentsGroup_id")]
         public int? StudentsGroup_id { get; set; }
+
+        /// <summary>
+        /// Дата и время создания
+        /// </summary>
+        [DetailDisplay("Дата регистрации")]
+        [ListDisplay("Дата регистрации")]
+        [NotNull]
+        [FieldType(FieldTypes.DateTime)]
+        [Column("CreationDateTime")]
+        public DateTime CreationDateTime { get; set; }
     }
 }

@@ -32,6 +32,7 @@
                                 var taskStatesUrl = "https://" + Context.Request.Host + "/EntityObjects/TaskState/List";
                                 var testStatesUrl = "https://" + Context.Request.Host + "/EntityObjects/TestState/List";
                                 var programmingLanguagesUrl = "https://" + Context.Request.Host + "/EntityObjects/ProgrammingLanguage/List";
+                                var notificationsUrl = "https://" + Context.Request.Host + "/EntityObjects/Notification/List";
                             }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href=@usersUrl>Пользователи</a>
@@ -59,6 +60,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="@programmingLanguagesUrl">Языки программирования</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="@notificationsUrl">Уведомления</a>
                             </li>
                         </ul>
                     </div>

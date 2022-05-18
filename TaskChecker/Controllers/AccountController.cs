@@ -66,7 +66,8 @@ namespace TaskChecker.Controllers
                         LastName = model.LastName,
                         MiddleName = model.MiddleName,
                         Title = model.LastName + " " + model.FirstName,
-                        Role = UserRole.Student(dataContext)
+                        Role = UserRole.Student(dataContext),
+                        CreationDateTime = System.DateTime.UtcNow
                     };
 
                     dataContext.Users.Add(user);

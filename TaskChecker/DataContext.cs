@@ -30,6 +30,7 @@ namespace TaskChecker.Models
         public virtual DbSet<StudentTestResult> StudentsTestsResults { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<NotificationType> NotificationTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

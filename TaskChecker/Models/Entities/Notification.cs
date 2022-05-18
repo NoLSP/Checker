@@ -123,5 +123,14 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Прочитано' обязательно для заполнения")]
         [Column("Read")]
         public bool Read { get; set; }
+
+        /// <summary>
+        /// Дата и время создания
+        /// </summary>
+        [DetailDisplay("Дата и время создания")]
+        [NotNull]
+        [FieldType(FieldTypes.DateTime)]
+        [Column("CreationDateTime")]
+        public DateTime CreationDateTime { get; set; }
     }
 }

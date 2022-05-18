@@ -88,6 +88,17 @@ namespace TaskChecker.Controllers
                             Url = url
                         });
                     }
+                    else if (field.FieldType == FieldTypes.Boolean)
+                    {
+                        dtoEntity.Add(new EntityObjectFieldDto()
+                        {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
+                            Type = field.FieldType,
+                            Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                            Url = null
+                        });
+                    }
                     else if (field.FieldType == FieldTypes.List)
                     {
                         dynamic items = (dynamic)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
@@ -194,6 +205,16 @@ namespace TaskChecker.Controllers
                         Url = null
                     });
                 }
+                else if (field.FieldType == FieldTypes.Boolean)
+                {
+                    entityFields.Add(new EntityObjectFieldDto()
+                    {
+                        Type = field.FieldType,
+                        Title = field.FieldDisplayName,
+                        Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                        Url = null
+                    });
+                }
                 else if (field.FieldType == FieldTypes.List)
                 {
                     dynamic items = (dynamic)entity.GetType().GetProperty(field.FieldName).GetValue(entity, null);
@@ -287,6 +308,17 @@ namespace TaskChecker.Controllers
                     });
                 }
                 else if (field.FieldType == FieldTypes.String)
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull
+                    });
+                }
+                else if (field.FieldType == FieldTypes.Boolean)
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {
@@ -446,6 +478,18 @@ namespace TaskChecker.Controllers
                     });
                 }
                 else if (field.FieldType == FieldTypes.String)
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull,
+                        Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                    });
+                }
+                else if (field.FieldType == FieldTypes.Boolean)
                 {
                     dtoEntity.Add(new EntityObjectFieldDto()
                     {

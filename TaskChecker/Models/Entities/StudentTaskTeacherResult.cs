@@ -89,6 +89,7 @@ namespace TaskChecker.Models
         /// Дата и время загрузки решения
         /// </summary>
         [DetailDisplay("Дата и время загрузки решения")]
+        [ListDisplay("Дата и время загрузки решения")]
         [FieldType(FieldTypes.DateTime)]
         [Column("SolutionLoadDateTime")]
         public DateTime? SolutionLoadDateTime { get; set; }
@@ -102,6 +103,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.File)]
         [InputType("file")]
         [Column("StudentFilePath")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
         public string StudentFilePath { get; set; }
 
         /// <summary>

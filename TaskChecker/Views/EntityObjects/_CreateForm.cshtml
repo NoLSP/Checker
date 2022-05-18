@@ -27,6 +27,12 @@
                     <textarea id=@field.Name name="@field.Name" @(field.IsNotNull ? "required" : "")>@(field.Value)</textarea>
                 </div>
             }
+            else if(field.InputType == "checkbox")
+            { 
+                <div class="col-7 justify-content-start">
+                    <input type="checkbox" id=@field.Name name="@field.Name" @(((bool?)field.Value).HasValue && ((bool?)field.Value).Value ? "checked" : "")/>
+                </div>
+            }
             else if(field.InputType == "file")
             {
                 <div class="col-7 justify-content-start">

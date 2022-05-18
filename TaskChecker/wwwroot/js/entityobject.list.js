@@ -116,6 +116,9 @@ function SubmitButtonClick(formWindow, url) {
         if ($(element).attr("type") == "file") {
             formData.append($(element).attr("name"), element.files[0]);
         }
+        if ($(element).attr("type") == "checkbox") {
+            entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).is(':checked') });
+        }
         else {
             entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
         }
