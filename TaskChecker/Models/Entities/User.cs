@@ -146,8 +146,10 @@ namespace TaskChecker.Models
         /// </summary>
         [DetailDisplay("Дата регистрации")]
         [ListDisplay("Дата регистрации")]
+        [EditDisplay("Дата и время создания")]
         [NotNull]
         [FieldType(FieldTypes.DateTime)]
+        [InputType("datetime-local")]
         [Column("CreationDateTime")]
         public DateTime CreationDateTime { get; set; }
     }

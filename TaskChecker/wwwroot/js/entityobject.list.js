@@ -124,7 +124,7 @@ function SubmitButtonClick(formWindow, url) {
         }
     });
     form.find("select").each(function (index, element) {
-        entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() });
+        entityFields.push({ FieldName: $(element).attr("name"), FieldValue: $(element).val() == "-" || $(element).val() == "-" ? null : $(element).val()});
     });
     
     formData.append("fields", JSON.stringify(entityFields));

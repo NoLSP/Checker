@@ -124,6 +124,17 @@ namespace TaskChecker.Controllers
                             Url = "https://" + HttpContext.Request.Host + url
                         });
                     }
+                    else if (field.FieldType == FieldTypes.DateTime)
+                    {
+                        dtoEntity.Add(new EntityObjectFieldDto()
+                        {
+                            Name = field.FieldName,
+                            Title = field.FieldDisplayName,
+                            Type = field.FieldType,
+                            Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                            Url = null
+                        });
+                    }
                     else if (field.FieldType == FieldTypes.File)
                     {
                         string fileName = "-";
@@ -206,6 +217,16 @@ namespace TaskChecker.Controllers
                     });
                 }
                 else if (field.FieldType == FieldTypes.Boolean)
+                {
+                    entityFields.Add(new EntityObjectFieldDto()
+                    {
+                        Type = field.FieldType,
+                        Title = field.FieldDisplayName,
+                        Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                        Url = null
+                    });
+                }
+                else if (field.FieldType == FieldTypes.DateTime)
                 {
                     entityFields.Add(new EntityObjectFieldDto()
                     {
@@ -329,6 +350,17 @@ namespace TaskChecker.Controllers
                         IsNotNull = field.FieldNotNull
                     });
                 }
+                else if (field.FieldType == FieldTypes.DateTime)
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull
+                    });
+                }
                 else if (field.FieldType == FieldTypes.Link)
                 {
                     var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldEntityType))
@@ -402,7 +434,7 @@ namespace TaskChecker.Controllers
 
                 if(fieldName.EndsWith("_id"))
                 {
-                    entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
+                    entity.GetType().GetProperty(fieldName).SetValue(entity, (int?)jFieldValue);
                 }
                 else
                 {
@@ -501,6 +533,17 @@ namespace TaskChecker.Controllers
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
                     });
                 }
+                else if (field.FieldType == FieldTypes.DateTime)
+                {
+                    dtoEntity.Add(new EntityObjectFieldDto()
+                    {
+                        Name = field.FieldName,
+                        Title = field.FieldDisplayName,
+                        Type = field.FieldType,
+                        InputType = field.FieldInputType,
+                        IsNotNull = field.FieldNotNull
+                    });
+                }
                 else if (field.FieldType == FieldTypes.Link)
                 {
                     var items = ((IQueryable<dynamic>)dataContext.Set(field.FieldEntityType))
@@ -588,10 +631,7 @@ namespace TaskChecker.Controllers
 
                 if (fieldName.EndsWith("_id"))
                 {
-                    if((string)jFieldValue == "-")
-                        entity.GetType().GetProperty(fieldName).SetValue(entity, null);
-                    else
-                        entity.GetType().GetProperty(fieldName).SetValue(entity, (int)jFieldValue);
+                    entity.GetType().GetProperty(fieldName).SetValue(entity, (int?)jFieldValue);
                 }
                 else
                 {
