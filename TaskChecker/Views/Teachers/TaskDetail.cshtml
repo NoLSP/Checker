@@ -11,6 +11,15 @@
 <br />
 <strong>Максимальный результат:</strong>
 <span id="maxResult">@Model.MaxResult</span>
+<br />
+<strong>Окончание приема:</strong>
+@{
+    var deadline = Model.Deadline.HasValue ? Model.Deadline.Value.ToString() : "Не указана";
+}
+<span id="deadline">@deadline</span>
+<br />
+<strong>Минимальный процент тестов:</strong>
+<span id="minimumTestsPercent">@Model.MinimunTestsPercent</span>
 
 @foreach (var test in Model.Tests.OrderBy(x => x.Title))
 {

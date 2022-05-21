@@ -298,11 +298,25 @@ namespace TaskChecker.Controllers
             var succesState = TaskState.Success(dataContext);
             var inProgressState = TaskState.InProgress(dataContext);
 
-            if (data.Where(x => x.State.Title == "Success").Count() > (double)data.Count() / 2)
+            if (data.Where(x => x.State.Title == "Success").Count() / (double) data.Count() >= (double) studentResult.Task.MinimumTestsPercent / 100)
             {
                 studentResult.TaskState = inProgressState;
                 dataContext.Entry(studentResult).State = EntityState.Modified;
                 dataContext.SaveChanges();
+
+                var notificationChannel = NotificationChannel.LK(dataContext);
+
+                var notification = new Notification()
+                {
+                    CreationDateTime = DateTime.UtcNow,
+                    Channel = notificationChannel,
+                    Reaciever_id = studentResult.Task.Course.Owner_id,
+                    Title = "Студент решил задачу",
+                    Text = $"Студент {studentResult.Student.Title} прошел пороговое значение количества выполненных тестов в задаче {studentResult.Task.Title} курса {studentResult.Task.Course.Title}",
+                    Type = NotificationType.NewTaskToCheck(dataContext)
+                };
+
+                notificationChannel.Send(dataContext, notification);
             }
             else if(studentResult.TaskState == succesState || studentResult.TaskState == inProgressState)
             {
@@ -339,6 +353,20 @@ namespace TaskChecker.Controllers
             user.StudentsGroup_id = studentsGroup.Id;
             dataContext.Entry(user).State = EntityState.Modified;
             dataContext.SaveChanges();
+
+            var notificationChannel = NotificationChannel.LK(dataContext);
+
+            var notification = new Notification()
+            {
+                CreationDateTime = DateTime.UtcNow,
+                Channel = notificationChannel,
+                Reaciever_id = studentsGroup.Owner_id,
+                Title = "В группу добавлен студент",
+                Text = $"Студент {user.Title} добавлен в группу {studentsGroup.Title}",
+                Type = NotificationType.StudentAddedToGroup(dataContext)
+            };
+
+            notificationChannel.Send(dataContext, notification);
 
             return Redirect("https://" + HttpContext.Request.Host + $"/Users/Lk?userId={user.Id}");
         }

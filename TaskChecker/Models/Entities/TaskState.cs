@@ -38,6 +38,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(3)]
         public string Title { get; set; }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
         public string Name { get; set; }
     }
 }

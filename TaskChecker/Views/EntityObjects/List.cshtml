@@ -10,10 +10,10 @@
 
 <table border="1" style="border-color:aliceblue" width="100%">
     <tr>
-        @foreach (var headItem in Model.Head)
+        @foreach (var headItem in Model.Head.OrderBy(x => x.Order))
         {
             <th style="background-color:lightgray">
-                <strong style="text-align:left;margin-left:10px">@headItem</strong>
+                <strong style="text-align:left;margin-left:10px">@headItem.Title</strong>
             </th>
         }
 
@@ -25,7 +25,7 @@
     @foreach (var entity in Model.Entities)
     {
         <tr>
-            @foreach (var entityField in entity)
+            @foreach (var entityField in entity.OrderBy(x => x.Order))
             {
                 <td style="background-color:antiquewhite">
                     @*if (entityField.Type == typeof(List<EntityObject>))

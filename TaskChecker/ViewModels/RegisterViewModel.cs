@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,5 +27,10 @@ namespace TaskChecker.ViewModels
         public string LastName { get; set; }
 
         public string MiddleName { get; set; }
+
+        [Required(ErrorMessage = "Не указана роль")]
+        public int UserRoleId { get; set; }
+
+        public List<SelectListItem> UserRoles { get; set; }
     }
 }

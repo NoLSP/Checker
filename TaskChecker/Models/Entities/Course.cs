@@ -38,7 +38,23 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Системное название' обязательно для заполнения")]
         [Column("Name")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Название
+        /// </summary>
+        [ListDisplay("Название")]
+        [DetailDisplay("Название")]
+        [EditDisplay("Название")]
+        [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
+        [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
+        [Column("Title")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(3)]
+        public string Title { get; set; }
 
         /// <summary>
         /// Владелец
@@ -51,6 +67,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Владелец' обязательно для заполнения")]
         [ForeignKey("Owner_id")]
+        [Order(4)]
         public User Owner
         {
             get
@@ -69,26 +86,13 @@ namespace TaskChecker.Models
         public int Owner_id { get; set; }
 
         /// <summary>
-        /// Название
-        /// </summary>
-        [ListDisplay("Название")]
-        [DetailDisplay("Название")]
-        [EditDisplay("Название")]
-        [InputType("text")]
-        [NotNull]
-        [FieldType(FieldTypes.String)]
-        [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
-        [Column("Title")]
-        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
-        public string Title { get; set; }
-
-        /// <summary>
         /// Задачи
         /// </summary>
         [ListDisplay("Задачи")]
         [DetailDisplay("Задачи")]
         [FieldType(FieldTypes.List)]
         [NotMapped]
+        [Order(5)]
         public IList<Task> Tasks
         {
             get
@@ -108,6 +112,7 @@ namespace TaskChecker.Models
         [DetailDisplay("Студ. группы")]
         [FieldType(FieldTypes.List)]
         [NotMapped]
+        [Order(6)]
         public IList<StudentsGroup> StudentsGroups
         {
             get

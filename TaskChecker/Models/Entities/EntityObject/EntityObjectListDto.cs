@@ -6,7 +6,7 @@ namespace TaskChecker.Models
     {
         public string Title;
         public string EntityName;
-        public List<string> Head;
+        public List<EntityObjectFieldDto> Head;
         public List<List<EntityObjectFieldDto>> Entities;
     }
 }

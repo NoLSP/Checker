@@ -37,6 +37,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Студент' обязательно для заполнения")]
         [ForeignKey("Student_id")]
+        [Order(2)]
         public User Student { get; set; }
         [Column("Student_id")]
         public int Student_id { get; set; }
@@ -52,6 +53,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Задача' обязательно для заполнения")]
         [ForeignKey("Task_id")]
+        [Order(3)]
         public Task Task { get; set; }
         [Column("Task_id")]
         public int Task_id { get; set; }
@@ -65,6 +67,7 @@ namespace TaskChecker.Models
         [InputType("number")]
         [FieldType(FieldTypes.Int)]
         [Column("TeacherResult")]
+        [Order(4)]
         public int? TeacherResult { get; set; }
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace TaskChecker.Models
         [NotNull]
         [FieldType(FieldTypes.DateTime)]
         [Column("CreationDateTime")]
+        [Order(5)]
         public DateTime CreationDateTime { get; set; }
 
         /// <summary>
@@ -83,6 +87,7 @@ namespace TaskChecker.Models
         [NotNull]
         [FieldType(FieldTypes.DateTime)]
         [Column("StateDateTime")]
+        [Order(6)]
         public DateTime StateDateTime { get; set; }
 
         /// <summary>
@@ -92,6 +97,7 @@ namespace TaskChecker.Models
         [ListDisplay("Дата и время загрузки решения")]
         [FieldType(FieldTypes.DateTime)]
         [Column("SolutionLoadDateTime")]
+        [Order(7)]
         public DateTime? SolutionLoadDateTime { get; set; }
 
         /// <summary>
@@ -104,6 +110,7 @@ namespace TaskChecker.Models
         [InputType("file")]
         [Column("StudentFilePath")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(9)]
         public string StudentFilePath { get; set; }
 
         /// <summary>
@@ -116,6 +123,7 @@ namespace TaskChecker.Models
         [NotNull] 
         [FieldType(FieldTypes.Link)]
         [ForeignKey("TaskState_id")]
+        [Order(8)]
         public TaskState TaskState { get; set; }
         [Column("TaskState_id")]
         public int? TaskState_id { get; set; }

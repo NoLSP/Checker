@@ -13,7 +13,6 @@ namespace TaskChecker.Helpers
 {
     public static class CryptoHelper
     {
-        private static byte[] key;
         private static string initVec = "a8doSuDitOz1hZe#";
         private static string cryptographicAlgorithm = "SHA1";
         private static int passIter = 2;

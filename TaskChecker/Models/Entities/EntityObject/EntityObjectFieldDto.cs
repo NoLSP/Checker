@@ -17,5 +17,6 @@ namespace TaskChecker.Models
         public string Url;
         public string InputType;
         public bool IsNotNull;
+        public int Order;
     }
 }

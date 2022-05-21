@@ -36,6 +36,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Студент' обязательно для заполнения")]
         [ForeignKey("Student_id")]
+        [Order(2)]
         public User Student { get; set; }
         [Column("Student_id")]
         public int Student_id { get; set; }
@@ -51,6 +52,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Тест' обязательно для заполнения")]
         [ForeignKey("Test_id")]
+        [Order(3)]
         public Test Test { get; set; }
         [Column("Test_id")]
         public int Test_id { get; set; }
@@ -66,6 +68,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Статус' обязательно для заполнения")]
         [ForeignKey("TestState_id")]
+        [Order(4)]
         public TestState TestState { get; set; }
         [Column("TestState_id")]
         public int TestState_id { get; set; }

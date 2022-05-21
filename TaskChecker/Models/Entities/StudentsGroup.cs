@@ -39,6 +39,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
         public string Title { get; set; }
 
         /// <summary>
@@ -52,7 +53,8 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Владелец' обязательно для заполнения")]
         [ForeignKey("Owner_id")]
-        public User Owner 
+        [Order(3)]
+        public User Owner
         {
             get
             {
@@ -77,6 +79,7 @@ namespace TaskChecker.Models
         [NotNull]
         [FieldType(FieldTypes.List)]
         [NotMapped]
+        [Order(4)]
         public IList<Course> Courses
         {
             get
@@ -109,6 +112,7 @@ namespace TaskChecker.Models
         [NotNull]
         [FieldType(FieldTypes.List)]
         [NotMapped]
+        [Order(5)]
         public IList<User> Students
         {
             get

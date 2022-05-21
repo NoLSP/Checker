@@ -68,11 +68,22 @@ namespace TaskChecker.Models
             return type;
         }
 
+        public static NotificationType StudentAddedToGroup(DataContext dataContext)
+        {
+            var type = Find(dataContext, "StudentAddedToGroup");
+
+            if (type == null)
+                type = Obtain(dataContext, "StudentAddedToGroup", "Студент добавлен в группу");
+
+            return type;
+        }
+
         public static void Install(DataContext dataContext)
         {
             NewMessage(dataContext);
             NewTaskToCheck(dataContext);
             TaskChecked(dataContext);
+            StudentAddedToGroup(dataContext);
         }
     }
 }

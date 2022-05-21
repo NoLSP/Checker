@@ -45,6 +45,24 @@
 
     <div class="row col-12">
         <div class="col-5 justify-content-end">
+            <label style="font-weight:bold" asp-for="Deadline">Окончание приема:</label>
+        </div>
+        <div class="col-7 justify-content-start">
+            <input type="datetime-local" asp-for="Deadline" />
+        </div>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-5 justify-content-end">
+            <label style="font-weight:bold" asp-for="MinimumTestsPercent">Минимальный процент тестов:</label>
+        </div>
+        <div class="col-7 justify-content-start">
+            <input type="number" asp-for="MinimumTestsPercent" min="0" max="100" value="100" />
+        </div>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-5 justify-content-end">
             <label style="font-weight:bold" asp-for="CourseId" hidden>Курс:</label>
         </div>
         <div class="col-7 justify-content-start">

@@ -15,6 +15,8 @@ namespace TaskChecker.Models
         public string CourseTitle;
         public int CourseId;
         public int MaxResult;
+        public int MinimunTestsPercent;
+        public DateTime? Deadline;
 
         public IEnumerable<TestDto> Tests;
     }

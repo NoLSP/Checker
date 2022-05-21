@@ -28,6 +28,7 @@ namespace TaskChecker.Controllers
             TaskState.Install(dataContext);
             ProgrammingLanguage.Install(dataContext);
             NotificationType.Install(dataContext);
+            NotificationChannel.Install(dataContext);
 
             return View();
         }

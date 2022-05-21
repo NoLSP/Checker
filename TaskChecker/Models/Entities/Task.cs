@@ -39,6 +39,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
         public string Title { get; set; }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'Описание' обязательно для заполнения")]
         [Column("Description")]
+        [Order(3)]
         public string Description { get; set; }
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Группа задач' обязательно для заполнения")]
         [ForeignKey("Course_id")]
+        [Order(4)]
         public virtual Course Course { get; set; }
         [Column("Course_id")]
         public int Course_id { get; set; }
@@ -80,6 +83,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Язык программирования' обязательно для заполнения")]
         [ForeignKey("ProgrammingLanguage_id")]
+        [Order(5)]
         public virtual ProgrammingLanguage ProgrammingLanguage { get; set; }
         [Column("ProgrammingLanguage_id")]
         public int ProgrammingLanguage_id { get; set; }
@@ -95,8 +99,34 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Int)]
         [Required(ErrorMessage = "Поле 'Максю результат' обязательно для заполнения")]
         [Column("MaxResult")]
+        [Order(6)]
         public int MaxResult { get; set; }
 
+        /// <summary>
+        /// Дата окончания приема
+        /// </summary>
+        [DetailDisplay("Дата окончания приема")]
+        [ListDisplay("Дата окончания приема")]
+        [EditDisplay("Дата окончания приема")]
+        [FieldType(FieldTypes.DateTime)]
+        [InputType("datetime-local")]
+        [Column("Deadline")]
+        [Order(7)]
+        public DateTime? Deadline { get; set; }
+
+        /// <summary>
+        /// Процент выполненных тестов
+        /// </summary>
+        [ListDisplay("Процент выполненных тестов")]
+        [DetailDisplay("Процент выполненных тестов")]
+        [EditDisplay("Процент выполненных тестов")]
+        [InputType("number")]
+        [NotNull]
+        [FieldType(FieldTypes.Int)]
+        [Required(ErrorMessage = "Поле 'Процент выполненных тестов' обязательно для заполнения")]
+        [Column("MinimumTestsPercent")]
+        [Order(8)]
+        public int MinimumTestsPercent { get; set; }
 
         /// <summary>
         /// Тесты
@@ -105,6 +135,7 @@ namespace TaskChecker.Models
         [DetailDisplay("Тесты")]
         [NotNull]
         [FieldType(FieldTypes.List)]
+        [Order(9)]
         public virtual IList<Test> Tests
         {
             get

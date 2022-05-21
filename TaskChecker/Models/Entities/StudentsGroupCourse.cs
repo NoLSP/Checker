@@ -35,6 +35,7 @@ namespace TaskChecker.Models
         [ForeignKey("StudentsGroup_id")]
         public virtual StudentsGroup StudentsGroup { get; set; }
         [Column("StudentsGroup_id")]
+        [Order(2)]
         public int StudentsGroup_id { get; set; }
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace TaskChecker.Models
         [ForeignKey("Course_id")]
         public virtual Course Course { get; set; }
         [Column("Course_id")]
+        [Order(3)]
         public int Course_id { get; set; }
     }
 }

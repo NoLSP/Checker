@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using TaskChecker.ViewModels;
 using TaskChecker.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace TaskChecker.Controllers
 {
@@ -45,7 +47,15 @@ namespace TaskChecker.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            var userRoles = dataContext.UserRoles
+                .Where(x => x.Name != "Administrator")
+                .Select(x => new SelectListItem()
+                {
+                    Value = $"{x.Id}",
+                    Text = x.Title
+                }).ToList();
+
+            return View(new RegisterViewModel() { UserRoles = userRoles});
         }
 
         [HttpPost]
@@ -66,7 +76,7 @@ namespace TaskChecker.Controllers
                         LastName = model.LastName,
                         MiddleName = model.MiddleName,
                         Title = model.LastName + " " + model.FirstName,
-                        Role = UserRole.Student(dataContext),
+                        Role_id = model.UserRoleId,
                         CreationDateTime = System.DateTime.UtcNow
                     };
 

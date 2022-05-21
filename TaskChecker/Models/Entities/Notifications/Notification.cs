@@ -38,6 +38,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Заголовок' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(512, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
         public string Title { get; set; }
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace TaskChecker.Models
         [InputType("text")]
         [FieldType(FieldTypes.String)]
         [Column("Text")]
+        [Order(3)]
         public string Text { get; set; }
 
         /// <summary>
@@ -61,6 +63,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.String)]
         [Column("Link")]
         [StringLength(2048, ErrorMessage = "Строка слишком длинная")]
+        [Order(5)]
         public string Link { get; set; }
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Получатель' обязательно для заполнения")]
         [ForeignKey("Reaciever_id")]
+        [Order(4)]
         public User Reaciever
         {
             get
@@ -99,6 +103,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Тип' обязательно для заполнения")]
         [ForeignKey("Type_id")]
+        [Order(6)]
         public NotificationType Type
         {
             get
@@ -124,6 +129,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Канал' обязательно для заполнения")]
         [ForeignKey("Channel_id")]
+        [Order(7)]
         public NotificationChannel Channel
         {
             get
@@ -149,6 +155,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Boolean)]
         [Required(ErrorMessage = "Поле 'Прочитано' обязательно для заполнения")]
         [Column("Read")]
+        [Order(8)]
         public bool Read { get; set; }
 
         /// <summary>
@@ -158,6 +165,7 @@ namespace TaskChecker.Models
         [NotNull]
         [FieldType(FieldTypes.DateTime)]
         [Column("CreationDateTime")]
+        [Order(9)]
         public DateTime CreationDateTime { get; set; }
 
         #endregion
@@ -166,7 +174,7 @@ namespace TaskChecker.Models
 
         public static Notification Create(DataContext dataContext, Notification notification)
         {
-            dataContext.Database.ExecuteSqlRaw($"CREATE TABLE \"Notification_{notification.Reaciever_id}\" IF NOT EXIST PARTITION OF \"Notification\" FOR VALUES IN ({notification.Reaciever_id})");
+            dataContext.Database.ExecuteSqlRaw($"CREATE TABLE IF NOT EXISTS \"Notification_{notification.Reaciever_id}\" PARTITION OF \"Notification\" FOR VALUES IN ({notification.Reaciever_id})");
 
             dataContext.Entry(notification).State = EntityState.Added;
             dataContext.SaveChanges();

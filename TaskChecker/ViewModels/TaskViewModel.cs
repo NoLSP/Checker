@@ -18,6 +18,10 @@ namespace TaskChecker.ViewModels
         
         public int CourseId { get; set; }
 
+        public int MinimumTestsPercent { get; set; }
+
+        public DateTime? Deadline { get; set; }
+
         public int ProgrammingLanguageId { get; set; }
 
         public List<SelectListItem> Courses { get; set; }

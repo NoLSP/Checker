@@ -37,6 +37,11 @@
                         <input asp-for="MiddleName" class="middleName_input" type="text" size="25">
                     </label>
 
+                    <label asp-for="UserRoleId" class="userRole">
+                        Роль:
+                        <select asp-for="UserRoleId" class="userRole_input" asp-items="@Model.UserRoles"></select>
+                    </label>
+
                     <label asp-for="Password" class="password">
                         Пароль:
                         <input asp-for="Password" class="password_input" type="password" size="25" minlength="6" pattern="^[ 0-9]+$" title="Введите пароль, состоящий минимум из 6 цифр." autocomplete="current-password" required>

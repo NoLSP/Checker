@@ -47,9 +47,10 @@ namespace TaskChecker.Controllers
                     FieldDisplayName = (p.GetCustomAttributes(false).First(attr => attr is ListDisplay) as ListDisplay).Name,
                     FieldNotNull = p.GetCustomAttributes(false).Any(attr => attr is NotNull),
                     FieldType = (p.GetCustomAttributes(false).First(attr => attr is FieldType) as FieldType).Name,
+                    Order = (p.GetCustomAttributes(false).First(attr => attr is Order) as Order).OrderNumber,
                 });
 
-            var head = fields.Select(x => x.FieldDisplayName)
+            var head = fields.Select(x => new EntityObjectFieldDto() { Title = x.FieldDisplayName, Order = x.Order })
                 .ToList();
 
             var query = (IQueryable)type.GetMethod("AsIQueryable").Invoke(EntityObject.GetInstance(dataContext, type), new object[] { dataContext, type });
@@ -64,13 +65,18 @@ namespace TaskChecker.Controllers
                 {
                     if (field.FieldType == FieldTypes.Int)
                     {
+                        var url = (string)null;
+                        if (field.FieldName == "Id" && !fields.Any(x => x.FieldName == "Title"))
+                            url = "https://" + HttpContext.Request.Host + (entity as EntityObject).RouteDetail();
+
                         dtoEntity.Add(new EntityObjectFieldDto()
                         {
                             Name = field.FieldName,
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
-                            Url = null
+                            Order = field.Order,
+                            Url = url
                         });
                     }
                     else if (field.FieldType == FieldTypes.String)
@@ -85,6 +91,7 @@ namespace TaskChecker.Controllers
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                            Order = field.Order,
                             Url = url
                         });
                     }
@@ -96,6 +103,7 @@ namespace TaskChecker.Controllers
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                            Order = field.Order,
                             Url = null
                         });
                     }
@@ -108,6 +116,7 @@ namespace TaskChecker.Controllers
                             Name = field.FieldName,
                             Title = field.FieldDisplayName,
                             Type = FieldTypes.List,
+                            Order = field.Order,
                             Value = items.Count,
                         });
                     }
@@ -121,6 +130,7 @@ namespace TaskChecker.Controllers
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = fieldValue == null ? "-" : fieldValue.GetType().GetProperty("Title").GetValue(fieldValue, null),
+                            Order = field.Order,
                             Url = "https://" + HttpContext.Request.Host + url
                         });
                     }
@@ -132,6 +142,7 @@ namespace TaskChecker.Controllers
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
+                            Order = field.Order,
                             Url = null
                         });
                     }
@@ -155,6 +166,7 @@ namespace TaskChecker.Controllers
                             Title = field.FieldDisplayName,
                             Type = field.FieldType,
                             Value = fileName,
+                            Order = field.Order,
                             Url = url
                         });
                     }
@@ -198,12 +210,16 @@ namespace TaskChecker.Controllers
             {
                 if (field.FieldType == FieldTypes.Int)
                 {
+                    var url = (string)null;
+                    if (field.FieldName == "Id" && !fields.Any(x => x.FieldName == "Title"))
+                        url = "https://" + HttpContext.Request.Host + (entity as EntityObject).RouteDetail();
+
                     entityFields.Add(new EntityObjectFieldDto()
                     {
                         Type = field.FieldType,
                         Title = field.FieldDisplayName,
                         Value = entity.GetType().GetProperty(field.FieldName).GetValue(entity, null),
-                        Url = null
+                        Url = url
                     });
                 }
                 else if (field.FieldType == FieldTypes.String)

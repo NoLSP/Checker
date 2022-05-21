@@ -23,6 +23,20 @@ namespace TaskChecker.Models
         {
             dataContext = context;
         }
+        /// <summary>
+        /// Имя
+        /// </summary>
+        [ListDisplay("Имя")]
+        [DetailDisplay("Имя")]
+        [EditDisplay("Имя")]
+        [InputType("text")]
+        [NotNull]
+        [FieldType(FieldTypes.String)]
+        [Required(ErrorMessage = "Поле 'Имя' обязательно для заполнения")]
+        [Column("FirstName")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
+        public string FirstName { get; set; }
 
         /// <summary>
         /// Фамилия
@@ -36,21 +50,8 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Фамилия' обязательно для заполнения")]
         [Column("LastName")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(3)]
         public string LastName { get; set; }
-
-        /// <summary>
-        /// Имя
-        /// </summary>
-        [ListDisplay("Имя")]
-        [DetailDisplay("Имя")]
-        [EditDisplay("Имя")]
-        [InputType("text")]
-        [NotNull]
-        [FieldType(FieldTypes.String)]
-        [Required(ErrorMessage = "Поле 'Имя' обязательно для заполнения")]
-        [Column("FirstName")]
-        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
-        public string FirstName { get; set; }
 
         /// <summary>
         /// Отчество
@@ -62,6 +63,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.String)]
         [Column("MiddleName")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(4)]
         public string MiddleName { get; set; }
 
         /// <summary>
@@ -76,6 +78,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Ф.И.О.' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(5)]
         public string Title { get; set; }
 
         /// <summary>
@@ -90,6 +93,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Email' обязательно для заполнения")]
         [Column("Email")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(6)]
         public string Email { get; set; }
 
         /// <summary>
@@ -101,6 +105,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.String)]
         [Required(ErrorMessage = "Поле 'пароль' обязательно для заполнения")]
         [Column("Password")]
+        [Order(7)]
         public string Password { get; set; }
 
         /// <summary>
@@ -114,6 +119,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Роль' обязательно для заполнения")]
         [ForeignKey("Role_id")]
+        [Order(8)]
         public UserRole Role
         {
             get
@@ -137,7 +143,8 @@ namespace TaskChecker.Models
         [InputType("select")]
         [FieldType(FieldTypes.Link)]
         [ForeignKey("StudentsGroup_id")]
-        public StudentsGroup Group{ get; set; }
+        [Order(9)]
+        public StudentsGroup Group { get; set; }
         [Column("StudentsGroup_id")]
         public int? StudentsGroup_id { get; set; }
 
@@ -151,6 +158,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.DateTime)]
         [InputType("datetime-local")]
         [Column("CreationDateTime")]
+        [Order(10)]
         public DateTime CreationDateTime { get; set; }
     }
 }

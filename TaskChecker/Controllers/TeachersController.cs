@@ -369,6 +369,8 @@ namespace TaskChecker.Controllers
                 MaxResult = task.MaxResult,
                 CourseId = task.Course_id,
                 Courses = courses,
+                Deadline = task.Deadline,
+                MinimumTestsPercent = task.MinimumTestsPercent,
                 ProgrammingLanguageId = task.ProgrammingLanguage_id,
                 ProgrammingLanguages = programmingLanguages
             };
@@ -393,6 +395,8 @@ namespace TaskChecker.Controllers
             task.Description = model.Description;
             task.MaxResult = model.MaxResult;
             task.Course_id = model.CourseId;
+            task.Deadline = model.Deadline;
+            task.MinimumTestsPercent = model.MinimumTestsPercent;
             task.ProgrammingLanguage_id = model.ProgrammingLanguageId;
 
             dataContext.Entry(task).State = EntityState.Modified;
@@ -442,7 +446,9 @@ namespace TaskChecker.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 MaxResult = model.MaxResult,
+                Deadline = model.Deadline,
                 Course_id = courseId,
+                MinimumTestsPercent = model.MinimumTestsPercent,
                 ProgrammingLanguage_id = model.ProgrammingLanguageId
             };
 
@@ -486,6 +492,8 @@ namespace TaskChecker.Controllers
                 CourseTitle = task.Course.Title,
                 Description = task.Description,
                 MaxResult = task.MaxResult,
+                Deadline = task.Deadline,
+                MinimunTestsPercent = task.MinimumTestsPercent,
                 Tests = tests
             };
 

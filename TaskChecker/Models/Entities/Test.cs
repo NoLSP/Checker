@@ -37,6 +37,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Название' обязательно для заполнения")]
         [Column("Title")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(2)]
         public string Title { get; set; }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Link)]
         [Required(ErrorMessage = "Поле 'Задача' обязательно для заполнения")]
         [ForeignKey("Task_id")]
+        [Order(3)]
         public virtual Task Task { get; set; }
         [Column("Task_id")]
         public int Task_id { get; set; }
@@ -66,6 +68,7 @@ namespace TaskChecker.Models
         [Required(ErrorMessage = "Поле 'Тестовый файл' обязательно для заполнения")]
         [Column("TestFilePath")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(4)]
         public string TestFilePath { get; set; }
     }
 }

@@ -55,6 +55,7 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.Int)]
         [Required(ErrorMessage = "Поле 'Id' обязательно для заполнения")]
         [Key]
+        [Order(1)]
         public int Id { get; set; }
     }
 }
