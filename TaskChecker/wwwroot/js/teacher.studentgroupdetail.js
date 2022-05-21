@@ -12,7 +12,32 @@
             }
         });
     });
+
+    $("#addCourseToStudentsGroup").on("click", function (e) {
+        AddCourse(e.target);
+    });
 });
+
+function AddCourse(target) {
+    var darkLayer = document.createElement('div'); // слой затемнения
+    darkLayer.id = 'shadow'; // id чтобы подхватить стиль
+    document.body.appendChild(darkLayer); // включаем затемнение
+
+    var studentsGroupId = $(target).data("id");
+
+    var modalWin = document.getElementById('popupWin'); // находим наше "окно"
+    $.get("/Teachers/AddCourseToStudentsGroup?studentsGroupId=" + studentsGroupId, { layout: null }, function (data) {
+        $("#popupWin").html(data);
+    });
+
+    modalWin.style.display = 'block'; // "включаем" его
+
+    darkLayer.onclick = function () {  // при клике на слой затемнения все исчезнет
+        darkLayer.parentNode.removeChild(darkLayer); // удаляем затемнение
+        modalWin.style.display = 'none'; // делаем окно невидимым
+        return false;
+    };
+}
 
 var $tabs = function (target) {
     var

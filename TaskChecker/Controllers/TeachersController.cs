@@ -354,6 +354,13 @@ namespace TaskChecker.Controllers
                     Text = x.Title
                 }).ToList();
 
+            var programmingLanguages = dataContext.ProgrammingLanguages
+                .Select(x => new SelectListItem()
+                {
+                    Value = $"{x.Id}",
+                    Text = x.Title
+                }).ToList();
+
             var taskViewModel = new TaskViewModel()
             {
                 Id = task.Id,
@@ -361,7 +368,9 @@ namespace TaskChecker.Controllers
                 Description = task.Description,
                 MaxResult = task.MaxResult,
                 CourseId = task.Course_id,
-                Courses = courses
+                Courses = courses,
+                ProgrammingLanguageId = task.ProgrammingLanguage_id,
+                ProgrammingLanguages = programmingLanguages
             };
 
             return View(taskViewModel);
@@ -384,6 +393,7 @@ namespace TaskChecker.Controllers
             task.Description = model.Description;
             task.MaxResult = model.MaxResult;
             task.Course_id = model.CourseId;
+            task.ProgrammingLanguage_id = model.ProgrammingLanguageId;
 
             dataContext.Entry(task).State = EntityState.Modified;
             dataContext.SaveChanges();
@@ -404,9 +414,17 @@ namespace TaskChecker.Controllers
             if (course == null)
                 return ResultHelper.EntityNotFound("Course");
 
+            var programmingLanguages = dataContext.ProgrammingLanguages
+                .Select(x => new SelectListItem()
+                {
+                    Value = $"{x.Id}",
+                    Text = x.Title
+                }).ToList();
+
             var taskViewModel = new TaskViewModel()
             {
                 CourseId = courseId,
+                ProgrammingLanguages = programmingLanguages
             };
 
             return View(taskViewModel);
@@ -424,7 +442,8 @@ namespace TaskChecker.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 MaxResult = model.MaxResult,
-                Course_id = courseId
+                Course_id = courseId,
+                ProgrammingLanguage_id = model.ProgrammingLanguageId
             };
 
             dataContext.Entry(task).State = EntityState.Added;
@@ -643,5 +662,99 @@ namespace TaskChecker.Controllers
 
             return Json(new { Success = true, Link = link });
         }
+
+        [HttpGet]
+        public ActionResult AddCourseToStudentsGroup(int studentsGroupId)
+        {
+            var user = TaskChecker.Models.User.Get(dataContext, HttpContext);
+
+            if (user == null)
+                return ResultHelper.UserNotFound();
+
+            if (user.Role != UserRole.Teacher(dataContext))
+                return ResultHelper.Failed("Только преподаватели могут добавлять курсы в группы");
+
+            var studentsGroup = dataContext.StudentsGroups.Find(studentsGroupId);
+            if (studentsGroup == null)
+                return ResultHelper.EntityNotFound("StudentsGroup");
+
+            if (studentsGroup.Owner_id != user.Id)
+                return ResultHelper.Failed("Нет прав к текущей группе");
+
+            var courses = dataContext.Courses
+                .Where(x => x.Owner_id == user.Id)
+                .Select(x => new SelectListItem()
+                {
+                    Value = $"{x.Id}",
+                    Text = x.Title
+                }).ToList();
+
+            var studentsGroupCourseViewModel = new StudentsGroupCourseViewModel()
+            {
+                StudentsGroupId = studentsGroup.Id,
+                Courses = courses
+            };
+
+            return View(studentsGroupCourseViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult AddCourseToStudentsGroup(StudentsGroupCourseViewModel model)
+        {
+            var user = TaskChecker.Models.User.Get(dataContext, HttpContext);
+
+            if (user == null)
+                return ResultHelper.UserNotFound();
+
+            if (user.Role != UserRole.Teacher(dataContext))
+                return ResultHelper.Failed("Только преподаватели могут добавлять курсы в группы");
+
+            var studentsGroup = dataContext.StudentsGroups.Find(model.StudentsGroupId);
+            if (studentsGroup == null)
+                return ResultHelper.EntityNotFound("StudentsGroup");
+
+            var course = dataContext.Courses.Find(model.CourseId);
+            if (course == null)
+                return ResultHelper.EntityNotFound("Course");
+
+            if (studentsGroup.Owner_id != user.Id)
+                return ResultHelper.Failed("Нет прав к указанной группе");
+
+            if (course.Owner_id != user.Id)
+                return ResultHelper.Failed("Нет прав к указанному курсу");
+
+            var studentsGroupCourseToCreate = new StudentsGroupCourse()
+            {
+                StudentsGroup_id = studentsGroup.Id,
+                Course_id = course.Id
+            };
+
+            dataContext.Entry(studentsGroupCourseToCreate).State = EntityState.Added;
+
+            //Добавляем все результаты студентов по курсу
+            var taskStateFailed = TaskState.Failed(dataContext);
+
+            foreach(var student in studentsGroup.Students)
+            {
+                foreach (var task in course.Tasks)
+                {
+                    var studentResult = new StudentTaskTeacherResult()
+                    {
+                        CreationDateTime = DateTime.UtcNow,
+                        StateDateTime = DateTime.UtcNow,
+                        Student_id = student.Id,
+                        TaskState_id = taskStateFailed.Id,
+                        Task_id = task.Id,
+                    };
+
+                    dataContext.Entry(studentResult).State = EntityState.Added;
+                }
+            }
+
+            dataContext.SaveChanges();
+
+            return Redirect($"/Teachers/StudentsGroupDetail?groupId={studentsGroup.Id}");
+        }
+
     }
 }

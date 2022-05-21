@@ -24,6 +24,8 @@ namespace TaskChecker.Models
             dataContext = context;
         }
 
+        #region Properties
+
         /// <summary>
         /// Заголовок
         /// </summary>
@@ -112,6 +114,31 @@ namespace TaskChecker.Models
         public int Type_id { get; set; }
 
         /// <summary>
+        /// Канал
+        /// </summary>
+        [ListDisplay("Канал")]
+        [DetailDisplay("Канал")]
+        [EditDisplay("Канал")]
+        [InputType("select")]
+        [NotNull]
+        [FieldType(FieldTypes.Link)]
+        [Required(ErrorMessage = "Поле 'Канал' обязательно для заполнения")]
+        [ForeignKey("Channel_id")]
+        public NotificationChannel Channel
+        {
+            get
+            {
+                if (_channel == null)
+                    _channel = dataContext.Set<NotificationChannel>().First(x => x.Id == this.Channel_id);
+                return _channel;
+            }
+            set => _channel = value;
+        }
+        private NotificationChannel _channel;
+        [Column("Channel_id")]
+        public int Channel_id { get; set; }
+
+        /// <summary>
         /// Прочитано
         /// </summary>
         [ListDisplay("Прочитано")]
@@ -132,5 +159,21 @@ namespace TaskChecker.Models
         [FieldType(FieldTypes.DateTime)]
         [Column("CreationDateTime")]
         public DateTime CreationDateTime { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        public static Notification Create(DataContext dataContext, Notification notification)
+        {
+            dataContext.Database.ExecuteSqlRaw($"CREATE TABLE \"Notification_{notification.Reaciever_id}\" IF NOT EXIST PARTITION OF \"Notification\" FOR VALUES IN ({notification.Reaciever_id})");
+
+            dataContext.Entry(notification).State = EntityState.Added;
+            dataContext.SaveChanges();
+
+            return notification;
+        }
+
+        #endregion
     }
 }

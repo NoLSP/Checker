@@ -36,6 +36,15 @@
 
     <div class="row col-12">
         <div class="col-5 justify-content-end">
+            <label style="font-weight:bold" asp-for="ProgrammingLanguageId">Язык программирования:</label>
+        </div>
+        <div class="col-7 justify-content-start">
+            <select asp-for="ProgrammingLanguageId" class="form-select" asp-items="Model.ProgrammingLanguages"></select>
+        </div>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-5 justify-content-end">
             <label style="font-weight:bold" asp-for="CourseId" hidden>Курс:</label>
         </div>
         <div class="col-7 justify-content-start">

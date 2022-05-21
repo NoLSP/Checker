@@ -31,6 +31,8 @@ namespace TaskChecker.Models
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<NotificationType> NotificationTypes { get; set; }
+        public virtual DbSet<NotificationChannel> NotificationChannels { get; set; }
+        public virtual DbSet<NotificationChannelLK> NotificationChannelsLK { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +48,9 @@ namespace TaskChecker.Models
 
             modelBuilder.Entity<Notification>()
                 .HasOne(p => p.Type);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(p => p.Channel);
 
             modelBuilder.Entity<Course>()
                 .HasOne(p => p.Owner);

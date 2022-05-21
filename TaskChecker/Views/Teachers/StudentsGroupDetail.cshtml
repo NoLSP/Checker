@@ -2,6 +2,7 @@
 
 <h3>@Model.Title</h3>
 <button id="addStudentToGroup">Получить ссылку на добавление</button>
+<button id="addCourseToStudentsGroup" data-id="@Model.Id">Добавить курс</button>
 
 <div class="tabs">
     <div class="tabs__nav">
@@ -14,6 +15,7 @@
             first = false;
         }
     </div>
+
     <div class="tabs__content" data-id=@Model.Id>
         @{
             first = true;
@@ -61,6 +63,10 @@
             first = false;
         }
     </div>
+</div>
+
+<div id="popupWin" class="formWindow">
+
 </div>
 
 <script>

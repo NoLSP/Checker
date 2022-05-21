@@ -323,7 +323,7 @@ namespace TaskChecker.Controllers
                 return View("Error.cshtml", new ErrorViewModel() { ErrorMessage = "Пользователь не является студентом." });
             }
 
-            if (!CryptoHelper.TryDecrypt(hash, out var decryptedString))
+            if (!CryptoHelper.TryDecrypt(hash.Replace(" ", "+"), out var decryptedString))
             {
                 return View("Error.cshtml", new ErrorViewModel() { ErrorMessage = "Не удалось расшифровать ссылку. Возможно истек срок действия." });
             }
