@@ -544,7 +544,8 @@ namespace TaskChecker.Controllers
             {
                 Title = model.Title,
                 TestFilePath = path + fileName,
-                Task_id = task.Id
+                Task_id = task.Id,
+                Description = model.Description
             };
 
             dataContext.Entry(testToCreate).State = EntityState.Added;
@@ -572,7 +573,8 @@ namespace TaskChecker.Controllers
                 Id = test.Id,
                 Title = test.Title,
                 FileName = new FileInfo(test.TestFilePath).Name,
-                TaskId = test.Task_id
+                TaskId = test.Task_id,
+                Description = test.Description
             };
 
             return View(testViewModel);
@@ -601,7 +603,8 @@ namespace TaskChecker.Controllers
             {
                 Title = model.Title,
                 TestFilePath = path + model.TestFile.FileName,
-                Task_id = task.Id
+                Task_id = task.Id,
+                Description = model.Description
             };
 
             dataContext.Entry(testToCreate).State = EntityState.Added;
