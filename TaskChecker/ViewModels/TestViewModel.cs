@@ -16,6 +16,8 @@ namespace TaskChecker.ViewModels
         public IFormFile TestFile { get;set; }
 
         public string FileName { get; set; }
+        public string InputValue { get; set; }
+        public string ExpectedResult { get; set; }
 
         public List<SelectListItem> Tasks;
     }

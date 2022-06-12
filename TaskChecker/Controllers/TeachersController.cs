@@ -480,7 +480,7 @@ namespace TaskChecker.Controllers
                 {
                     Id = x.Id,
                     Title = x.Title,
-                    FileName = new FileInfo(x.TestFilePath).Name,
+                    FileName = x.TestFilePath != null ? new FileInfo(x.TestFilePath).Name : "",
                     DetailUrl = "https://" + HttpContext.Request.Host + "/Teachers/TestDetail?id=" + x.Id
                 }).ToList();
 
@@ -529,24 +529,30 @@ namespace TaskChecker.Controllers
             if(existTest != null)
                 return ResultHelper.Failed($"Тест с таким названием уже существует");
 
-            string path = appEnvironment.ContentRootPath + $"/AppData/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
-            var directory = Directory.CreateDirectory(path);
-
-            //Файл называем так же, как задачу
-            var fileName = model.Title + Path.GetExtension(model.TestFile.FileName);
-
-            using (var fileStream = new FileStream(path + fileName, FileMode.Create))
-            {
-                model.TestFile.CopyTo(fileStream);
-            }
-
             var testToCreate = new Test()
             {
                 Title = model.Title,
-                TestFilePath = path + fileName,
+                InputValue = model.InputValue,
+                ExpectedResult = model.ExpectedResult,
                 Task_id = task.Id,
                 Description = model.Description
             };
+
+            if (model.TestFile != null)
+            {
+                string path = appEnvironment.ContentRootPath + $"/AppData/Files/Tests/{task.Course.Owner.Title}/{task.Course.Title}/{task.Title}/";
+                var directory = Directory.CreateDirectory(path);
+
+                //Файл называем так же, как задачу
+                var fileName = model.Title + Path.GetExtension(model.TestFile.FileName);
+
+                using (var fileStream = new FileStream(path + fileName, FileMode.Create))
+                {
+                    model.TestFile.CopyTo(fileStream);
+                }
+
+                testToCreate.TestFilePath = path + fileName;
+            }
 
             dataContext.Entry(testToCreate).State = EntityState.Added;
             dataContext.SaveChanges();

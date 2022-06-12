@@ -59,16 +59,16 @@ namespace TaskChecker.Models
         /// <summary>
         /// Расширение
         /// </summary>
-        [ListDisplay("Расширение")]
-        [DetailDisplay("Расширение")]
-        [EditDisplay("Расширение")]
+        [ListDisplay("Расширения")]
+        [DetailDisplay("Расширения")]
+        [EditDisplay("Расширения")]
         [InputType("text")]
         [NotNull]
         [FieldType(FieldTypes.String)]
-        [Column("FileExtension")]
+        [Column("FileExtensions")]
         [StringLength(128, ErrorMessage = "Строка слишком длинная")]
         [Order(4)]
-        public string FileExtension { get; set; }
+        public string FileExtensions { get; set; }
 
         /// <summary>
         /// Задачи

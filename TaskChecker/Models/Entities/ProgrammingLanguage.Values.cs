@@ -14,7 +14,7 @@ namespace TaskChecker.Models
                 .FirstOrDefault(x => x.Name == name);
         }
 
-        public static ProgrammingLanguage Obtain(DataContext dataContext, string name, string title, string fileExtension)
+        public static ProgrammingLanguage Obtain(DataContext dataContext, string name, string title, string fileExtensions)
         {
             var language = Find(dataContext, name);
 
@@ -24,7 +24,7 @@ namespace TaskChecker.Models
                 {
                     Name = name,
                     Title = title,
-                    FileExtension = fileExtension
+                    FileExtensions = fileExtensions
                 };
 
                 dataContext.ProgrammingLanguages.Add(language);

@@ -43,5 +43,23 @@
         </div>
     </div>
 
+    <div class="row col-12">
+        <div class="col-5 justify-content-end">
+            <label style="font-weight:bold" asp-for="InputValue">Входное значение:</label>
+        </div>
+        <div class="col-7 justify-content-start">
+            <input type="text" asp-for="InputValue" />
+        </div>
+    </div>
+
+    <div class="row col-12">
+        <div class="col-5 justify-content-end">
+            <label style="font-weight:bold" asp-for="ExpectedResult">Ожидаемый результат:</label>
+        </div>
+        <div class="col-7 justify-content-start">
+            <input type="text" asp-for="ExpectedResult" />
+        </div>
+    </div>
+
     <input class="create_button" style="text-align: center" type="submit" value="Создать">
 </form>

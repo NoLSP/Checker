@@ -25,8 +25,8 @@ namespace TaskChecker.Controllers
 
         public StudentsController(DataContext context, IWebHostEnvironment appEnvironment)
         {
-            dataContext = context;
             this.appEnvironment = appEnvironment;
+            dataContext = context;
         }
 
         public ActionResult CourseDetail(int courseId)
@@ -220,7 +220,9 @@ namespace TaskChecker.Controllers
 
             var programmingLanguage = studentResult.Task.ProgrammingLanguage;
 
-            if(!studentFile.FileName.EndsWith(programmingLanguage.FileExtension))
+            var extension = studentFile.FileName.Substring(studentFile.FileName.LastIndexOf("."));
+
+            if (!programmingLanguage.FileExtensions.Contains(extension))
                 return Json(new { Success = false, Message = $"неверный формат файла" });
 
             string path = appEnvironment.ContentRootPath + $"/AppData/Files/Students/{studentResult.Student.Title}/Solutions/{studentResult.Task.Title}/";
@@ -243,7 +245,7 @@ namespace TaskChecker.Controllers
             //return Json(new { Success = true, Message = "решение загружено", LoadDate = now.ToString("dd.MM.yy"), LoadTime = now.ToString("HH.mm")});
         }
 
-        public ActionResult CheckSolution(int studentResultId)
+        public async Task<ActionResult> CheckSolution(int studentResultId)
         {
             var studentResult = dataContext.StudentsTaskTeacherResults.Find(studentResultId);
 
@@ -263,7 +265,7 @@ namespace TaskChecker.Controllers
 
             foreach (var test in tests)
             {
-                var testResult = testsEngine.RunTest(studentResult.StudentFilePath, test.TestFilePath);
+                var testResult = await testsEngine.RunTest(studentResult.StudentFilePath, test);
 
                 var studentTestResult = studentTestsResults.FirstOrDefault(x => x.Test_id == test.Id);
                 var testState = testResult ? TestState.Success(dataContext) : TestState.Failed(dataContext);
@@ -352,6 +354,26 @@ namespace TaskChecker.Controllers
 
             user.StudentsGroup_id = studentsGroup.Id;
             dataContext.Entry(user).State = EntityState.Modified;
+            dataContext.SaveChanges();
+
+            //Добавляем результаты студента по задачам курсов группы
+            foreach(var course in studentsGroup.Courses)
+            {
+                foreach(var task in course.Tasks)
+                {
+                    var studentResult = new StudentTaskTeacherResult()
+                    {
+                        CreationDateTime = DateTime.UtcNow,
+                        StateDateTime = DateTime.UtcNow,
+                        Student_id = user.Id,
+                        Task_id = task.Id,
+                        TaskState_id = TaskState.Failed(dataContext).Id
+                    };
+
+                    dataContext.Entry(studentResult).State = EntityState.Added;
+                }
+            }
+
             dataContext.SaveChanges();
 
             var notificationChannel = NotificationChannel.LK(dataContext);

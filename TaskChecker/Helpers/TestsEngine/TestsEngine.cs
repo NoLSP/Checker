@@ -19,11 +19,15 @@ namespace TaskChecker.Helpers
             {
                 case "JavaScript":
                     return new JavaScriptTestsEngine();
+                case "cmd":
+                    return new CMDTestsEngine();
+                case "bash":
+                    return new BashTestsEngine();
                 default: 
                     return null;
             }
         }
 
-        public abstract bool RunTest(string studentSolutionFilePath, string teacherTestFilePath);
+        public abstract Task<bool> RunTest(string studentSolutionFilePath, Test teacherTest);
     }
 }

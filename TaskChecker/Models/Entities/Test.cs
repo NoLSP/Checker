@@ -70,18 +70,42 @@ namespace TaskChecker.Models
         public int Task_id { get; set; }
 
         /// <summary>
+        /// Входное значение
+        /// </summary>
+        [ListDisplay("Входное значение")]
+        [DetailDisplay("Входное значение")]
+        [EditDisplay("Входное значение")]
+        [InputType("text")]
+        [FieldType(FieldTypes.String)]
+        [Column("InputValue")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(5)]
+        public string InputValue { get; set; }
+
+        /// <summary>
+        /// Ожидаемый результат
+        /// </summary>
+        [ListDisplay("Ожидаемый результат")]
+        [DetailDisplay("Ожидаемый результат")]
+        [EditDisplay("Ожидаемый результат")]
+        [InputType("text")]
+        [FieldType(FieldTypes.String)]
+        [Column("ExpectedResult")]
+        [StringLength(255, ErrorMessage = "Строка слишком длинная")]
+        [Order(6)]
+        public string ExpectedResult { get; set; }
+
+        /// <summary>
         /// Путь к тестовому файлу
         /// </summary>
         [ListDisplay("Тестовый файл")]
         [DetailDisplay("Тестовый файл")]
         [EditDisplay("Тестовый файл")]
-        [NotNull]
         [FieldType(FieldTypes.File)]
         [InputType("file")]
-        [Required(ErrorMessage = "Поле 'Тестовый файл' обязательно для заполнения")]
         [Column("TestFilePath")]
         [StringLength(255, ErrorMessage = "Строка слишком длинная")]
-        [Order(5)]
+        [Order(7)]
         public string TestFilePath { get; set; }
     }
 }
